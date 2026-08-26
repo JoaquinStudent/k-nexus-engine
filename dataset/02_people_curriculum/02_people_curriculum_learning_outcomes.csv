@@ -1,0 +1,379 @@
+﻿outcome_id,subject_id,outcome_description,cognitive_level,evidence_type
+LO-0001,SUB-001,Aplica principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0002,SUB-001,Analiza principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0003,SUB-001,Diseña principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0004,SUB-002,Aplica principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0005,SUB-002,Analiza principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0006,SUB-002,Diseña principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0007,SUB-003,Aplica principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0008,SUB-003,Analiza principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0009,SUB-003,Diseña principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0010,SUB-004,Aplica principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0011,SUB-004,Analiza principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0012,SUB-004,Diseña principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0013,SUB-005,Aplica principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0014,SUB-005,Analiza principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0015,SUB-005,Diseña principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0016,SUB-006,Aplica principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0017,SUB-006,Analiza principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0018,SUB-006,Diseña principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0019,SUB-007,Aplica principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0020,SUB-007,Analiza principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0021,SUB-007,Diseña principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0022,SUB-008,Aplica principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0023,SUB-008,Analiza principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0024,SUB-008,Diseña principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0025,SUB-009,Aplica principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0026,SUB-009,Analiza principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0027,SUB-009,Diseña principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0028,SUB-010,Aplica principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0029,SUB-010,Analiza principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0030,SUB-010,Diseña principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0031,SUB-011,Aplica principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0032,SUB-011,Analiza principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0033,SUB-011,Diseña principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0034,SUB-012,Aplica principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0035,SUB-012,Analiza principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0036,SUB-012,Diseña principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0037,SUB-013,Aplica principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0038,SUB-013,Analiza principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0039,SUB-013,Diseña principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0040,SUB-014,Aplica principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0041,SUB-014,Analiza principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0042,SUB-014,Diseña principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0043,SUB-015,Aplica principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0044,SUB-015,Analiza principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0045,SUB-015,Diseña principios y herramientas de programación avanzada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0046,SUB-016,Aplica principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0047,SUB-016,Analiza principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0048,SUB-016,Diseña principios y herramientas de arquitectura de software para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0049,SUB-017,Aplica principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0050,SUB-017,Analiza principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0051,SUB-017,Diseña principios y herramientas de inteligencia artificial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0052,SUB-018,Aplica principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0053,SUB-018,Analiza principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0054,SUB-018,Diseña principios y herramientas de sistemas distribuidos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0055,SUB-019,Aplica principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0056,SUB-019,Analiza principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0057,SUB-019,Diseña principios y herramientas de seguridad informática para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0058,SUB-020,Aplica principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0059,SUB-020,Analiza principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0060,SUB-020,Diseña principios y herramientas de internet de las cosas para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0061,SUB-021,Aplica principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0062,SUB-021,Analiza principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0063,SUB-021,Diseña principios y herramientas de optimización aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0064,SUB-022,Aplica principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0065,SUB-022,Analiza principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0066,SUB-022,Diseña principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0067,SUB-023,Aplica principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0068,SUB-023,Analiza principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0069,SUB-023,Diseña principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0070,SUB-024,Aplica principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0071,SUB-024,Analiza principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0072,SUB-024,Diseña principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0073,SUB-025,Aplica principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0074,SUB-025,Analiza principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0075,SUB-025,Diseña principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0076,SUB-026,Aplica principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0077,SUB-026,Analiza principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0078,SUB-026,Diseña principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0079,SUB-027,Aplica principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0080,SUB-027,Analiza principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0081,SUB-027,Diseña principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0082,SUB-028,Aplica principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0083,SUB-028,Analiza principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0084,SUB-028,Diseña principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0085,SUB-029,Aplica principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0086,SUB-029,Analiza principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0087,SUB-029,Diseña principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0088,SUB-030,Aplica principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0089,SUB-030,Analiza principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0090,SUB-030,Diseña principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0091,SUB-031,Aplica principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0092,SUB-031,Analiza principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0093,SUB-031,Diseña principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0094,SUB-032,Aplica principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0095,SUB-032,Analiza principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0096,SUB-032,Diseña principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0097,SUB-033,Aplica principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0098,SUB-033,Analiza principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0099,SUB-033,Diseña principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0100,SUB-034,Aplica principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0101,SUB-034,Analiza principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0102,SUB-034,Diseña principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0103,SUB-035,Aplica principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0104,SUB-035,Analiza principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0105,SUB-035,Diseña principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0106,SUB-036,Aplica principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0107,SUB-036,Analiza principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0108,SUB-036,Diseña principios y herramientas de epidemiología para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0109,SUB-037,Aplica principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0110,SUB-037,Analiza principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0111,SUB-037,Diseña principios y herramientas de salud pública para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0112,SUB-038,Aplica principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0113,SUB-038,Analiza principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0114,SUB-038,Diseña principios y herramientas de informática en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0115,SUB-039,Aplica principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0116,SUB-039,Analiza principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0117,SUB-039,Diseña principios y herramientas de monitoreo clínico para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0118,SUB-040,Aplica principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0119,SUB-040,Analiza principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0120,SUB-040,Diseña principios y herramientas de prevención y promoción para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0121,SUB-041,Aplica principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0122,SUB-041,Analiza principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0123,SUB-041,Diseña principios y herramientas de seguridad del paciente para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0124,SUB-042,Aplica principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0125,SUB-042,Analiza principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0126,SUB-042,Diseña principios y herramientas de investigación en salud para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0127,SUB-043,Aplica principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0128,SUB-043,Analiza principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0129,SUB-043,Diseña principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0130,SUB-044,Aplica principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0131,SUB-044,Analiza principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0132,SUB-044,Diseña principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0133,SUB-045,Aplica principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0134,SUB-045,Analiza principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0135,SUB-045,Diseña principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0136,SUB-046,Aplica principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0137,SUB-046,Analiza principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0138,SUB-046,Diseña principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0139,SUB-047,Aplica principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0140,SUB-047,Analiza principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0141,SUB-047,Diseña principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0142,SUB-048,Aplica principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0143,SUB-048,Analiza principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0144,SUB-048,Diseña principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0145,SUB-049,Aplica principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0146,SUB-049,Analiza principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0147,SUB-049,Diseña principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0148,SUB-050,Aplica principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0149,SUB-050,Analiza principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0150,SUB-050,Diseña principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0151,SUB-051,Aplica principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0152,SUB-051,Analiza principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0153,SUB-051,Diseña principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0154,SUB-052,Aplica principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0155,SUB-052,Analiza principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0156,SUB-052,Diseña principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0157,SUB-053,Aplica principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0158,SUB-053,Analiza principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0159,SUB-053,Diseña principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0160,SUB-054,Aplica principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0161,SUB-054,Analiza principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0162,SUB-054,Diseña principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0163,SUB-055,Aplica principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0164,SUB-055,Analiza principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0165,SUB-055,Diseña principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0166,SUB-056,Aplica principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0167,SUB-056,Analiza principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0168,SUB-056,Diseña principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0169,SUB-057,Aplica principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0170,SUB-057,Analiza principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0171,SUB-057,Diseña principios y herramientas de analítica empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0172,SUB-058,Aplica principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0173,SUB-058,Analiza principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0174,SUB-058,Diseña principios y herramientas de finanzas cuantitativas para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0175,SUB-059,Aplica principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0176,SUB-059,Analiza principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0177,SUB-059,Diseña principios y herramientas de econometría para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0178,SUB-060,Aplica principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0179,SUB-060,Analiza principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0180,SUB-060,Diseña principios y herramientas de gestión de innovación para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0181,SUB-061,Aplica principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0182,SUB-061,Analiza principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0183,SUB-061,Diseña principios y herramientas de riesgo y decisiones para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0184,SUB-062,Aplica principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0185,SUB-062,Analiza principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0186,SUB-062,Diseña principios y herramientas de desarrollo regional para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0187,SUB-063,Aplica principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0188,SUB-063,Analiza principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0189,SUB-063,Diseña principios y herramientas de optimización empresarial para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0190,SUB-064,Aplica principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0191,SUB-064,Analiza principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0192,SUB-064,Diseña principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0193,SUB-065,Aplica principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0194,SUB-065,Analiza principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0195,SUB-065,Diseña principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0196,SUB-066,Aplica principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0197,SUB-066,Analiza principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0198,SUB-066,Diseña principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0199,SUB-067,Aplica principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0200,SUB-067,Analiza principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0201,SUB-067,Diseña principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0202,SUB-068,Aplica principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0203,SUB-068,Analiza principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0204,SUB-068,Diseña principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0205,SUB-069,Aplica principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0206,SUB-069,Analiza principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0207,SUB-069,Diseña principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0208,SUB-070,Aplica principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0209,SUB-070,Analiza principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0210,SUB-070,Diseña principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0211,SUB-071,Aplica principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0212,SUB-071,Analiza principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0213,SUB-071,Diseña principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0214,SUB-072,Aplica principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0215,SUB-072,Analiza principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0216,SUB-072,Diseña principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0217,SUB-073,Aplica principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0218,SUB-073,Analiza principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0219,SUB-073,Diseña principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0220,SUB-074,Aplica principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0221,SUB-074,Analiza principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0222,SUB-074,Diseña principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0223,SUB-075,Aplica principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0224,SUB-075,Analiza principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0225,SUB-075,Diseña principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0226,SUB-076,Aplica principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0227,SUB-076,Analiza principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0228,SUB-076,Diseña principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0229,SUB-077,Aplica principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0230,SUB-077,Analiza principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0231,SUB-077,Diseña principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0232,SUB-078,Aplica principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0233,SUB-078,Analiza principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0234,SUB-078,Diseña principios y herramientas de evaluación del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0235,SUB-079,Aplica principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0236,SUB-079,Analiza principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0237,SUB-079,Diseña principios y herramientas de tecnología educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0238,SUB-080,Aplica principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0239,SUB-080,Analiza principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0240,SUB-080,Diseña principios y herramientas de diseño curricular para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0241,SUB-081,Aplica principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0242,SUB-081,Analiza principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0243,SUB-081,Diseña principios y herramientas de investigación educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0244,SUB-082,Aplica principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0245,SUB-082,Analiza principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0246,SUB-082,Diseña principios y herramientas de psicología del aprendizaje para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0247,SUB-083,Aplica principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0248,SUB-083,Analiza principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0249,SUB-083,Diseña principios y herramientas de analítica educativa para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0250,SUB-084,Aplica principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0251,SUB-084,Analiza principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0252,SUB-084,Diseña principios y herramientas de lenguaje y conocimiento para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0253,SUB-085,Aplica principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0254,SUB-085,Analiza principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0255,SUB-085,Diseña principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0256,SUB-086,Aplica principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0257,SUB-086,Analiza principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0258,SUB-086,Diseña principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0259,SUB-087,Aplica principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0260,SUB-087,Analiza principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0261,SUB-087,Diseña principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0262,SUB-088,Aplica principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0263,SUB-088,Analiza principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0264,SUB-088,Diseña principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0265,SUB-089,Aplica principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0266,SUB-089,Analiza principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0267,SUB-089,Diseña principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0268,SUB-090,Aplica principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0269,SUB-090,Analiza principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0270,SUB-090,Diseña principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0271,SUB-091,Aplica principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0272,SUB-091,Analiza principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0273,SUB-091,Diseña principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0274,SUB-092,Aplica principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0275,SUB-092,Analiza principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0276,SUB-092,Diseña principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0277,SUB-093,Aplica principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0278,SUB-093,Analiza principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0279,SUB-093,Diseña principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0280,SUB-094,Aplica principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0281,SUB-094,Analiza principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0282,SUB-094,Diseña principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0283,SUB-095,Aplica principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0284,SUB-095,Analiza principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0285,SUB-095,Diseña principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0286,SUB-096,Aplica principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0287,SUB-096,Analiza principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0288,SUB-096,Diseña principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0289,SUB-097,Aplica principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0290,SUB-097,Analiza principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0291,SUB-097,Diseña principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0292,SUB-098,Aplica principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0293,SUB-098,Analiza principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0294,SUB-098,Diseña principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0295,SUB-099,Aplica principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0296,SUB-099,Analiza principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0297,SUB-099,Diseña principios y herramientas de gestión de recursos hídricos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0298,SUB-100,Aplica principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0299,SUB-100,Analiza principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0300,SUB-100,Diseña principios y herramientas de monitoreo ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0301,SUB-101,Aplica principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0302,SUB-101,Analiza principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0303,SUB-101,Diseña principios y herramientas de cambio climático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0304,SUB-102,Aplica principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0305,SUB-102,Analiza principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0306,SUB-102,Diseña principios y herramientas de sistemas territoriales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0307,SUB-103,Aplica principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0308,SUB-103,Analiza principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0309,SUB-103,Diseña principios y herramientas de infraestructura sostenible para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0310,SUB-104,Aplica principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0311,SUB-104,Analiza principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0312,SUB-104,Diseña principios y herramientas de gestión del riesgo para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0313,SUB-105,Aplica principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0314,SUB-105,Analiza principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0315,SUB-105,Diseña principios y herramientas de modelamiento ambiental para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0316,SUB-106,Aplica principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0317,SUB-106,Analiza principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0318,SUB-106,Diseña principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0319,SUB-107,Aplica principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0320,SUB-107,Analiza principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0321,SUB-107,Diseña principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0322,SUB-108,Aplica principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0323,SUB-108,Analiza principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0324,SUB-108,Diseña principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0325,SUB-109,Aplica principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0326,SUB-109,Analiza principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0327,SUB-109,Diseña principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0328,SUB-110,Aplica principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0329,SUB-110,Analiza principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0330,SUB-110,Diseña principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0331,SUB-111,Aplica principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0332,SUB-111,Analiza principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0333,SUB-111,Diseña principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0334,SUB-112,Aplica principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0335,SUB-112,Analiza principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0336,SUB-112,Diseña principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0337,SUB-113,Aplica principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0338,SUB-113,Analiza principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0339,SUB-113,Diseña principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0340,SUB-114,Aplica principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0341,SUB-114,Analiza principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0342,SUB-114,Diseña principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0343,SUB-115,Aplica principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0344,SUB-115,Analiza principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0345,SUB-115,Diseña principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0346,SUB-116,Aplica principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0347,SUB-116,Analiza principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0348,SUB-116,Diseña principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0349,SUB-117,Aplica principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0350,SUB-117,Analiza principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0351,SUB-117,Diseña principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0352,SUB-118,Aplica principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0353,SUB-118,Analiza principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0354,SUB-118,Diseña principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0355,SUB-119,Aplica principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0356,SUB-119,Analiza principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0357,SUB-119,Diseña principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0358,SUB-120,Aplica principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0359,SUB-120,Analiza principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0360,SUB-120,Diseña principios y herramientas de modelamiento matemático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0361,SUB-121,Aplica principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0362,SUB-121,Analiza principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0363,SUB-121,Diseña principios y herramientas de estadística aplicada para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0364,SUB-122,Aplica principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0365,SUB-122,Analiza principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0366,SUB-122,Diseña principios y herramientas de ciencia de datos para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0367,SUB-123,Aplica principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0368,SUB-123,Analiza principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0369,SUB-123,Diseña principios y herramientas de procesamiento de señales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0370,SUB-124,Aplica principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0371,SUB-124,Analiza principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0372,SUB-124,Diseña principios y herramientas de series temporales para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0373,SUB-125,Aplica principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0374,SUB-125,Analiza principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0375,SUB-125,Diseña principios y herramientas de aprendizaje automático para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado
+LO-0376,SUB-126,Aplica principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Apply,estudio de caso
+LO-0377,SUB-126,Analiza principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Analyze,prototipo
+LO-0378,SUB-126,Diseña principios y herramientas de procesamiento de lenguaje natural para interpretar información y construir respuestas verificables en un contexto aplicado.,Create,proyecto aplicado

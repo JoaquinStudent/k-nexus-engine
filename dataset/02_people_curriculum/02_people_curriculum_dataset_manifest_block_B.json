@@ -1,0 +1,14 @@
+{
+  "dataset": "Knowledge Nexus LATAM",
+  "version": "1.0-block-B",
+  "depends_on": "Block A v1.0",
+  "record_counts": {
+    "researchers": 180,
+    "researcher_expertise": 720,
+    "subjects": 126,
+    "competencies": 252,
+    "learning_outcomes": 378,
+    "researcher_group": 180
+  },
+  "note": "Canonical structured layer with controlled semantic and curricular diversity."
+}

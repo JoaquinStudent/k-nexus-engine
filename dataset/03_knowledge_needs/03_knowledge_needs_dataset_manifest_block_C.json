@@ -1,0 +1,23 @@
+{
+  "dataset": "Knowledge Nexus LATAM",
+  "version": "1.0-block-C",
+  "depends_on": [
+    "Block A v1.0",
+    "Block B v1.0"
+  ],
+  "record_counts": {
+    "institutional_needs": 42,
+    "projects": 320,
+    "theses": 650,
+    "publications": 360,
+    "researcher_project": 746,
+    "project_group": 320,
+    "thesis_advisor": 650,
+    "publication_researcher": 720,
+    "publication_project": 200,
+    "documents": 60
+  },
+  "language_mix": "Predominantly Spanish with controlled English content in selected abstracts/titles.",
+  "quality_design": "Controlled missingness and terminology variation only in non-key enriched fields.",
+  "generated_at": "2026-08-26T15:16:17"
+}

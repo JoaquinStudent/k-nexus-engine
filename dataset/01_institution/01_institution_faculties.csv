@@ -1,0 +1,7 @@
+﻿faculty_id,faculty_name,description,strategic_focus,active
+FAC-001,Ingeniería y Tecnologías Digitales,"Ingeniería, software, electrónica, automatización y tecnologías digitales.",Transformación digital; sistemas inteligentes; automatización,True
+FAC-002,Ciencias de la Salud,"Formación e investigación en salud, atención clínica, salud pública y bienestar ocupacional.",Salud digital; prevención; salud pública,True
+FAC-003,"Ciencias Económicas, Administrativas y Financieras","Gestión, economía, finanzas, innovación empresarial y toma de decisiones.",Innovación; finanzas; desarrollo regional,True
+FAC-004,Educación y Ciencias Humanas,"Aprendizaje, comportamiento humano, innovación pedagógica y currículo.",Innovación educativa; aprendizaje; comportamiento,True
+FAC-005,Ciencias Ambientales y Territoriales,"Sostenibilidad, recursos naturales, territorio e infraestructura.",Sostenibilidad; agua; territorio; infraestructura,True
+FAC-006,Ciencias Básicas y Aplicadas,"Modelamiento, física, matemáticas, analítica y métodos cuantitativos.",Modelamiento; ciencia de datos; instrumentación,True

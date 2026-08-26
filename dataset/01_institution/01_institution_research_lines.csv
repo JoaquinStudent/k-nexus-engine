@@ -1,0 +1,61 @@
+﻿line_id,group_id,line_name,description,keywords,active
+LIN-001,GRP-001,Aprendizaje automático,Estudio y aplicación de aprendizaje automático en problemas institucionales o territoriales.,aprendizaje;automático,True
+LIN-002,GRP-001,Sistemas inteligentes,Estudio y aplicación de sistemas inteligentes en problemas institucionales o territoriales.,sistemas;inteligentes,True
+LIN-003,GRP-001,Inteligencia artificial explicable,Estudio y aplicación de inteligencia artificial explicable en problemas institucionales o territoriales.,inteligencia;artificial;explicable,True
+LIN-004,GRP-002,Arquitecturas de software,Estudio y aplicación de arquitecturas de software en problemas institucionales o territoriales.,arquitecturas;de;software,True
+LIN-005,GRP-002,Ingeniería de software basada en evidencia,Estudio y aplicación de ingeniería de software basada en evidencia en problemas institucionales o territoriales.,ingeniería;de;software;basada;en;evidencia,True
+LIN-006,GRP-002,Sistemas distribuidos,Estudio y aplicación de sistemas distribuidos en problemas institucionales o territoriales.,sistemas;distribuidos,True
+LIN-007,GRP-003,Sistemas embebidos,Estudio y aplicación de sistemas embebidos en problemas institucionales o territoriales.,sistemas;embebidos,True
+LIN-008,GRP-003,Monitoreo mediante sensores,Estudio y aplicación de monitoreo mediante sensores en problemas institucionales o territoriales.,monitoreo;mediante;sensores,True
+LIN-009,GRP-003,Computación en el borde,Estudio y aplicación de computación en el borde en problemas institucionales o territoriales.,computación;en;el;borde,True
+LIN-010,GRP-004,Seguridad de aplicaciones,Estudio y aplicación de seguridad de aplicaciones en problemas institucionales o territoriales.,seguridad;de;aplicaciones,True
+LIN-011,GRP-004,Gestión de identidades y confianza,Estudio y aplicación de gestión de identidades y confianza en problemas institucionales o territoriales.,gestión;de;identidades;y;confianza,True
+LIN-012,GRP-004,Analítica de amenazas,Estudio y aplicación de analítica de amenazas en problemas institucionales o territoriales.,analítica;de;amenazas,True
+LIN-013,GRP-005,Optimización combinatoria,Estudio y aplicación de optimización combinatoria en problemas institucionales o territoriales.,optimización;combinatoria,True
+LIN-014,GRP-005,Analítica de operaciones,Estudio y aplicación de analítica de operaciones en problemas institucionales o territoriales.,analítica;de;operaciones,True
+LIN-015,GRP-005,Sistemas productivos inteligentes,Estudio y aplicación de sistemas productivos inteligentes en problemas institucionales o territoriales.,sistemas;productivos;inteligentes,True
+LIN-016,GRP-006,Telesalud,Estudio y aplicación de telesalud en problemas institucionales o territoriales.,telesalud,True
+LIN-017,GRP-006,Sistemas de información clínica,Estudio y aplicación de sistemas de información clínica en problemas institucionales o territoriales.,sistemas;de;información;clínica,True
+LIN-018,GRP-006,Monitoreo remoto de pacientes,Estudio y aplicación de monitoreo remoto de pacientes en problemas institucionales o territoriales.,monitoreo;remoto;de;pacientes,True
+LIN-019,GRP-007,Analítica epidemiológica,Estudio y aplicación de analítica epidemiológica en problemas institucionales o territoriales.,analítica;epidemiológica,True
+LIN-020,GRP-007,Modelos predictivos en salud,Estudio y aplicación de modelos predictivos en salud en problemas institucionales o territoriales.,modelos;predictivos;en;salud,True
+LIN-021,GRP-007,Salud poblacional,Estudio y aplicación de salud poblacional en problemas institucionales o territoriales.,salud;poblacional,True
+LIN-022,GRP-008,Higiene y seguridad ocupacional,Estudio y aplicación de higiene y seguridad ocupacional en problemas institucionales o territoriales.,higiene;y;seguridad;ocupacional,True
+LIN-023,GRP-008,Ergonomía y factores humanos,Estudio y aplicación de ergonomía y factores humanos en problemas institucionales o territoriales.,ergonomía;y;factores;humanos,True
+LIN-024,GRP-008,Monitoreo de exposición laboral,Estudio y aplicación de monitoreo de exposición laboral en problemas institucionales o territoriales.,monitoreo;de;exposición;laboral,True
+LIN-025,GRP-009,Innovación organizacional,Estudio y aplicación de innovación organizacional en problemas institucionales o territoriales.,innovación;organizacional,True
+LIN-026,GRP-009,Transformación digital empresarial,Estudio y aplicación de transformación digital empresarial en problemas institucionales o territoriales.,transformación;digital;empresarial,True
+LIN-027,GRP-009,Gestión del conocimiento organizacional,Estudio y aplicación de gestión del conocimiento organizacional en problemas institucionales o territoriales.,gestión;del;conocimiento;organizacional,True
+LIN-028,GRP-010,Riesgo financiero,Estudio y aplicación de riesgo financiero en problemas institucionales o territoriales.,riesgo;financiero,True
+LIN-029,GRP-010,Analítica de mercados,Estudio y aplicación de analítica de mercados en problemas institucionales o territoriales.,analítica;de;mercados,True
+LIN-030,GRP-010,Finanzas algorítmicas,Estudio y aplicación de finanzas algorítmicas en problemas institucionales o territoriales.,finanzas;algorítmicas,True
+LIN-031,GRP-011,Desarrollo regional,Estudio y aplicación de desarrollo regional en problemas institucionales o territoriales.,desarrollo;regional,True
+LIN-032,GRP-011,Economía aplicada,Estudio y aplicación de economía aplicada en problemas institucionales o territoriales.,economía;aplicada,True
+LIN-033,GRP-011,Predicción de permanencia estudiantil,Estudio y aplicación de predicción de permanencia estudiantil en problemas institucionales o territoriales.,predicción;de;permanencia;estudiantil,True
+LIN-034,GRP-012,Analítica educativa,Estudio y aplicación de analítica educativa en problemas institucionales o territoriales.,analítica;educativa,True
+LIN-035,GRP-012,Personalización del aprendizaje,Estudio y aplicación de personalización del aprendizaje en problemas institucionales o territoriales.,personalización;del;aprendizaje,True
+LIN-036,GRP-012,Tecnología educativa,Estudio y aplicación de tecnología educativa en problemas institucionales o territoriales.,tecnología;educativa,True
+LIN-037,GRP-013,Diseño de experiencias de aprendizaje,Estudio y aplicación de diseño de experiencias de aprendizaje en problemas institucionales o territoriales.,diseño;de;experiencias;de;aprendizaje,True
+LIN-038,GRP-013,Innovación curricular,Estudio y aplicación de innovación curricular en problemas institucionales o territoriales.,innovación;curricular,True
+LIN-039,GRP-013,Cognición y aprendizaje,Estudio y aplicación de cognición y aprendizaje en problemas institucionales o territoriales.,cognición;y;aprendizaje,True
+LIN-040,GRP-014,Comportamiento y toma de decisiones,Estudio y aplicación de comportamiento y toma de decisiones en problemas institucionales o territoriales.,comportamiento;y;toma;de;decisiones,True
+LIN-041,GRP-014,Psicología social aplicada,Estudio y aplicación de psicología social aplicada en problemas institucionales o territoriales.,psicología;social;aplicada,True
+LIN-042,GRP-014,Calidad del agua,Estudio y aplicación de calidad del agua en problemas institucionales o territoriales.,calidad;del;agua,True
+LIN-043,GRP-015,Gestión de cuencas,Estudio y aplicación de gestión de cuencas en problemas institucionales o territoriales.,gestión;de;cuencas,True
+LIN-044,GRP-015,Monitoreo ambiental,Estudio y aplicación de monitoreo ambiental en problemas institucionales o territoriales.,monitoreo;ambiental,True
+LIN-045,GRP-015,Riesgo climático,Estudio y aplicación de riesgo climático en problemas institucionales o territoriales.,riesgo;climático,True
+LIN-046,GRP-016,Adaptación territorial,Estudio y aplicación de adaptación territorial en problemas institucionales o territoriales.,adaptación;territorial,True
+LIN-047,GRP-016,Modelamiento ambiental,Estudio y aplicación de modelamiento ambiental en problemas institucionales o territoriales.,modelamiento;ambiental,True
+LIN-048,GRP-016,Infraestructura inteligente,Estudio y aplicación de infraestructura inteligente en problemas institucionales o territoriales.,infraestructura;inteligente,True
+LIN-049,GRP-017,Ciudades sostenibles,Estudio y aplicación de ciudades sostenibles en problemas institucionales o territoriales.,ciudades;sostenibles,True
+LIN-050,GRP-017,Monitoreo estructural,Estudio y aplicación de monitoreo estructural en problemas institucionales o territoriales.,monitoreo;estructural,True
+LIN-051,GRP-017,Modelos dinámicos,Estudio y aplicación de modelos dinámicos en problemas institucionales o territoriales.,modelos;dinámicos,True
+LIN-052,GRP-018,Optimización matemática,Estudio y aplicación de optimización matemática en problemas institucionales o territoriales.,optimización;matemática,True
+LIN-053,GRP-018,Instrumentación y adquisición de señales,Estudio y aplicación de instrumentación y adquisición de señales en problemas institucionales o territoriales.,instrumentación;y;adquisición;de;señales,True
+LIN-054,GRP-018,Procesamiento de señales,Estudio y aplicación de procesamiento de señales en problemas institucionales o territoriales.,procesamiento;de;señales,True
+LIN-055,GRP-019,Física computacional,Estudio y aplicación de física computacional en problemas institucionales o territoriales.,física;computacional,True
+LIN-056,GRP-019,Aprendizaje estadístico,Estudio y aplicación de aprendizaje estadístico en problemas institucionales o territoriales.,aprendizaje;estadístico,True
+LIN-057,GRP-019,Series temporales,Estudio y aplicación de series temporales en problemas institucionales o territoriales.,series;temporales,True
+LIN-058,GRP-020,Analítica predictiva,Estudio y aplicación de analítica predictiva en problemas institucionales o territoriales.,analítica;predictiva,True
+LIN-059,GRP-020,Procesamiento de lenguaje natural,Estudio y aplicación de procesamiento de lenguaje natural en problemas institucionales o territoriales.,procesamiento;de;lenguaje;natural,True
+LIN-060,GRP-020,Recuperación de información,Estudio y aplicación de recuperación de información en problemas institucionales o territoriales.,recuperación;de;información,True

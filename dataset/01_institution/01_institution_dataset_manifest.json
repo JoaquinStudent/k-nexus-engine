@@ -1,0 +1,14 @@
+{
+  "dataset": "Knowledge Nexus LATAM",
+  "version": "1.0-block-A",
+  "institution": "UNEXA (ficticia)",
+  "generated_at": "2026-08-26T15:07:39",
+  "record_counts": {
+    "faculties": 6,
+    "programs": 18,
+    "research_groups": 24,
+    "research_lines": 60,
+    "institutional_capabilities": 96,
+    "source_catalog": 35
+  }
+}
