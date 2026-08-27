@@ -11,7 +11,7 @@
 | ID Sprint | Épica | Estado | Criterios de Aceptación (DoD) |
 |---|---|---|---|
 | **Sprint-00** | Scaffolding & Infraestructura documental (SDD+Scrum) | ✅ Done | Los 9 artefactos existen · arquitectura Pipeline+Hexagonal documentada en `ARCHITECTURE.md` · `schema.sql` con placeholder `ChaparroVillavicencioJoaquin` · `BACKLOG.md` tabulado. |
-| **Sprint-01** | Núcleo de Dominio: features + scoring + tipado | 🔲 Pendiente | Tests Rojo→Verde de las 7 features · `scoring.py` combina features ponderadas · `relation_type.py` clasifica la conexión · `domain/` sin imports externos (test de arquitectura A1 verde). |
+| **Sprint-01** | Núcleo de Dominio: features + scoring + tipado | ✅ Done | Tests Rojo→Verde de las 7 features · `scoring.py` combina features ponderadas · `relation_type.py` clasifica la conexión · `domain/` sin imports externos (test de arquitectura A1 verde). |
 | **Sprint-02** | Ingesta + Provenance + Entity Store | 🔲 Pendiente | Carga CSV + 60 MD · cada texto arrastra `archivo/registro/campo` · `EntityRepository` implementado contra su puerto · test de trazabilidad end-to-end verde. |
 | **Sprint-03** | Representación: índices denso + léxico + grafo | 🔲 Pendiente | Embeddings bge-m3 en FAISS flat · BM25 operativo · grafo NetworkX con aristas explícitas desde tablas de relación · consulta cruza ES↔EN. |
 | **Sprint-04** | Recuperación híbrida + Reranking explicable | 🔲 Pendiente | Fusión RRF genera candidatos · reranker produce score desglosado en 7 features · demo "¿por qué A antes que B?" reproducible. |

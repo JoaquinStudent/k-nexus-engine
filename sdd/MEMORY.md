@@ -32,6 +32,16 @@
 
 ---
 
+### Sprint-01 — Núcleo de Dominio (features + scoring + tipado)
+
+| Dimensión | Detalle |
+|---|---|
+| **Objetivo** | Construir features.py, scoring.py, relation_type.py puros y testeados TDD Rojo→Verde. |
+| **✅ Qué funcionó** | TDD estricto: los 5 tests se escribieron antes que la implementación y fallaron por `ModuleNotFoundError` (Rojo real, no simulado). El caso estrella A vs B (DoD-3) validó que compat_metodo desempata con sim_semantica idéntica. |
+| **⚠️ Qué vigilar** | El test de arquitectura A1 inicialmente marcó falso positivo en imports intra-`domain/` (`src.domain.models` importado por `features.py`/`scoring.py`/`relation_type.py`); se corrigió el propio test para no confundir import intra-paquete con dependencia externa. |
+| **❌ Errores a evitar** | No asumir Python 3.11 disponible en el entorno del PO; el sistema traía 3.14 vía Homebrew. Se creó `.venv` local en `knexus/` para aislar pytest sin tocar el Python del sistema. |
+| **🔁 Acción para el próximo Sprint** | Sprint-02 = ingesta + provenance + EntityRepository. Los tipos `QueryEntity`/`CandidateEntity` de `models.py` ya definen el contrato de entrada que la ingesta deberá producir. |
+
 ## 3. Antipatrones detectados (lista negra)
 
 | Antipatrón | Por qué es peligroso |
