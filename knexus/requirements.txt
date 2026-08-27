@@ -1,10 +1,18 @@
-pandas
-pytest
-networkx
-rank-bm25
-faiss-cpu
-sentence-transformers
-fastapi
-uvicorn[standard]
-jinja2
-httpx
+# Versiones fijadas con las que corren los 174 tests (Sprint-08, verificado con
+# instalación limpia). Ver sdd/TECH_STACK.md para el rol de cada una y
+# docs/DECLARACION_TECNOLOGICA.md para la declaración completa de componentes externos.
+pandas==3.0.5
+pytest==9.1.1
+networkx==3.6.1
+rank-bm25==0.2.2
+faiss-cpu==1.15.0
+sentence-transformers==6.0.0
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+jinja2==3.1.6
+httpx==0.28.1
+
+# Opcional (Regla A4 — el sistema corre completo sin esto, degrada a
+# TemplateExplainer): habilita LlmExplainer si se exporta ANTHROPIC_API_KEY.
+# No verificado en este entorno (sin API key disponible, SPEC.md §11).
+# anthropic>=1.0.0

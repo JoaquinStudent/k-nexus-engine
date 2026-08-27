@@ -22,7 +22,7 @@
         ┌───────────────────────────────────────────────┐
         │                 INTERFACE                     │  FastAPI + Jinja2 (un proceso) · mini-grafo SVG
         │   ┌───────────────────────────────────────┐   │
-        │   │              ADAPTERS                  │   │  bge-m3 · FAISS · bm25 · NetworkX
+        │   │              ADAPTERS                  │   │  sentence-transformers · FAISS · bm25 · NetworkX
         │   │   ┌───────────────────────────────┐   │   │  LlmExplainer / TemplateExplainer
         │   │   │        APPLICATION            │   │   │  use-cases (orquestan el pipeline)
         │   │   │   ┌───────────────────────┐   │   │   │
@@ -51,7 +51,9 @@
         │   cada texto → {texto, entity_id, entity_type, archivo, campo}
         ▼
 [F2] REPRESENTACIÓN
-        │   denso (bge-m3→FAISS) · léxico (bm25) · grafo (NetworkX desde tablas de relación)
+        │   denso (sentence-transformers `paraphrase-multilingual-MiniLM-L12-v2`→FAISS,
+        │   swap de una línea detrás de `EmbeddingProvider` a bge-m3 si hiciera falta más adelante)
+        │   · léxico (bm25) · grafo (NetworkX desde tablas de relación)
         ▼
 [F3] RECUPERACIÓN HÍBRIDA      ◄── query: necesidad / entidad / texto libre
         │   fusión RRF(denso, léxico) → candidatos top-N
@@ -67,6 +69,10 @@
         ▼
 [F7] INTERFAZ                  ── FastAPI + Jinja2 (Sprint-06, ADR-013) ──
         score desglosado · evidencia · procedencia · mini-grafo · oportunidad
+
+[F8] EVALUACIÓN (lateral, Sprint-07) ── evaluation/, fuera del hexágono ──
+        │   corre F1-F5 sobre `qrels.csv` (20 NEEDs) con 3 brazos (full/cosine/dense)
+        │   → evaluation/results.json → F7 lo LEE (nunca lo recalcula en vivo)
 ```
 
 ## 4. Estructura de carpetas
@@ -90,7 +96,7 @@ knexus/
 │   │   ├── explainer.py
 │   │   └── entity_repository.py
 │   ├── adapters/
-│   │   ├── embeddings/       # bge-m3
+│   │   ├── embeddings/       # sentence-transformers (paraphrase-multilingual-MiniLM-L12-v2)
 │   │   ├── retrieval/        # faiss, bm25, fusión RRF
 │   │   ├── graph/            # networkx
 │   │   ├── explain/          # llm_explainer.py + template_explainer.py
@@ -123,7 +129,7 @@ knexus/
 | Puerto | Responsabilidad | Adapter(s) |
 |---|---|---|
 | `EntityRepository` | Cargar entidades con provenance. | loaders CSV/MD |
-| `EmbeddingProvider` | Texto → vector. | bge-m3 |
+| `EmbeddingProvider` | Texto → vector. | `SentenceTransformerProvider` (`paraphrase-multilingual-MiniLM-L12-v2`) — bge-m3 queda como swap de una línea detrás del puerto si el modelo actual se quedara corto |
 | `LexicalIndex` | Búsqueda por términos. | rank-bm25 |
 | `GraphStore` | Relaciones explícitas y caminos. | NetworkX |
 | `Explainer` | Redactar explicación y oportunidad. | `LlmExplainer` **/** `TemplateExplainer` |
