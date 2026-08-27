@@ -100,13 +100,17 @@ def _capability_topic(capability_name: str) -> str:
     return capability_name.split("—")[0].strip()
 
 
-def has_capability_support(domains: tuple, methods: tuple, capabilities: tuple) -> bool:
+def find_matching_capability(domains: tuple, methods: tuple, capabilities: tuple):
+    """La PRIMERA `StoredEntity` de tipo CAPABILITY que satisface sector + tema
+    + madurez, o `None`. `has_capability_support` es un caso particular de esto
+    (Sprint-05: la cadena de oportunidad necesita saber CUÁL capacidad, no sólo
+    si existe alguna — mismo criterio, sin duplicar la regla)."""
     sectors = {domain_sector(d) for d in domains} - {""}
     required_topics = set()
     for method in methods:
         required_topics |= set(METHOD_TO_CAPABILITY_TOPICS.get(method, ()))
     if not sectors or not required_topics:
-        return False
+        return None
 
     for cap in capabilities:
         raw = cap.raw
@@ -122,5 +126,9 @@ def has_capability_support(domains: tuple, methods: tuple, capabilities: tuple) 
             continue
         cap_sectors = {_fold(s) for s in raw.get("application_domains", "").split(";")}
         if sectors & cap_sectors:
-            return True
-    return False
+            return cap
+    return None
+
+
+def has_capability_support(domains: tuple, methods: tuple, capabilities: tuple) -> bool:
+    return find_matching_capability(domains, methods, capabilities) is not None

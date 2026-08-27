@@ -152,3 +152,35 @@ RankedConnection:
 **Comparador "¿por qué A antes que B?"** (`application/auditar_resultado.py`, módulo M7 de `DESIGN.md`): `comparar(a, b)` descompone el delta de score en deltas por feature — la suma de los 7 deltas reproduce exacto `score_a - score_b` (mismo principio de aditividad que `compute_score`).
 
 **Caché de vectores** (`adapters/retrieval/vector_cache.py`): clave = modelo + hash del corpus; evita recodificar ~14.000 textos (~40s) en cada arranque. Instanciar el modelo real (`SentenceTransformer(...)`) sigue costando su tiempo de carga (~5-15s) cada vez — la caché evita el *encoding*, no la carga del modelo en memoria.
+
+## 11. Contrato de ensamblado de oportunidad + Explainer (Sprint-05)
+
+`src/application/generar_oportunidad.py` orquesta F5+F6 de `ARCHITECTURE.md`, reutilizando `descubrir_conexiones` (Sprint-04) para los antecedentes — no rehace recuperación.
+
+```
+generar_oportunidad(query_input: str, *, repo, dense_index, lexical_index, graph,
+                     top_antecedentes=3) -> tuple[Opportunity, ...]
+
+ChainLink (domain/opportunity.py):
+  role: necesidad | antecedente | investigador | capacidad | curriculo
+  entity_id, entity_type
+  link_type: retrieved | edge | inferred     # fuerza probatoria del eslabón
+  score: float | None                         # None si es un hecho puro, sin score propio
+  relation_type: str                          # sólo poblado en el antecedente
+  rationale_features: tuple[(nombre, valor), ...]
+
+Opportunity:
+  need_id, links: tuple[ChainLink, ...]
+  opportunity_type: continuidad_investigativa | activacion_capacidad |
+                    integracion_curricular | colaboracion_interdisciplinaria | exploratoria
+  priority: alta | media | baja
+  score: float    # score del antecedente — el ancla de la oportunidad
+```
+
+**Por qué `link_type` es obligatorio, no cosmético.** Los 4 eslabones NO tienen la misma fuerza probatoria: antecedente = puntuado (`retrieved`); investigador = arista real de `researcher_project.csv` (`edge`); capacidad = inferida sin tabla de enlace (`inferred`, ADR-008); currículo = FK real (`primary_program_id`) pero el subject/competency específico se elige por score (`edge`, igual criterio que investigador — el "cómo se sabe que existe la conexión" es un hecho duro, aunque cuál instancia se muestre sea puntuado). Presentar los tres tipos como si fueran lo mismo es la "trazabilidad de mentira" que la rúbrica penaliza.
+
+**Eslabón curricular puntuado, no traversado.** De los ~7 subjects/competencies del programa de un investigador, se puntúan TODOS con `to_candidate_entity`+`compute_features`+`compute_score` contra la misma consulta (mismas 7 features que el resto del sistema) y sólo entra el de mayor score si supera `CURRICULAR_SCORE_THRESHOLD=0.30`. Verificado con el modelo real: para NEED-001, "Analítica educativa" (SUB-083) puntúa por encima de "Lenguaje y conocimiento" (SUB-084) del mismo programa y sector.
+
+**Degradación honesta.** Un eslabón sin evidencia real (antecedente sin investigador conectado, ninguna capacidad institucional coincidente, ningún componente curricular sobre el umbral) simplemente **no aparece** en la cadena — nunca se fabrica. `opportunity_priority` penaliza esto de forma natural: menos eslabones "edge" ⇒ prioridad más baja a igual score del antecedente.
+
+**`Explainer` (ADR-002, `ports/explainer.py`):** `explain_connection`/`explain_opportunity` reciben sólo los DTO ya ensamblados (nunca el repositorio) y producen prosa. `TemplateExplainer` es el adapter por defecto (determinista, sin red); `LlmExplainer` es opcional y **degrada automáticamente a `TemplateExplainer`** si no hay `ANTHROPIC_API_KEY` en el entorno, si el SDK no está instalado, o si la llamada falla por cualquier motivo (`adapters/explain/factory.py:build_explainer()`, Regla A4). Grounding verificado por test: ningún identificador ni cifra en la salida del `TemplateExplainer` puede faltar en su input.
