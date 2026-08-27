@@ -12,11 +12,13 @@ def classify_relation(fv: FeatureVector, candidate_entity_type: str) -> str:
         return "investigador_complementario"
     metodo_alto = fv.compat_metodo is not None and fv.compat_metodo >= ALTO
     metodo_no_alto = fv.compat_metodo is None or fv.compat_metodo < ALTO
-    if fv.soporte_capacidad >= ALTO and metodo_no_alto and fv.compat_dominio < ALTO:
+    dominio_alto = fv.compat_dominio is not None and fv.compat_dominio >= ALTO
+    dominio_no_alto = fv.compat_dominio is None or fv.compat_dominio < ALTO
+    if fv.soporte_capacidad >= ALTO and metodo_no_alto and dominio_no_alto:
         return "activacion_capacidad"
     if metodo_alto and fv.densidad_evidencia >= ALTO:
         return "antecedente_metodologico"
-    if fv.compat_dominio >= ALTO and fv.sim_semantica >= ALTO:
+    if dominio_alto and fv.sim_semantica >= ALTO:
         return "antecedente_relevante"
     # ponytail: cualquier resto (solo sim_lexica/sim_semantica altas, resto bajo)
     # cae aquí por diseño — coincidir en tema/texto sin método, dominio, capacidad

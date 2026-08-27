@@ -9,10 +9,10 @@
 
 | Capa | Tecnología | Rol | Justificación |
 |---|---|---|---|
-| Lenguaje | **Python 3.11** | Todo el backend y la lógica. | Estándar del equipo; ecosistema NLP/datos maduro. |
+| Lenguaje | **Python 3.11+** (usado en la práctica: 3.12) | Todo el backend y la lógica. | Estándar del equipo; ecosistema NLP/datos maduro. Nota: el equipo trabaja en 3.12/3.14 según la máquina — 3.11 quedó como piso mínimo, no como versión exacta instalada en ningún puesto. |
 | Datos | **pandas** | Ingesta y manejo del entity store. | ~2.000 entidades caben en memoria; no requiere DB pesada. |
-| Embeddings | **sentence-transformers + BAAI/bge-m3** | Texto → vector multilingüe. | El dataset mezcla ES/EN a propósito; da denso + sparse. Corre en CPU. |
-| Índice denso | **FAISS (flat)** | Búsqueda por similitud exacta. | Exacto e instantáneo a esta escala; evita vector DB cloud. |
+| Embeddings | **sentence-transformers + `paraphrase-multilingual-MiniLM-L12-v2`** (Sprint-03; bge-m3 queda como swap de una línea detrás del puerto `EmbeddingProvider`) | Texto → vector multilingüe. | El dataset mezcla ES/EN a propósito (verificado: coseno 0.82 "deserción estudiantil"↔"student attrition"). bge-m3 (~5GB con torch) se cambió por este modelo (~470MB) para iterar rápido en hackathon sin perder cobertura ES↔EN. |
+| Índice denso | **FAISS (flat)**, con fallback exacto en NumPy si `faiss` no importa (Regla A4) | Búsqueda por similitud exacta. | Exacto e instantáneo a esta escala; evita vector DB cloud. |
 | Índice léxico | **rank-bm25** | Búsqueda por términos/keywords. | Complementa al denso en coincidencias exactas y siglas. |
 | Grafo | **NetworkX** | Relaciones explícitas y caminos. | Vive en el proceso Python; Neo4j sería sobrecosto sin beneficio. |
 | Fusión / Reranking | **código propio** (RRF + features ponderadas) | Núcleo de dominio. | Debe ser auditable y testeable; no se delega a librería opaca. |

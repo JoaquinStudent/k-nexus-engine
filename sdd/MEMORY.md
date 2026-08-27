@@ -16,6 +16,7 @@
 | L3 | "Similarity ≠ Relevance" es el examen central. | Documento Técnico | El score se descompone en features auditables, no en coseno. |
 | L4 | Lo que no corre en vivo se considera "trabajo futuro". | Rúbrica | El sistema debe responder a consultas nuevas sin precargados. |
 | L5 | Los NEED no traen método (el MD lo declara a propósito); el Jaccard simétrico de `compat_metodo` degenera a 0 en todo par NEED→candidato y volvía inalcanzable `antecedente_metodologico`. | Auditoría del dataset (Sprint-01.5) | Feature con un lado estructuralmente vacío: puntuar por **transferabilidad** (tipo-de-problema inferido → método real del candidato) y, sin señal, marcar **N/A + re-normalizar** — nunca un 0 falso. |
+| L6 | Una feature "casi-constante" (siempre `False`, siempre 0, o auto-saturada en 1.0) no rompe ningún test escrito con fixtures a mano — sólo se ve midiendo la distribución sobre datos reales. Pasó 3 veces (`compat_metodo` en Sprint-01.5, `graph_linked`/`has_capability_support`/`compat_dominio`/`densidad_evidencia` en Sprint-03). | Auditorías repetidas antes de cada plan de sprint | Todo sprint que toque features debe correr (o extender) `test_feature_discrimination.py` sobre una muestra real antes de darse por cerrado — no basta con que los tests con fixtures pasen. |
 
 ---
 
@@ -57,6 +58,33 @@
 
 > **Nota de infraestructura (corrección).** La retro de Sprint-01 dice que se creó un `.venv` en `knexus/`; **ese venv no está en el repo**. En este entorno (Windows, Python 3.12 de Microsoft Store) `pytest` se instaló en el Python del sistema para verificar. Pendiente: crear `requirements.txt` (mín. `pytest`) y decidir venv vs. sistema; añadir `.pytest_cache/` y `__pycache__/` a `.gitignore`.
 
+---
+
+### Sprint-02 — Ingesta + Provenance + Entity Store
+
+| Dimensión | Detalle |
+|---|---|
+| **Objetivo** | Cargar las 22 tablas CSV + 60 MD de Data V1.0 con provenance campo-por-campo, servidas por `EntityRepository` (puerto), y cerrar el lazo de ADR-007 sobre entidades reales. |
+| **✅ Qué funcionó** | `pandas.read_csv(..., keep_default_na=False)` respeta la "controlled missingness" del manifest sin inventar NaN. El vocabulario de `enrichment.py` se valida por `assert` contra `method_compat.TRANSFERABILITY` (anti-drift) — imposible que ingesta y dominio diverjan en silencio. 19/19 tests verdes a la primera corrida completa; 2.512 entidades cargadas cuadran exacto con la suma de los 3 manifests (Block A+B+C). |
+| **⚠️ Qué vigilar** | **El ejemplo "verificado" que se escribió en `SPEC.md §9.1` durante Sprint-01.5 estaba mal etiquetado**: los números venían de un fixture de test inyectado a mano, no del dataset real — y de hecho el dataset real no tiene ningún proyecto con método "encuesta" (PRJ-004 y PRJ-007 reales comparten el mismo método). Se corrigió `SPEC.md` con el par real (PRJ-004 vs PRJ-002). **Lección: nunca marcar un número como "verificado sobre datos reales" hasta que la ingesta exista** — antes de Sprint-02 sólo estaba verificado contra fixtures. |
+| **❌ Errores a evitar** | No usar `str.split(',')` sobre los CSV: `projects.methodology` trae comas embebidas dentro de campos entrecomillados; requiere parser CSV real (pandas ya lo maneja). No olvidar `encoding='utf-8-sig'` — los headers traen BOM. |
+| **🔁 Acción para el próximo Sprint** | Sprint-03 = representación (embeddings bge-m3 + FAISS + BM25 + grafo NetworkX). Las 7 tablas de relación ya están cargadas como aristas (`repo.edges(relation)`) — el grafo de Sprint-03 las consume directo, sin re-parsear CSV. `has_capability_support`/`graph_linked` en `projection.py` siguen en `False` por defecto hasta que Sprint-03/04 los conecten. |
+
+---
+
+### Sprint-03 — Representación (denso + léxico + grafo) y revivir el 25% inerte
+
+| Dimensión | Detalle |
+|---|---|
+| **Objetivo** | Construir los 3 índices (denso, léxico, grafo) y, al auditar antes de planear, cerrar el 25% de peso (`soporte_capacidad`+`enlace_estructural`) que `projection.py` dejaba fijo en `False` desde Sprint-02. |
+| **✅ Qué funcionó** | El patrón N/A + re-normalización de ADR-007 se reutilizó tal cual para ADR-009 (`compat_dominio`) — cero cambios en `scoring.py`. El test de discriminación sistémico (`test_feature_discrimination.py`) **cazó 3 problemas reales antes de que llegaran a producción**: (1) mi primer diseño de `has_capability_support` por `capability_type` daba `True` al 97.8% de los proyectos — se descartó y se rediseñó sobre el tema real de `capability_name` (21.6%/78.4%, discrimina de verdad); (2) `densidad_evidencia` estaba auto-saturada en 1.0 para el 96% de la muestra por un bug de Sprint-02 (`expected_fields = max(declarado, len(filled_fields))` nunca podía ser menor que lo ya llenado); (3) el muestreo inicial del propio test no encontraba investigadores conectados (slice ciego de `by_type()`, los IDs con arista real no caían en las primeras filas del CSV) — se corrigió el test, no el código. `venv` en ruta corta (`C:\kvenv`) resolvió el fallo de `torch` por `MAX_PATH` de Windows con el Python de Microsoft Store (ver nota de infra). |
+| **⚠️ Qué vigilar** | **Un cuarto hallazgo del mismo patrón, encontrado pero NO corregido a propósito**: `sim_lexica` también es 0 constante para todo NEED (`institutional_needs.csv` no tiene columna `keywords`) — pero a diferencia de `compat_dominio`, esto se dejó así porque el SPEC pesa `sim_lexica` en 0.05 *a propósito* como "la más débil, evita premiar la trampa léxica"; forzarla a variar iría contra el diseño. Documentado con un test dedicado (`test_sim_lexica_es_cero_constante_por_diseno_no_por_bug`) para que no se confunda con una regresión en el futuro. |
+| **❌ Errores a evitar** | No usar `capability_type` como señal de capacidad institucional en este dataset: es prácticamente ruido (cada uno de los 12 temas de `capability_name` aparece con los 7 `capability_type` casi por igual — decorrelacionados). La señal real siempre está en el campo de texto más específico (`capability_name`), nunca en la categoría gruesa, si la categoría gruesa no se audita primero contra la variable que se quiere predecir. |
+| **📋 Nota de rigor TDD** | A diferencia de Sprint-01/01.5 (Rojo real antes de cada línea de implementación), Sprint-03 fue más exploratorio: varias piezas (`capability_match.py`, el rediseño de `has_capability_support`, `MD_SECTION_COUNTS`) se escribieron auditando primero la forma real de los datos, y los tests de cierre se escribieron después de tener una implementación candidata — no antes. El Rojo real que sí se observó fue el de módulos inexistentes al importar. Es una desviación honesta del proceso estricto, no un intento de ocultarla. |
+| **🔁 Acción para el próximo Sprint** | Sprint-04 (recuperación híbrida + reranking) es quien arma `seed_ids` de verdad (candidatos ya recuperados por RRF) para alimentar `graph_linked` en producción — hoy sólo se probó con seeds construidos a mano en tests. Ampliar `NEED_SECTOR_PHRASES`/`METHOD_PHRASES` sigue siendo incremental, no bloqueante (cobertura ya en mayoría clara). |
+
+> **Nota de infraestructura.** `sentence-transformers` (→ torch) **no instala** en el Python de Microsoft Store de este equipo: la ruta de `site-packages` es tan profunda (`...LocalCache\local-packages\Python312\site-packages\...`) que un header interno de torch llega a los 260 caracteres exactos (`MAX_PATH` de Windows sin long-paths). Fix: `python -m venv C:\kvenv` (ruta corta) + instalar ahí. Comando de tests de esta sesión: `/c/kvenv/Scripts/python.exe -m pytest tests/ -v` (no el `python` del PATH). `requirements.txt` ya lista `sentence-transformers`; documentar este workaround en el README de Sprint-08.
+
 ## 3. Antipatrones detectados (lista negra)
 
 | Antipatrón | Por qué es peligroso |
@@ -80,3 +108,5 @@
 | ADR-005 | Paleta: índigo `#251D4B` como base (cumple "azul oscuro"); lavandas del PO solo como acentos; se añaden neutros, semánticos de relevancia y colores de grafo. | Aceptada |
 | ADR-006 | Signature element del producto: "Relevance Breakdown Bar" (descompone el score en 7 features). | Aceptada |
 | ADR-007 | `compat_metodo` híbrido: Jaccard simétrico si la consulta trae métodos; si no, transferabilidad `problem_type→método` (tabla explícita en `method_compat.py`); sin señal, N/A + re-normalización de pesos. `problem_types` de los NEED se infiere en ingesta (Sprint-02), no en el dominio. | Aceptada |
+| ADR-008 | `has_capability_support` cruza sector + **tema de `capability_name`** (no `capability_type`, decorrelacionado del tema real) + madurez≥4 (`capability_match.py`). `graph_linked` es relacional: adyacencia real a otro candidato fuerte de la MISMA consulta (`graph`/`seed_ids` en `to_candidate_entity`), no "existe en el grafo" — sin contexto, ambas quedan en `False` (cero regresión). | Aceptada |
+| ADR-009 | `compat_dominio` sigue el mismo patrón N/A + re-normalización que ADR-007: los NEED no tienen ninguna columna de dominio, así que se infiere un **sector** institucional (8 valores) del texto del NEED (`vocabulary.py:NEED_SECTOR_PHRASES`) y el candidato se etiqueta con el mismo sector (`capability_match.domain_sector`, reutilizado de ADR-008) para que Jaccard tenga vocabulario común. | Aceptada |

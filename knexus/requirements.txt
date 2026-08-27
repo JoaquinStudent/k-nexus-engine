@@ -1,0 +1,6 @@
+pandas
+pytest
+networkx
+rank-bm25
+faiss-cpu
+sentence-transformers

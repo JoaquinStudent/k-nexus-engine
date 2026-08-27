@@ -1,5 +1,5 @@
 """Contrato de datos del dominio. PURO — sin imports externos (Regla A1)."""
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
@@ -41,7 +41,8 @@ class FeatureVector:
     sim_lexica: float
     compat_metodo: float  # None == N/A: la consulta no aporta método comparable;
     # se excluye del score (re-normalización) en vez de contar como 0.
-    compat_dominio: float
+    compat_dominio: float  # None == N/A (ADR-009): la consulta no aporta ningún
+    # dominio/sector comparable; se excluye del score igual que compat_metodo.
     densidad_evidencia: float
     soporte_capacidad: float
     enlace_estructural: float

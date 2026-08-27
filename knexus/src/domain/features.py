@@ -37,7 +37,17 @@ def compat_metodo(pair: CandidatePair):
     return None
 
 
-def compat_dominio(pair: CandidatePair) -> float:
+def compat_dominio(pair: CandidatePair):
+    """ADR-009: los NEED no traen ninguna columna de dominio (a diferencia de
+    projects/theses), así que `query.domains` puede venir vacío. Jaccard sobre
+    conjuntos vacíos ya da 0.0 (no rompe), pero eso es indistinguible de "domain
+    realmente incompatible" — por eso, igual que `compat_metodo` (ADR-007), sin
+    señal de dominio en la consulta la feature es N/A (None), no 0. La ingesta
+    (`ADR-009`) infiere un sector institucional del texto del NEED para que
+    Jaccard tenga con qué cruzar en el caso común.
+    """
+    if not pair.query.domains:
+        return None
     return _jaccard(pair.query.domains, pair.candidate.domains)
 
 
