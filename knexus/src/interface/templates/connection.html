@@ -2,19 +2,19 @@
 {% import "_macros.html" as m %}
 {% block title %}{{ connection.title }} — KNexus Engine{% endblock %}
 {% block content %}
-<a class="btn-secondary" href="/results?q={{ query|urlencode }}">&larr; Back to results</a>
+<a class="btn-secondary" href="/results?q={{ query|urlencode }}">&larr; Volver a resultados</a>
 
 <div style="margin-top:24px; display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap;">
   <div>
     <span class="badge">{{ connection.entity_type }} {{ connection.entity_id }}</span>
     <h1 style="margin-top:8px;">{{ connection.title }}</h1>
-    <p class="muted">{{ connection.relation_label }} for query "{{ query }}"</p>
+    <p class="muted">{{ connection.relation_label }} para la consulta "{{ query }}"</p>
   </div>
-  <a class="btn-secondary" href="/audit?q={{ query|urlencode }}&amp;a={{ connection.entity_id }}">Compare with…</a>
+  <a class="btn-secondary" href="/audit?q={{ query|urlencode }}&amp;a={{ connection.entity_id }}">Comparar con…</a>
 </div>
 
 <div class="card" style="margin-top:24px;">
-  <h2 style="margin-bottom:4px;">Relevance {{ '%.2f'|format(connection.score) }}</h2>
+  <h2 style="margin-bottom:4px;">Relevancia {{ '%.2f'|format(connection.score) }}</h2>
   <span class="pill {{ connection.relevance_band }}">{{ connection.relevance_band|capitalize }}</span>
   <div style="margin-top:20px;">{{ m.breakdown_bar(connection.breakdown) }}</div>
   {{ m.breakdown_legend(connection.breakdown) }}
@@ -22,27 +22,27 @@
 
 {% if connection.explanation %}
 <div class="card" style="margin-top:16px;">
-  <span class="tag-generated">AI-generated</span>
+  <span class="tag-generated">Generado por IA</span>
   <p style="margin-top:12px; margin-bottom:0;">{{ connection.explanation }}</p>
 </div>
 {% endif %}
 
 <div class="card" style="margin-top:16px;">
-  <h3>Why we trust this</h3>
-  <span class="tag-evidence">Institutional evidence</span>
+  <h3>Por qué confiamos en esto</h3>
+  <span class="tag-evidence">Evidencia institucional</span>
   <div class="evidence-item" style="margin-top:16px;">
     <p style="margin:0;">"{{ connection.evidence_text }}"</p>
     <p class="provenance-trail">{{ connection.evidence.source_file }} · {{ connection.evidence.entity_id }} · {{ connection.evidence.field_name }}</p>
   </div>
-  <p class="muted" style="margin-bottom:0;">AI text never counts as evidence.</p>
+  <p class="muted" style="margin-bottom:0;">El texto generado por IA nunca cuenta como evidencia.</p>
 </div>
 
 <div class="card graph-panel" style="margin-top:16px;">
-  <h3>Knowledge graph</h3>
+  <h3>Grafo de conocimiento</h3>
   {{ graph_svg | safe }}
   <div class="graph-legend">
-    <span class="item"><span class="line"></span> explicit relation</span>
-    <span class="item"><span class="line dashed"></span> discovered by ranking</span>
+    <span class="item"><span class="line"></span> relación explícita</span>
+    <span class="item"><span class="line dashed"></span> descubierta por ranking</span>
   </div>
 </div>
 {% endblock %}

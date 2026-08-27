@@ -45,7 +45,7 @@ def test_metrics_page_sin_archivo_muestra_estado_vacio(client, tmp_path, monkeyp
     monkeypatch.setattr(metrics_report, "RESULTS_PATH", tmp_path / "no-existe.json")
     resp = client.get("/metrics")
     assert resp.status_code == 200
-    assert "No measurement recorded yet" in resp.text
+    assert "Aún no hay ninguna medición registrada" in resp.text
     assert "scripts/evaluate.py" in resp.text
 
 

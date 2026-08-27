@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Performance — KNexus Engine{% endblock %}
+{% block title %}Desempeño — KNexus Engine{% endblock %}
 {% block content %}
-<h1>Performance</h1>
+<h1>Desempeño</h1>
 
 {% if not metrics.available %}
   <div class="card state-empty">
-    <h2>No measurement recorded yet</h2>
-    <p class="muted">Run <code>python scripts/evaluate.py</code> from <code>knexus/</code> to generate
+    <h2>Aún no hay ninguna medición registrada</h2>
+    <p class="muted">Ejecuta <code>python scripts/evaluate.py</code> desde <code>knexus/</code> para generar
        <code>evaluation/results.json</code>.</p>
   </div>
 {% else %}
@@ -30,14 +30,14 @@
     </div>
     {% endfor %}
     <p class="muted" style="margin-top:12px;">
-      Recall ceilings (labeled-set size limits, never hidden):
+      Techos de recall (límite del tamaño del set etiquetado, nunca ocultos):
       R@10 &le; {{ '%.2f'|format(metrics.recall_ceilings.r10_ceiling) }} ·
       R@30 &le; {{ '%.2f'|format(metrics.recall_ceilings.r30_ceiling) }}
     </p>
   </div>
 
   <div class="card">
-    <h3>Ablation: full reranker vs cosine reorder vs dense-only</h3>
+    <h3>Ablation: pipeline completo vs. reorden por coseno vs. sólo denso</h3>
     {% for row in metrics.ablation %}
     <div class="chart-row">
       <span class="chart-label">{{ row.label }}</span>
@@ -47,22 +47,23 @@
     {% endfor %}
     <p class="delta-line">
       <span class="{{ 'delta-positive' if metrics.ablation_delta_cosine >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_cosine) }}</span>
-      P@5 vs cosine reorder ·
+      P@5 vs. reorden por coseno ·
       <span class="{{ 'delta-positive' if metrics.ablation_delta_dense >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_dense) }}</span>
-      P@5 vs dense-only
+      P@5 vs. sólo denso
     </p>
     <p class="caption" style="font-style: italic; margin-top: 8px;">Similarity != relevance, measured.</p>
   </div>
 </div>
 
 <div class="card" style="margin-top:16px;">
-  <h3>Construct validity (top-5)</h3>
-  <p class="muted" style="margin-top:-8px; margin-bottom:12px;">What P@K can't see: does the top-5 actually
-     contain a trap, a real capability match, a transferable method, an actionable relation? Rates are over
-     candidates the real pipeline scored; <code>unscored</code> is the rest — never a false zero.</p>
+  <h3>Validez de constructo (top-5)</h3>
+  <p class="muted" style="margin-top:-8px; margin-bottom:12px;">Lo que P@K no puede ver: ¿el top-5 realmente
+     contiene una trampa, una coincidencia de capacidad real, un método transferible, una relación accionable?
+     Las tasas son sobre los candidatos que el pipeline real puntuó; <code>sin puntuar</code> es el resto —
+     nunca un 0 falso.</p>
   <table class="metrics-table">
     <thead>
-      <tr><th>Arm</th><th>Trap</th><th>Capability</th><th>Method</th><th>Actionable</th><th>Unscored</th></tr>
+      <tr><th>Brazo</th><th>Trampa</th><th>Capacidad</th><th>Método</th><th>Accionable</th><th>Sin puntuar</th></tr>
     </thead>
     <tbody>
     {% for row in metrics.construct_validity %}
@@ -80,10 +81,10 @@
 </div>
 
 <details class="card" style="margin-top:16px;">
-  <summary>Per-NEED breakdown ({{ metrics.per_need|length }} needs)</summary>
+  <summary>Desglose por NEED ({{ metrics.per_need|length }} needs)</summary>
   <table class="metrics-table" style="margin-top:12px;">
     <thead>
-      <tr><th>NEED</th><th>Relevant (cluster)</th><th>P@5 full</th><th>P@5 cosine</th><th>P@5 dense</th><th>Latency (ms)</th></tr>
+      <tr><th>NEED</th><th>Relevantes (cluster)</th><th>P@5 completo</th><th>P@5 coseno</th><th>P@5 denso</th><th>Latencia (ms)</th></tr>
     </thead>
     <tbody>
     {% for row in metrics.per_need %}
@@ -101,9 +102,9 @@
 </details>
 
 <p class="provenance-trail-block" style="margin-top:16px;">
-  Measured {{ metrics.meta.generated_at }} · provider <code>{{ metrics.meta.provider }}</code> ·
-  {{ metrics.meta.needs_evaluated }} NEEDs · {{ metrics.meta.qrels_rows }} qrels.csv rows ·
-  {{ metrics.meta.entities_indexed }} entities indexed.
+  Medido {{ metrics.meta.generated_at }} · proveedor <code>{{ metrics.meta.provider }}</code> ·
+  {{ metrics.meta.needs_evaluated }} NEEDs · {{ metrics.meta.qrels_rows }} filas de qrels.csv ·
+  {{ metrics.meta.entities_indexed }} entidades indexadas.
 </p>
 {% endif %}
 {% endblock %}

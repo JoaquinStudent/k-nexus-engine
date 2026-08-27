@@ -299,7 +299,7 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
 # --- Métricas (M8, Sprint-07): dict de `evaluation/results.json` -> presentación ---
 
 ARMS_ORDER = ("full", "cosine", "dense")
-ARM_LABELS = {"full": "Full pipeline", "cosine": "Cosine reorder", "dense": "Dense only"}
+ARM_LABELS = {"full": "Pipeline completo", "cosine": "Reorden por coseno", "dense": "Sólo denso"}
 
 
 def serialize_metrics(report: dict | None) -> dict:
@@ -325,9 +325,9 @@ def serialize_metrics(report: dict | None) -> dict:
         "available": True,
         "meta": meta,
         "stat_tiles": (
-            {"label": "Entities indexed", "value": str(meta.get("entities_indexed", "-"))},
-            {"label": "Avg latency", "value": f"{report['avg_latency_ms']:.0f} ms"},
-            {"label": "Evidence coverage", "value": f"{report['evidence_coverage'] * 100:.0f}%"},
+            {"label": "Entidades indexadas", "value": str(meta.get("entities_indexed", "-"))},
+            {"label": "Latencia promedio", "value": f"{report['avg_latency_ms']:.0f} ms"},
+            {"label": "Cobertura de evidencia", "value": f"{report['evidence_coverage'] * 100:.0f}%"},
         ),
         "precision_at_k": (
             {"label": "P@5", "value": pr_cluster["full"]["p5"], "pct": pr_cluster["full"]["p5"] * 100},

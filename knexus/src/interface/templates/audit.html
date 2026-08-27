@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 {% import "_macros.html" as m %}
-{% block title %}Why A over B — KNexus Engine{% endblock %}
+{% block title %}Por qué A antes que B — KNexus Engine{% endblock %}
 {% block content %}
-<h1>Why A over B — audit</h1>
+<h1>Por qué A antes que B — auditoría</h1>
 
 {% if not query %}
-  <div class="card state-empty"><h2>Start by entering a need or an entity ID.</h2></div>
+  <div class="card state-empty"><h2>Comienza ingresando una necesidad o un ID de entidad.</h2></div>
 {% elif not connection_a or not connection_b %}
   <div class="card">
-    <p class="muted">Pick two results from "{{ query }}" to compare.</p>
+    <p class="muted">Elige dos resultados de "{{ query }}" para comparar.</p>
     <form action="/audit" method="get" style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
       <input type="hidden" name="q" value="{{ query }}">
       <select name="a" class="search-input">
-        <option value="">Candidate A</option>
+        <option value="">Candidato A</option>
         {% for c in connections %}<option value="{{ c.entity_id }}" {{ 'selected' if c.entity_id == a }}>{{ c.entity_id }} — {{ c.title }}</option>{% endfor %}
       </select>
       <select name="b" class="search-input">
-        <option value="">Candidate B</option>
+        <option value="">Candidato B</option>
         {% for c in connections %}<option value="{{ c.entity_id }}" {{ 'selected' if c.entity_id == b }}>{{ c.entity_id }} — {{ c.title }}</option>{% endfor %}
       </select>
-      <button class="btn-primary" type="submit">Compare</button>
+      <button class="btn-primary" type="submit">Comparar</button>
     </form>
   </div>
 {% else %}
@@ -48,8 +48,8 @@
   {% endfor %}
   <div class="card" style="margin-top:24px;">
     <p style="margin:0; font-weight:600; color:var(--text-strong);">
-      {{ connection_a.entity_id if comparison.score_delta > 0 else connection_b.entity_id }} ranks higher —
-      dominant feature: {{ comparison.dominant_feature_label }} (delta {{ '%+.3f'|format(comparison.score_delta) }}).
+      {{ connection_a.entity_id if comparison.score_delta > 0 else connection_b.entity_id }} rankea más alto —
+      feature dominante: {{ comparison.dominant_feature_label }} (delta {{ '%+.3f'|format(comparison.score_delta) }}).
     </p>
   </div>
 {% endif %}

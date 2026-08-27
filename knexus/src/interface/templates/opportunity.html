@@ -1,24 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Opportunity — KNexus Engine{% endblock %}
+{% block title %}Oportunidad — KNexus Engine{% endblock %}
 {% block content %}
-<h1>Opportunity</h1>
-<p class="muted">Assembled chains for "{{ query }}"</p>
+<h1>Oportunidad</h1>
+<p class="muted">Cadenas ensambladas para "{{ query }}"</p>
 
 {% if not query %}
   <div class="card state-empty">
-    <h2>Start by entering a need or an entity ID.</h2>
+    <h2>Comienza ingresando una necesidad o un ID de entidad.</h2>
   </div>
 {% elif not opportunities %}
   <div class="card state-empty">
-    <h2>No opportunity could be assembled for this query</h2>
-    <p class="muted">No matching researcher, capability, or curricular component was found — nothing is fabricated.</p>
+    <h2>No se pudo ensamblar ninguna oportunidad para esta consulta</h2>
+    <p class="muted">No se encontró investigador, capacidad ni componente curricular coincidente — nada se fabrica.</p>
   </div>
 {% else %}
 {% for o in opportunities %}
 <div class="card" style="margin-bottom:16px;">
   <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
     <span class="badge">{{ o.opportunity_type_label }}</span>
-    <span class="pill {{ o.priority }}">{{ o.priority|capitalize }} priority</span>
+    <span class="pill {{ o.priority }}">Prioridad {{ o.priority }}</span>
   </div>
   <div class="chain">
     {% for link in o.links %}
@@ -31,7 +31,7 @@
     {% endfor %}
   </div>
   {% if o.explanation %}
-    <span class="tag-generated">AI-generated</span>
+    <span class="tag-generated">Generado por IA</span>
     <p style="margin-top:8px; margin-bottom:0;">{{ o.explanation }}</p>
   {% endif %}
 </div>

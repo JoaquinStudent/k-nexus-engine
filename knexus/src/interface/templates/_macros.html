@@ -16,7 +16,7 @@
   {% for s in segments %}
     <div class="item {{ 'na' if s.na else '' }}">
       <span class="swatch {{ '' if s.na else 'feat-' + s.name }}"></span>
-      {{ s.label }}{% if not s.na %} ({{ '%.2f'|format(s.value) }}){% else %} — not measurable{% endif %}
+      {{ s.label }}{% if not s.na %} ({{ '%.2f'|format(s.value) }}){% else %} — no medible{% endif %}
     </div>
   {% endfor %}
 </div>

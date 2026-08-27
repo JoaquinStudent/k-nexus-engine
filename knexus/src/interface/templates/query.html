@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Discover — KNexus Engine{% endblock %}
+{% block title %}Descubrir — KNexus Engine{% endblock %}
 {% block content %}
 <div class="state-empty" style="text-align:left; padding-top:0;">
-  <h1>Discover connections</h1>
-  <p class="muted">Enter an institutional need, an entity ID, or free text.</p>
+  <h1>Descubrir conexiones</h1>
+  <p class="muted">Ingresa una necesidad institucional, un ID de entidad o texto libre.</p>
   <form class="search-form" action="/results" method="get">
-    <input class="search-input" type="text" name="q" placeholder="NEED-001, PRJ-004, or a free-text need..." autofocus>
-    <button class="btn-primary" type="submit">Discover</button>
+    <input class="search-input" type="text" name="q" placeholder="NEED-001, PRJ-004, o una necesidad en texto libre..." autofocus>
+    <button class="btn-primary" type="submit">Descubrir</button>
   </form>
   {% if quick_picks %}
   <div class="quick-picks">
@@ -15,6 +15,6 @@
     {% endfor %}
   </div>
   {% endif %}
-  <p class="caption" style="margin-top:32px;">{{ entity_count }} entities indexed</p>
+  <p class="caption" style="margin-top:32px;">{{ entity_count }} entidades indexadas</p>
 </div>
 {% endblock %}

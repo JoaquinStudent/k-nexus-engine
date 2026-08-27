@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% import "_macros.html" as m %}
-{% block title %}Results — KNexus Engine{% endblock %}
+{% block title %}Resultados — KNexus Engine{% endblock %}
 {% block content %}
-<div class="muted" style="margin-bottom:16px;">Results for: <strong>{{ query }}</strong></div>
+<div class="muted" style="margin-bottom:16px;">Resultados para: <strong>{{ query }}</strong></div>
 
 {% if not_found_id %}
   <div class="card state-empty">
-    <h2>'{{ not_found_id }}' isn't in these results</h2>
-    <p class="muted">It fell outside the ranked set for this query.</p>
-    <a class="btn-secondary" href="/results?q={{ query|urlencode }}">Back to results</a>
+    <h2>'{{ not_found_id }}' no está en estos resultados</h2>
+    <p class="muted">Quedó fuera del conjunto rankeado para esta consulta.</p>
+    <a class="btn-secondary" href="/results?q={{ query|urlencode }}">Volver a resultados</a>
   </div>
 {% elif not connections %}
   <div class="card state-empty">
-    <h2>No connections passed the relevance threshold</h2>
-    <p class="muted">Try a different need, entity ID, or free text.</p>
-    <a class="btn-primary" href="/">Try another query</a>
+    <h2>Ninguna conexión superó el umbral de relevancia</h2>
+    <p class="muted">Prueba con otra necesidad, ID de entidad o texto libre.</p>
+    <a class="btn-primary" href="/">Probar otra consulta</a>
   </div>
 {% else %}
 <div class="result-list">
