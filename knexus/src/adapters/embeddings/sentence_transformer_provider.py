@@ -5,6 +5,12 @@ bge-m3 (~5GB con torch) — decisión de Sprint-03 para iterar rápido en hackat
 sin perder cobertura ES↔EN (L2 de MEMORY.md). Swap de una línea si se necesita
 bge-m3 más adelante: cambiar `DEFAULT_MODEL`.
 """
+import os
+
+# ponytail: mismo workaround que dense_index.py — faiss y torch no pueden
+# cargar cada uno su runtime OpenMP en el mismo proceso en macOS sin esto.
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
 import numpy as np
 
 from src.ports.embedding_provider import EmbeddingProvider

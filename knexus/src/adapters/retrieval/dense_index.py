@@ -1,6 +1,14 @@
 """Índice denso: FAISS IndexFlatIP sobre vectores L2-normalizados (= coseno).
 Si `faiss` no importa en este entorno, cae a búsqueda exacta con numpy — mismo
 resultado matemático, porque IndexFlatIP ya es una búsqueda exhaustiva."""
+import os
+
+# ponytail: faiss y torch (sentence-transformers) empaquetan cada uno su
+# propio runtime OpenMP; cargar ambos en el mismo proceso en macOS aborta con
+# SIGABRT ("OMP: Error #15") al registrar el segundo. Es inocuo declarar que
+# se tolera — ninguno de los dos usa paralelismo OpenMP dentro del otro aquí.
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
 import numpy as np
 
 from src.adapters.retrieval import vector_cache

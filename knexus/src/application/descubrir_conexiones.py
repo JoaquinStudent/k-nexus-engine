@@ -34,7 +34,7 @@ DEFAULT_TOP_K_SEEDS = 10
 RETRIEVAL_K = 200  # candidatos por índice antes de fusionar (recall amplio)
 
 
-def _feature_contributions(feature_vector) -> tuple:
+def feature_contributions(feature_vector) -> tuple:
     """(nombre, valor, contribución normalizada al score) para las features
     activas (no-N/A) — la MISMA lógica de re-normalización que `compute_score`,
     expuesta para poder explicar qué pesó más."""
@@ -51,7 +51,7 @@ def _feature_contributions(feature_vector) -> tuple:
 def top_features(feature_vector, n: int = 3) -> tuple:
     """Las `n` features que más explican el score — DATOS estructurados, no
     prosa. La redacción en lenguaje natural es del `Explainer` (Sprint-05)."""
-    contributions = _feature_contributions(feature_vector)
+    contributions = feature_contributions(feature_vector)
     return tuple(sorted(contributions, key=lambda c: -c[2])[:n])
 
 

@@ -20,7 +20,7 @@
 
 ```
         ┌───────────────────────────────────────────────┐
-        │                 INTERFACE                     │  FastAPI · Streamlit · mini-grafo
+        │                 INTERFACE                     │  FastAPI + Jinja2 (un proceso) · mini-grafo SVG
         │   ┌───────────────────────────────────────┐   │
         │   │              ADAPTERS                  │   │  bge-m3 · FAISS · bm25 · NetworkX
         │   │   ┌───────────────────────────────┐   │   │  LlmExplainer / TemplateExplainer
@@ -65,7 +65,7 @@
 [F6] EXPLICACIÓN + TRAZABILIDAD── Explainer (port) ──
         │   LlmExplainer  ó  TemplateExplainer (degradación)
         ▼
-[F7] INTERFAZ                  ── FastAPI / Streamlit ──
+[F7] INTERFAZ                  ── FastAPI + Jinja2 (Sprint-06, ADR-013) ──
         score desglosado · evidencia · procedencia · mini-grafo · oportunidad
 ```
 
@@ -95,12 +95,17 @@ knexus/
 │   │   ├── graph/            # networkx
 │   │   ├── explain/          # llm_explainer.py + template_explainer.py
 │   │   └── repository/       # loaders CSV/MD + provenance
-│   └── interface/
-│       ├── api/             # fastapi
-│       └── ui/              # streamlit
+│   └── interface/          # Sprint-06 (ADR-013): FastAPI + Jinja2, un proceso
+│       ├── composition.py     # composition root: arma el pipeline UNA vez + caché de consulta
+│       ├── presenters.py      # DTO -> dict de presentación (PURO); mini-grafo SVG
+│       ├── app.py             # monta static/templates, ambos routers, lifespan
+│       ├── api/                # rutas JSON: /api/discover, /api/connection, /api/opportunity, /api/audit
+│       ├── ui/                  # rutas HTML: /, /results, /connection/{id}, /opportunity, /audit
+│       ├── templates/          # Jinja — base + 5 pantallas + 3 parciales
+│       └── static/               # knexus.css (tokens de DESIGN.md) + fonts/ vendorizadas
 ├── database/
 │   └── schema.sql
-├── tests/                # espejo de domain/ y application/
+├── tests/                # espejo de domain/, application/ e interface/
 └── .sprints/
 ```
 
@@ -119,8 +124,8 @@ knexus/
 | # | Regla | Cómo se verifica |
 |---|---|---|
 | A1 | `domain/` no importa `adapters/`, `ports/`, `application/`, ni librerías externas. | Test de arquitectura (grep de imports). |
-| A2 | Los use-cases dependen de puertos, no de adapters concretos. | Inyección de dependencias en el arranque. |
-| A3 | Todo resultado conserva su provenance hasta la UI. | Test de trazabilidad end-to-end. |
+| A2 | Los use-cases dependen de puertos, no de adapters concretos. | Inyección de dependencias en el arranque. Desde Sprint-06, `interface/composition.py` es el ÚNICO módulo autorizado a instanciar adapters concretos (`DatasetEntityRepository`, `DenseIndex`, `BM25Index`, `NetworkXGraphStore`); las rutas los reciben ya construidos vía `Depends(get_query_service)`. |
+| A3 | Todo resultado conserva su provenance hasta la UI. | Test de trazabilidad end-to-end. Desde Sprint-06 esto se verifica también a nivel HTML renderizado (`tests/interface/test_trazabilidad_ui.py`), no sólo a nivel de datos. |
 | A4 | Existe al menos un adapter de degradación por cada dependencia externa. | `TemplateExplainer` presente y probado. |
 
 ## 7. Flujo de una consulta (secuencia)

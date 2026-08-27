@@ -17,40 +17,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.adapters.graph.networkx_store import NetworkXGraphStore
-from src.adapters.repository.dataset_repository import DatasetEntityRepository
-from src.adapters.retrieval.bm25_index import BM25Index
-from src.adapters.retrieval.corpus import build_corpus
-from src.adapters.retrieval.dense_index import DenseIndex
-from src.adapters.explain.factory import build_explainer
 from src.application.auditar_resultado import comparar
 from src.application.descubrir_conexiones import descubrir_conexiones
 from src.application.generar_oportunidad import generar_oportunidad
-
-
-def build_pipeline(fast: bool):
-    print("Cargando repositorio...", file=sys.stderr)
-    repo = DatasetEntityRepository()
-    refs, texts = build_corpus(repo)
-
-    if fast:
-        from src.adapters.embeddings.hashing_provider import HashingProvider
-        provider = HashingProvider(dim=256)
-        print("Modo rápido: HashingProvider (sin similitud semántica real).", file=sys.stderr)
-    else:
-        from src.adapters.embeddings.sentence_transformer_provider import SentenceTransformerProvider
-        print("Cargando modelo de embeddings (primera vez puede tardar)...", file=sys.stderr)
-        provider = SentenceTransformerProvider()
-
-    dense = DenseIndex(provider)
-    t0 = time.time()
-    dense.build(refs, texts, use_cache=not fast)
-    print(f"Índice denso listo en {time.time() - t0:.1f}s.", file=sys.stderr)
-
-    lexical = BM25Index()
-    lexical.build(refs, texts)
-    graph = NetworkXGraphStore(repo)
-    return repo, dense, lexical, graph
+from src.adapters.explain.factory import build_explainer
+from src.interface.composition import build_pipeline
 
 
 def main():
@@ -62,7 +33,7 @@ def main():
     parser.add_argument("--opportunity", action="store_true", help="ensamblar y mostrar la cadena de oportunidad")
     args = parser.parse_args()
 
-    repo, dense, lexical, graph = build_pipeline(args.fast)
+    repo, dense, lexical, graph = build_pipeline(args.fast, log=lambda msg: print(msg, file=sys.stderr))
 
     print(f"\n=== Consulta: {args.query!r} ===")
     t0 = time.time()

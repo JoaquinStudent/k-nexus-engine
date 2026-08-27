@@ -4,3 +4,7 @@ networkx
 rank-bm25
 faiss-cpu
 sentence-transformers
+fastapi
+uvicorn[standard]
+jinja2
+httpx

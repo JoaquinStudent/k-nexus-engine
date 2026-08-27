@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}KNexus Engine{% endblock %}</title>
+<link rel="stylesheet" href="/static/knexus.css">
+</head>
+<body>
+<div class="app">
+  {% include "_nav.html" %}
+  <main class="main">
+    {% if explainer_degraded %}
+      {% include "_banner.html" %}
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Results — KNexus Engine{% endblock %}
+{% block content %}
+<div class="muted" style="margin-bottom:16px;">Results for: <strong>{{ query }}</strong></div>
+
+{% if not_found_id %}
+  <div class="card state-empty">
+    <h2>'{{ not_found_id }}' isn't in these results</h2>
+    <p class="muted">It fell outside the ranked set for this query.</p>
+    <a class="btn-secondary" href="/results?q={{ query|urlencode }}">Back to results</a>
+  </div>
+{% elif not connections %}
+  <div class="card state-empty">
+    <h2>No connections passed the relevance threshold</h2>
+    <p class="muted">Try a different need, entity ID, or free text.</p>
+    <a class="btn-primary" href="/">Try another query</a>
+  </div>
+{% else %}
+<div class="result-list">
+  {% for c in connections %}
+  <a href="/connection/{{ c.entity_id }}?q={{ query|urlencode }}" style="text-decoration:none; color:inherit;">
+    <div class="card result-card {{ c.relevance_band }}">
+      <div style="display:flex; gap:24px; align-items:flex-start;">
+        <div class="result-rank">{{ '%02d'|format(c.rank) }}</div>
+        <div class="result-body">
+          <div class="result-title-row">
+            <h3 style="margin:0;">{{ c.title }}</h3>
+            <span class="badge">{{ c.entity_type }} {{ c.entity_id }}</span>
+          </div>
+          <div style="margin-top:8px; width:260px;">{{ m.breakdown_bar(c.breakdown, mini=True) }}</div>
+          <p class="result-reason">{{ c.relation_label }}</p>
+        </div>
+      </div>
+      <span class="pill {{ c.relevance_band }}">{{ c.relevance_band|capitalize }} · {{ '%.2f'|format(c.score) }}</span>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

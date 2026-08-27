@@ -184,3 +184,59 @@ Opportunity:
 **Degradación honesta.** Un eslabón sin evidencia real (antecedente sin investigador conectado, ninguna capacidad institucional coincidente, ningún componente curricular sobre el umbral) simplemente **no aparece** en la cadena — nunca se fabrica. `opportunity_priority` penaliza esto de forma natural: menos eslabones "edge" ⇒ prioridad más baja a igual score del antecedente.
 
 **`Explainer` (ADR-002, `ports/explainer.py`):** `explain_connection`/`explain_opportunity` reciben sólo los DTO ya ensamblados (nunca el repositorio) y producen prosa. `TemplateExplainer` es el adapter por defecto (determinista, sin red); `LlmExplainer` es opcional y **degrada automáticamente a `TemplateExplainer`** si no hay `ANTHROPIC_API_KEY` en el entorno, si el SDK no está instalado, o si la llamada falla por cualquier motivo (`adapters/explain/factory.py:build_explainer()`, Regla A4). Grounding verificado por test: ningún identificador ni cifra en la salida del `TemplateExplainer` puede faltar en su input.
+
+## 12. Contrato de la interfaz (Sprint-06)
+
+> **Estado:** ✅ Implementado. **Capa:** `interface/` (FastAPI + Jinja2, ADR-013 — reemplaza a Streamlit del `TECH_STACK.md` original). Un solo proceso: `/api/*` (JSON) y las páginas HTML consumen los MISMOS DTO de `interface/presenters.py`.
+
+### 12.1 Composition root
+
+`interface/composition.py` es el ÚNICO módulo autorizado a instanciar adapters concretos (Regla A2). Expone:
+
+```
+build_pipeline(fast: bool = False, *, log=...) -> (repo, dense_index, lexical_index, graph)
+
+class QueryService:
+    QueryService(repo, dense_index, lexical_index, graph, explainer=None)
+    .discover(query: str) -> tuple[RankedConnection, ...]        # lru_cache(maxsize=64)
+    .opportunities(query: str) -> tuple[Opportunity, ...]        # lru_cache(maxsize=64)
+    .explainer_degraded: bool                                     # isinstance(explainer, TemplateExplainer)
+    QueryService.build(fast=False, *, log=...) -> QueryService   # atajo: build_pipeline + build_explainer()
+```
+
+`scripts/query_cli.py` reusa `build_pipeline` (una sola definición del arranque, movida desde el propio CLI en Sprint-06). `interface/app.py` construye UN `QueryService` en el `lifespan` de FastAPI y lo expone vía `Depends(get_query_service)` — las rutas nunca arman el pipeline.
+
+**Por qué la caché.** `generar_oportunidad` llama por dentro a `descubrir_conexiones` con la MISMA query (`generar_oportunidad.py`). Sin caché, navegar Resultados → Oportunidad → Auditoría sobre la misma consulta repetiría todo el pipeline en cada salto.
+
+### 12.2 Rutas
+
+| Ruta | Método | Devuelve | Estado M9 si falla |
+|---|---|---|---|
+| `GET /` | HTML | M1 — Discover | vacío por defecto (sin query) |
+| `GET /results?q=` | HTML | M2 — lista rankeada | sin resultados: mensaje + acción; query vacía redirige a M1 |
+| `GET /connection/{entity_id}?q=` | HTML | M3+M4+M6 | 404 si `entity_id` no está en los resultados de `q` |
+| `GET /opportunity?q=` | HTML | M5 — cadena(s) | `generar_oportunidad` ya devuelve `()`; se muestra "no se pudo ensamblar" |
+| `GET /audit?q=&a=&b=` | HTML | M7 — comparador | sin `a`/`b` pide seleccionar candidatos de `q` |
+| `GET /api/discover?q=` | JSON | `{query, results: [...]}` | `results: []` si `q` vacía |
+| `GET /api/connection/{entity_id}?q=` | JSON | `{query, connection}` | 404 |
+| `GET /api/opportunity?q=` | JSON | `{query, opportunities: [...]}` | `opportunities: []` |
+| `GET /api/audit?q=&a=&b=` | JSON | `{query, a, b, comparison}` | 404 si `a`/`b` no están en los resultados |
+| `GET /api/stats` | JSON | `{entities, sources}` | — |
+
+### 12.3 Presentación (`interface/presenters.py`)
+
+Funciones puras, testeadas sin FastAPI/Jinja (`tests/interface/test_presenters.py`):
+
+- **`breakdown_segments(feature_vector)`** — los 7 segmentos de la Relevance Breakdown Bar (signature, DESIGN.md M3), reusando `application/descubrir_conexiones.feature_contributions` (misma re-normalización de ADR-007/ADR-009, no reimplementada). Invariante verificado: `sum(pct)/100 == compute_score(fv)` exacto. Una feature en `None` se marca `na=True` — se pinta como "no medible", NUNCA como 0.
+- **`relevance_band(score)`** — alta/media/baja usando `ALTO=0.6`/`MEDIO=0.4` de `domain/opportunity.py`; ningún umbral nuevo inventado para la UI. Medido con datos reales (`query_cli.py --fast` y con el modelo real): los scores viven en 0.40-0.66, así que la mayoría de resultados cae en "media" — honesto, no se ajustó el umbral para inflar la demo.
+- **`subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None)`** — mini-grafo (M6 embebido en M3): SVG inline, sin JS ni CDN (Regla R5), posiciones deterministas (`spring_layout(seed=42)`). Nodos: la entidad EN VISTA + sus vecinos REALES del `GraphStore` (tope `SUBGRAPH_MAX_NODES=15`) + la entidad de la consulta si es distinta. Dos tipos de arista, mismo principio que `link_type` de `domain/opportunity.py`: sólida oscura = arista REAL (tabla de relación); punteada lavanda = cómo se llegó a la entidad vista desde la consulta (reranking, no una arista).
+- **`title_of(entity)`** — título legible por tipo de entidad (primera columna indexable de `dataset_paths.ENTITY_TABLES`); trunca a `TITLE_MAX_WORDS=12` para los tipos sin nombre propio (COMPETENCY, LEARNING_OUTCOME, cuyo primer campo indexable es su descripción larga).
+- **`serialize_connection`/`serialize_opportunity`/`serialize_comparison`** — shape JSON compartida entre `/api/*` y las plantillas Jinja; `explanation`/`title` quedan vacíos si no se pasa `explainer`/`repo` (no fallan).
+
+### 12.4 Vendorización (Regla R5)
+
+Cero CDN: `static/knexus.css` define los tokens de `DESIGN.md §2` como custom properties; Montserrat es un único `.woff2` variable (`static/fonts/montserrat-variable.woff2`, weight range 100-900) servido por el propio backend. Verificado manualmente sin red (V5 de la sección de verificación del sprint).
+
+### 12.5 Nota de infraestructura (macOS)
+
+`faiss` y `torch` (vía `sentence-transformers`) empaquetan cada uno su propio runtime OpenMP; cargar ambos en el mismo proceso en macOS aborta con `SIGABRT` ("OMP: Error #15") al registrar el segundo — no depende de esta app, es un conflicto conocido entre esas dos librerías nativas. Fix aplicado en `adapters/retrieval/dense_index.py` y `adapters/embeddings/sentence_transformer_provider.py`: `os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")` antes de sus respectivos imports pesados — inocuo porque ninguna de las dos librerías usa paralelismo OpenMP dentro de la otra en este pipeline. Mismo patrón que la nota de infra de Sprint-03 (venv en ruta corta para Windows).

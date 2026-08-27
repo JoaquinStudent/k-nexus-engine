@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Discover — KNexus Engine{% endblock %}
+{% block content %}
+<div class="state-empty" style="text-align:left; padding-top:0;">
+  <h1>Discover connections</h1>
+  <p class="muted">Enter an institutional need, an entity ID, or free text.</p>
+  <form class="search-form" action="/results" method="get">
+    <input class="search-input" type="text" name="q" placeholder="NEED-001, PRJ-004, or a free-text need..." autofocus>
+    <button class="btn-primary" type="submit">Discover</button>
+  </form>
+  {% if quick_picks %}
+  <div class="quick-picks">
+    {% for pick in quick_picks %}
+      <a class="chip" href="/results?q={{ pick.id }}">{{ pick.id }} · {{ pick.title }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <p class="caption" style="margin-top:32px;">{{ entity_count }} entities indexed</p>
+</div>
+{% endblock %}

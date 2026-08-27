@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Why A over B — KNexus Engine{% endblock %}
+{% block content %}
+<h1>Why A over B — audit</h1>
+
+{% if not query %}
+  <div class="card state-empty"><h2>Start by entering a need or an entity ID.</h2></div>
+{% elif not connection_a or not connection_b %}
+  <div class="card">
+    <p class="muted">Pick two results from "{{ query }}" to compare.</p>
+    <form action="/audit" method="get" style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+      <input type="hidden" name="q" value="{{ query }}">
+      <select name="a" class="search-input">
+        <option value="">Candidate A</option>
+        {% for c in connections %}<option value="{{ c.entity_id }}" {{ 'selected' if c.entity_id == a }}>{{ c.entity_id }} — {{ c.title }}</option>{% endfor %}
+      </select>
+      <select name="b" class="search-input">
+        <option value="">Candidate B</option>
+        {% for c in connections %}<option value="{{ c.entity_id }}" {{ 'selected' if c.entity_id == b }}>{{ c.entity_id }} — {{ c.title }}</option>{% endfor %}
+      </select>
+      <button class="btn-primary" type="submit">Compare</button>
+    </form>
+  </div>
+{% else %}
+  <div class="audit-grid">
+    <div><h3 style="margin-bottom:2px;">{{ connection_a.title }}</h3><span class="badge">{{ connection_a.entity_id }}</span></div>
+    <div></div>
+    <div style="text-align:right;"><h3 style="margin-bottom:2px;">{{ connection_b.title }}</h3><span class="badge">{{ connection_b.entity_id }}</span></div>
+  </div>
+  <div class="audit-grid" style="margin-top:16px;">
+    <div>{{ m.breakdown_bar(connection_a.breakdown) }}</div>
+    <div></div>
+    <div>{{ m.breakdown_bar(connection_b.breakdown) }}</div>
+  </div>
+  {% for f in comparison.features %}
+  <div class="audit-grid audit-feature-row" style="margin-top:10px;">
+    <div style="text-align:right;">
+      {{ '%.2f'|format(f.value_a) if f.value_a is not none else 'N/A' }}
+      {% if f.favors == 'A' %}<span class="audit-tick">&#10003;</span>{% endif %}
+    </div>
+    <div class="audit-feature-label">{{ f.label }}</div>
+    <div>
+      {% if f.favors == 'B' %}<span class="audit-tick">&#10003;</span>{% endif %}
+      {{ '%.2f'|format(f.value_b) if f.value_b is not none else 'N/A' }}
+    </div>
+  </div>
+  {% endfor %}
+  <div class="card" style="margin-top:24px;">
+    <p style="margin:0; font-weight:600; color:var(--text-strong);">
+      {{ connection_a.entity_id if comparison.score_delta > 0 else connection_b.entity_id }} ranks higher —
+      dominant feature: {{ comparison.dominant_feature_label }} (delta {{ '%+.3f'|format(comparison.score_delta) }}).
+    </p>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% macro breakdown_bar(segments, mini=False) %}
+<div class="breakdown-bar{{ ' mini' if mini else '' }}">
+  {% for s in segments %}
+    {# N/A (ADR-007/ADR-009) recibe un ancho fijo pequeño SOLO para visibilidad —
+       nunca se muestra como 0 falso; el ancho real (pct) que suma el score
+       exacto sigue siendo la fuente de verdad en interface/presenters.py. #}
+    <div class="segment {{ 'na' if s.na else 'feat-' + s.name }}"
+         style="width: {{ s.pct if not s.na else 4 }}%"
+         title="{{ s.label }}: {{ '%.2f'|format(s.value) if not s.na else 'no medible' }}"></div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro breakdown_legend(segments) %}
+<div class="breakdown-legend">
+  {% for s in segments %}
+    <div class="item {{ 'na' if s.na else '' }}">
+      <span class="swatch {{ '' if s.na else 'feat-' + s.name }}"></span>
+      {{ s.label }}{% if not s.na %} ({{ '%.2f'|format(s.value) }}){% else %} — not measurable{% endif %}
+    </div>
+  {% endfor %}
+</div>
+{% endmacro %}
