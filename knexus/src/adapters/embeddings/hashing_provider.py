@@ -43,5 +43,9 @@ class HashingProvider(EmbeddingProvider):
     def dimension(self) -> int:
         return self._dim
 
+    @property
+    def name(self) -> str:
+        return f"hashing-{self._dim}"
+
     def encode(self, texts: tuple) -> np.ndarray:
         return np.array([_hash_vector(t, self._dim) for t in texts], dtype=np.float64)

@@ -12,3 +12,11 @@ class EmbeddingProvider(ABC):
     @abstractmethod
     def dimension(self) -> int:
         ...
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        """Identificador estable del modelo/config — clave de la caché de
+        vectores (`vector_cache.py`); dos providers con distinto `name` nunca
+        deben compartir caché."""
+        ...

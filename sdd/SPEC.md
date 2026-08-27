@@ -1,7 +1,7 @@
-# SPEC.md — Sprint-01
+# SPEC.md — Sprint-01 (con amendments de Sprint-01.5, 03 y 04)
 
 > **Épica:** Núcleo de Dominio — features + scoring + tipado
-> **Estado:** 🔲 Pendiente (listo para Sprint Planning)
+> **Estado:** ✅ Implementado y en producción (Sprint-04 lo orquesta de punta a punta)
 > **Capa:** `domain/` (PURO, sin imports externos — Regla A1)
 
 ---
@@ -123,3 +123,32 @@ El caso §9 hand-inyectaba métodos en el NEED (que los datos reales no tienen) 
 | PRJ-002 ("Modelo institucional para riesgo académico...") | `analitica_educativa` | **0.70** | score **0.418** · `antecedente_metodologico` |
 
 > Verificado sobre las 2.512 entidades reales cargadas (`test_cierre_adr007_need001_desempata_sobre_datos_reales`, `knexus/tests/adapters/test_ingestion.py`). El método desempata **sin inventar método en el NEED** — se infiere el tipo de problema del texto y se puntúa el método real y documentado del candidato.
+
+## 10. Contrato de salida del pipeline (Sprint-04)
+
+`src/application/descubrir_conexiones.py` orquesta F3+F4 de `ARCHITECTURE.md`. Contrato de entrada/salida:
+
+```
+descubrir_conexiones(query_input: str, *, repo, dense_index, lexical_index, graph,
+                      top_n=50, top_k_seeds=10, retrieval_k=200) -> tuple[RankedConnection, ...]
+
+RankedConnection:
+  rank: int
+  scored: ScoredResult(entity_id, feature_vector, score, relation_type)   # domain/
+  entity: StoredEntity                                                    # ports/
+  evidence: Provenance          # campo que justificó la recuperación (o el mejor campo propio si entró por grafo)
+  evidence_text: str
+  top_features: tuple[(nombre, valor, contribución_normalizada), ...]     # datos, NO prosa (eso es Sprint-05)
+```
+
+**Invariante verificado por test:** `scored.score == compute_score(scored.feature_vector)` para **todo** resultado — el `rrf_score` de la fusión (RRF sobre denso+léxico) nunca entra al score final; sólo decide qué candidatos llegan a puntuarse.
+
+**Pipeline en dos pasadas** (`graph_linked` es relacional, ADR-008): pasada 1 sin contexto de grafo → top-K se vuelven `seed_ids` → **expansión del pool con los vecinos de esos seeds** (hallazgo de Sprint-04: un investigador casi nunca comparte vocabulario con una necesidad, así que si sólo se puntúa lo que trajo la búsqueda textual, `graph_linked` queda correcto pero vacío en la práctica) → pasada 2 con grafo ya informado.
+
+**Auto-exclusión:** si la consulta es una entidad del dataset, se excluye de sus propios resultados antes de fusionar (si no, aparecería como su propio mejor match).
+
+**Texto libre:** `application/query_builder.py` infiere `problem_types`/`domains` del texto con el mismo mecanismo que un NEED (`src/domain/text_matching.py`, movido desde `adapters/` en Sprint-04 — Regla A2: es vocabulario puro, no una implementación swappeable). Nunca se le asigna método.
+
+**Comparador "¿por qué A antes que B?"** (`application/auditar_resultado.py`, módulo M7 de `DESIGN.md`): `comparar(a, b)` descompone el delta de score en deltas por feature — la suma de los 7 deltas reproduce exacto `score_a - score_b` (mismo principio de aditividad que `compute_score`).
+
+**Caché de vectores** (`adapters/retrieval/vector_cache.py`): clave = modelo + hash del corpus; evita recodificar ~14.000 textos (~40s) en cada arranque. Instanciar el modelo real (`SentenceTransformer(...)`) sigue costando su tiempo de carga (~5-15s) cada vez — la caché evita el *encoding*, no la carga del modelo en memoria.

@@ -4,13 +4,14 @@ Tokeniza con `_fold()` (minúsculas + sin acentos) para que "analitica" y
 from rank_bm25 import BM25Okapi
 
 from src.adapters.repository.enrichment import _fold
+from src.ports.lexical_index import LexicalIndex
 
 
 def _tokenize(text: str) -> list:
     return _fold(text or "").split()
 
 
-class BM25Index:
+class BM25Index(LexicalIndex):
     def __init__(self):
         self._refs = ()
         self._bm25 = None

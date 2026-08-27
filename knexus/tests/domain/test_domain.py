@@ -11,7 +11,7 @@ from src.domain.method_compat import transferability
 
 DOMAIN_DIR = pathlib.Path(__file__).resolve().parents[2] / "src" / "domain"
 
-ALLOWED_STDLIB = {"dataclasses"}
+ALLOWED_STDLIB = {"dataclasses", "unicodedata"}
 
 
 def _pair(sim_semantic, keywords=(), methods=(), domains=(), problem_types=(),

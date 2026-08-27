@@ -2,6 +2,8 @@
 `EntityRepository.edges()` (Sprint-02) — no re-parsea CSV."""
 import networkx as nx
 
+from src.ports.graph_store import GraphStore
+
 RELATIONS = (
     "researcher_project", "project_group", "thesis_advisor",
     "publication_researcher", "publication_project", "researcher_group",
@@ -9,7 +11,7 @@ RELATIONS = (
 )
 
 
-class NetworkXGraphStore:
+class NetworkXGraphStore(GraphStore):
     def __init__(self, repo):
         graph = nx.MultiGraph()
         for relation in RELATIONS:

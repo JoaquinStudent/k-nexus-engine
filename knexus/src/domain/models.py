@@ -50,6 +50,7 @@ class FeatureVector:
 
 @dataclass(frozen=True)
 class ScoredResult:
+    entity_id: str  # string plano: el dominio no importa nada de ports/ (Regla A1)
     feature_vector: FeatureVector
     score: float
     relation_type: str

@@ -1,45 +1,19 @@
 """Enriquecimiento de entidades: methods, problem_types, keywords, domains.
 
-Deriva señales a partir del texto crudo del dataset (que el MD del NEED-001
-declara explícitamente que no prescribe método) usando el vocabulario
-controlado de `vocabulary.py`. Vive en adapters/, no en domain/: el dominio
-sólo consume las tuplas ya resueltas (Regla A1).
+El matching de texto contra vocabulario (`_fold`, `mine_methods`,
+`infer_problem_types`, `infer_sectors`) vive en `src.domain.text_matching`
+desde Sprint-04 (Regla A2) y se re-exporta aquí para no romper los import
+existentes. Lo que se queda en este módulo es específico de la ingesta CSV:
+`split_keywords`/`extract_domains` operan sobre la convención de columnas del
+dataset (semicolon-separated), no sobre vocabulario puro.
 """
-import unicodedata
-
-from src.adapters.repository.vocabulary import METHOD_PHRASES, NEED_SECTOR_PHRASES, PROBLEM_TYPE_PHRASES
-
-
-def _fold(text: str) -> str:
-    """minúsculas + sin acentos, para matching tolerante a variación tipográfica."""
-    normalized = unicodedata.normalize("NFKD", text.lower())
-    return "".join(ch for ch in normalized if not unicodedata.combining(ch))
-
-
-def _match_phrases(text: str, phrase_to_tag: dict) -> tuple:
-    folded = _fold(text or "")
-    found = []
-    for phrase, tag in phrase_to_tag.items():
-        if _fold(phrase) in folded and tag not in found:
-            found.append(tag)
-    return tuple(found)
-
-
-def mine_methods(*texts: str) -> tuple:
-    combined = " ".join(t for t in texts if t)
-    return _match_phrases(combined, METHOD_PHRASES)
-
-
-def infer_problem_types(*texts: str) -> tuple:
-    combined = " ".join(t for t in texts if t)
-    return _match_phrases(combined, PROBLEM_TYPE_PHRASES)
-
-
-def infer_sectors(*texts: str) -> tuple:
-    """ADR-009: sector institucional inferido del texto de un NEED (que no trae
-    ninguna columna de dominio) — mismo mecanismo que `infer_problem_types`."""
-    combined = " ".join(t for t in texts if t)
-    return _match_phrases(combined, NEED_SECTOR_PHRASES)
+from src.domain.text_matching import (  # noqa: F401
+    _fold,
+    _match_phrases,
+    infer_problem_types,
+    infer_sectors,
+    mine_methods,
+)
 
 
 def split_keywords(value: str) -> tuple:

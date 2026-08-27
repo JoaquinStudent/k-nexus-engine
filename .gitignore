@@ -6,3 +6,4 @@ venv/
 *.egg-info/
 .idea/
 .DS_Store
+knexus/.cache/

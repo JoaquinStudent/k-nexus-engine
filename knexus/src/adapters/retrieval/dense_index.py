@@ -3,6 +3,9 @@ Si `faiss` no importa en este entorno, cae a búsqueda exacta con numpy — mism
 resultado matemático, porque IndexFlatIP ya es una búsqueda exhaustiva."""
 import numpy as np
 
+from src.adapters.retrieval import vector_cache
+from src.ports.vector_index import VectorIndex
+
 try:
     import faiss
     _HAS_FAISS = True
@@ -10,16 +13,23 @@ except ImportError:  # Regla A4: degradación sin la dependencia nativa
     _HAS_FAISS = False
 
 
-class DenseIndex:
+class DenseIndex(VectorIndex):
     def __init__(self, embedding_provider):
         self._provider = embedding_provider
         self._refs = ()
         self._vectors = None
         self._faiss_index = None
 
-    def build(self, refs: tuple, texts: tuple) -> None:
+    def build(self, refs: tuple, texts: tuple, *, use_cache: bool = True) -> None:
         self._refs = tuple(refs)
-        vectors = self._provider.encode(texts).astype("float32")
+        texts = tuple(texts)
+        cached = vector_cache.load(self._provider.name, texts) if use_cache else None
+        if cached is not None:
+            vectors = cached.astype("float32")
+        else:
+            vectors = self._provider.encode(texts).astype("float32")
+            if use_cache:
+                vector_cache.save(self._provider.name, texts, vectors)
         self._vectors = vectors
         if _HAS_FAISS:
             index = faiss.IndexFlatIP(vectors.shape[1])
