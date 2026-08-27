@@ -8,6 +8,8 @@ Explainer), los umbrales de relevancia son los de `domain/opportunity.py`
 sale de `application/descubrir_conexiones.feature_contributions` — no se
 reimplementa la re-normalización de ADR-007/ADR-009 aquí.
 """
+from html import escape as _xml_escape
+
 import networkx as nx
 
 from src.adapters.explain.template_explainer import (
@@ -243,7 +245,7 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
             f'role="img" aria-label="Mini-grafo de conexiones">'
             f'<circle cx="{x:.1f}" cy="{y:.1f}" r="10" fill="{color}" stroke="#FFFFFF" stroke-width="1.5"/>'
             f'<text x="{x:.1f}" y="{y + 24:.1f}" text-anchor="middle" font-size="10" '
-            f'font-family="Montserrat, sans-serif" fill="#3D3A57">{viewed_entity.entity_id}</text></svg>'
+            f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(viewed_entity.entity_id)}</text></svg>'
         )
 
     pos = nx.spring_layout(g, seed=42, k=0.9)
@@ -286,7 +288,7 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
         r = 10 if is_center else 7
         parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" stroke="#FFFFFF" stroke-width="1.5"/>')
         parts.append(f'<text x="{x:.1f}" y="{y + r + 12:.1f}" text-anchor="middle" font-size="10" '
-                      f'font-family="Montserrat, sans-serif" fill="#3D3A57">{entity_id}</text>')
+                      f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(entity_id)}</text>')
 
     return (
         f'<svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" '

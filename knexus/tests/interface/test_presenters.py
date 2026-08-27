@@ -84,3 +84,20 @@ def test_title_of_trunca_descripciones_largas_sin_nombre_propio():
 def test_title_of_no_trunca_nombres_cortos():
     entity = StoredEntity(entity_id="PRJ-004", entity_type="PROJECT", raw={"title": "Análisis de permanencia universitaria"})
     assert presenters.title_of(entity) == "Análisis de permanencia universitaria"
+
+
+class _NoGraph:
+    def neighbors(self, entity_id):
+        return ()
+
+
+def test_subgraph_svg_escapa_entity_id_de_texto_libre():
+    """`entity_id` puede ser texto libre sin validar (consulta en texto libre
+    -> StoredEntity placeholder, `ui/routes.py:_query_entity_or_placeholder`).
+    El SVG se renderiza con `| safe` en connection.html — si no se escapa aquí,
+    una query como '<script>...' se ejecuta en el navegador (XSS reflejado
+    vía el parámetro `q`)."""
+    malicious = StoredEntity(entity_id="<script>alert(1)</script>", entity_type="QUERY")
+    svg = presenters.subgraph_svg(malicious, malicious, (), graph=_NoGraph())
+    assert "<script>" not in svg
+    assert "&lt;script&gt;" in svg
