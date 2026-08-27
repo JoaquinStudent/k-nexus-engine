@@ -9,6 +9,9 @@ class QueryEntity:
     keywords: tuple = ()
     domains: tuple = ()
     methods: tuple = ()
+    problem_types: tuple = ()  # tipo(s) de problema inferido(s) en ingesta cuando
+    # la consulta (p.ej. un NEED) no prescribe método — habilita compat_metodo por
+    # transferabilidad en lugar de solape simétrico.
 
 
 @dataclass(frozen=True)
@@ -36,7 +39,8 @@ class CandidatePair:
 class FeatureVector:
     sim_semantica: float
     sim_lexica: float
-    compat_metodo: float
+    compat_metodo: float  # None == N/A: la consulta no aporta método comparable;
+    # se excluye del score (re-normalización) en vez de contar como 0.
     compat_dominio: float
     densidad_evidencia: float
     soporte_capacidad: float

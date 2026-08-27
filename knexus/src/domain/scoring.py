@@ -13,4 +13,10 @@ WEIGHTS = {
 
 
 def compute_score(fv: FeatureVector) -> float:
-    return sum(weight * getattr(fv, name) for name, weight in WEIGHTS.items())
+    # Se excluyen las features N/A (None) y se re-normalizan los pesos restantes a
+    # 1.0. Con las 7 features presentes, total == 1.0 → idéntico al cálculo directo.
+    active = {name: getattr(fv, name) for name in WEIGHTS if getattr(fv, name) is not None}
+    total = sum(WEIGHTS[name] for name in active)
+    if not total:
+        return 0.0
+    return sum(WEIGHTS[name] * active[name] for name in active) / total

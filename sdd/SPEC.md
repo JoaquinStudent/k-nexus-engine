@@ -39,7 +39,7 @@ CandidatePair:
 |---|---|---|
 | `sim_semantica` | 0..1 | Pasa a través desde recuperación (coseno normalizado). |
 | `sim_lexica` | 0..1 | Jaccard entre keywords de query y candidato. |
-| `compat_metodo` | 0..1 | Solape de `methods`; método transferible ≠ mismo tema. |
+| `compat_metodo` | 0..1 o **N/A** | Híbrido (ADR-007): (1) consulta con métodos → Jaccard; (2) consulta sin método pero con `problem_types` inferido → **transferabilidad** contra el método real del candidato (`method_compat.py`); (3) sin señal → **N/A** (excluida del score, re-normaliza). Los NEED caen en (2)/(3) porque no prescriben método. |
 | `compat_dominio` | 0..1 | Solape de `domains` (application_domains / disciplinary_area). |
 | `densidad_evidencia` | 0..1 | Proporción de `filled_fields` sobre campos esperados del tipo. |
 | `soporte_capacidad` | 0..1 | 1.0 si `has_capability_support` else 0.0. |
@@ -62,6 +62,8 @@ score = Σ (peso_i · feature_i),  con Σ pesos = 1.0
 | 0.05 | sim_lexica | La más débil: evita premiar la trampa léxica. |
 
 > Los pesos son configurables y se justifican en el pitch. La suma DEBE ser 1.0 (test lo verifica).
+>
+> **Features N/A y re-normalización (ADR-007).** Una feature puede ser N/A cuando no es medible para el par (hoy sólo `compat_metodo`, ante consultas que no prescriben método). En ese caso se **excluye** del sumatorio y los pesos restantes se **re-normalizan** a 1.0. Con las 7 features presentes el resultado es idéntico al cálculo directo. Esto evita el techo artificial de ~0.80 sin inventar datos ni alterar `WEIGHTS`.
 
 ## 6. Tipado de la relación (contrato)
 
@@ -106,3 +108,14 @@ Basado en el dataset real (NEED-001 deserción):
 | Tesis solo-tema, método distinto, campos vacíos | 0.85 | 0.20 | 0.50 | score bajo · `coincidencia_superficial` |
 
 > Mismo `sim_semantica` ≈ 0.88 en los dos primeros, pero el método desempata. **Ese es el examen.**
+
+### 9.1 Reproducción sobre datos reales (ADR-007)
+
+El caso 9 hand-inyectaba métodos en el NEED, cosa que los datos reales no tienen. La variante reproducible parte de un NEED **sin método** y `problem_types=("prediccion",)` inferido del texto ("predicción y prevención"):
+
+| Candidato | `compat_metodo` (fuente) | Resultado |
+|---|---|---|
+| PRJ-004 (`methods=clasificacion_supervisada`) | **0.90** por transferabilidad `prediccion→clasificacion_supervisada` | `score` alto · `antecedente_metodologico` |
+| PRJ-007 (`methods=encuesta`) | **0.30** por transferabilidad `prediccion→encuesta` | `score` menor · `antecedente_relevante` |
+
+> Verificado: PRJ-004 = 0.678 / `antecedente_metodologico`; PRJ-007 = 0.448. El método desempata **sin inventar método en el NEED**. Cubierto por `test_A_vs_B_need_transferabilidad_desempata`.

@@ -1,5 +1,6 @@
 """Cálculo de las 7 features auditables. PURO — sin imports externos (Regla A1)."""
 from src.domain.models import CandidatePair, FeatureVector
+from src.domain.method_compat import transferability
 
 
 def _jaccard(a: tuple, b: tuple) -> float:
@@ -20,8 +21,20 @@ def sim_lexica(pair: CandidatePair) -> float:
     return _jaccard(pair.query.keywords, pair.candidate.keywords)
 
 
-def compat_metodo(pair: CandidatePair) -> float:
-    return _jaccard(pair.query.methods, pair.candidate.methods)
+def compat_metodo(pair: CandidatePair):
+    """Compatibilidad de método, en 3 escalones honestos:
+    1. Consulta CON métodos → Jaccard simétrico (proyecto↔proyecto, tesis↔proyecto).
+    2. Consulta sin métodos pero con tipo de problema inferido y candidato con
+       método → transferabilidad problema→método (mantiene viva la feature y
+       alcanzable `antecedente_metodologico` desde un NEED).
+    3. Sin señal comparable → None (N/A): no se cuenta como 0; el scoring lo excluye
+       y re-normaliza. Evita el techo artificial de ~0.80 sin inventar datos.
+    """
+    if pair.query.methods:
+        return _jaccard(pair.query.methods, pair.candidate.methods)
+    if pair.query.problem_types and pair.candidate.methods:
+        return transferability(pair.query.problem_types, pair.candidate.methods)
+    return None
 
 
 def compat_dominio(pair: CandidatePair) -> float:
