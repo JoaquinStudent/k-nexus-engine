@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Performance — KNexus Engine{% endblock %}
+{% block content %}
+<h1>Performance</h1>
+
+{% if not metrics.available %}
+  <div class="card state-empty">
+    <h2>No measurement recorded yet</h2>
+    <p class="muted">Run <code>python scripts/evaluate.py</code> from <code>knexus/</code> to generate
+       <code>evaluation/results.json</code>.</p>
+  </div>
+{% else %}
+<div class="stat-tiles">
+  {% for tile in metrics.stat_tiles %}
+  <div class="card stat-tile">
+    <span class="caption">{{ tile.label }}</span>
+    <span class="stat-value">{{ tile.value }}</span>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="metrics-grid">
+  <div class="card">
+    <h3>Precision@K</h3>
+    {% for row in metrics.precision_at_k %}
+    <div class="chart-row">
+      <span class="chart-label">{{ row.label }}</span>
+      <div class="chart-bar-track"><div class="chart-bar arm-full" style="width: {{ row.pct }}%"></div></div>
+      <span class="chart-value">{{ '%.2f'|format(row.value) }}</span>
+    </div>
+    {% endfor %}
+    <p class="muted" style="margin-top:12px;">
+      Recall ceilings (labeled-set size limits, never hidden):
+      R@10 &le; {{ '%.2f'|format(metrics.recall_ceilings.r10_ceiling) }} ·
+      R@30 &le; {{ '%.2f'|format(metrics.recall_ceilings.r30_ceiling) }}
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Ablation: full reranker vs cosine reorder vs dense-only</h3>
+    {% for row in metrics.ablation %}
+    <div class="chart-row">
+      <span class="chart-label">{{ row.label }}</span>
+      <div class="chart-bar-track"><div class="chart-bar arm-{{ row.arm }}" style="width: {{ row.pct }}%"></div></div>
+      <span class="chart-value">{{ '%.2f'|format(row.p5) }}</span>
+    </div>
+    {% endfor %}
+    <p class="delta-line">
+      <span class="{{ 'delta-positive' if metrics.ablation_delta_cosine >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_cosine) }}</span>
+      P@5 vs cosine reorder ·
+      <span class="{{ 'delta-positive' if metrics.ablation_delta_dense >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_dense) }}</span>
+      P@5 vs dense-only
+    </p>
+    <p class="caption" style="font-style: italic; margin-top: 8px;">Similarity != relevance, measured.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <h3>Construct validity (top-5)</h3>
+  <p class="muted" style="margin-top:-8px; margin-bottom:12px;">What P@K can't see: does the top-5 actually
+     contain a trap, a real capability match, a transferable method, an actionable relation? Rates are over
+     candidates the real pipeline scored; <code>unscored</code> is the rest — never a false zero.</p>
+  <table class="metrics-table">
+    <thead>
+      <tr><th>Arm</th><th>Trap</th><th>Capability</th><th>Method</th><th>Actionable</th><th>Unscored</th></tr>
+    </thead>
+    <tbody>
+    {% for row in metrics.construct_validity %}
+      <tr>
+        <td>{{ row.label }}</td>
+        <td>{{ '%.0f'|format(row.trap_rate * 100) }}%</td>
+        <td>{{ '%.0f'|format(row.capability_rate * 100) }}%</td>
+        <td>{{ '%.0f'|format(row.method_rate * 100) }}%</td>
+        <td>{{ '%.0f'|format(row.actionable_rate * 100) }}%</td>
+        <td>{{ '%.0f'|format(row.unscored_rate * 100) }}%</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<details class="card" style="margin-top:16px;">
+  <summary>Per-NEED breakdown ({{ metrics.per_need|length }} needs)</summary>
+  <table class="metrics-table" style="margin-top:12px;">
+    <thead>
+      <tr><th>NEED</th><th>Relevant (cluster)</th><th>P@5 full</th><th>P@5 cosine</th><th>P@5 dense</th><th>Latency (ms)</th></tr>
+    </thead>
+    <tbody>
+    {% for row in metrics.per_need %}
+      <tr>
+        <td>{{ row.need_id }}</td>
+        <td>{{ row.relevant_cluster }}</td>
+        <td>{{ '%.2f'|format(row.p5_full) }}</td>
+        <td>{{ '%.2f'|format(row.p5_cosine) }}</td>
+        <td>{{ '%.2f'|format(row.p5_dense) }}</td>
+        <td>{{ '%.0f'|format(row.latency_ms) }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</details>
+
+<p class="provenance-trail-block" style="margin-top:16px;">
+  Measured {{ metrics.meta.generated_at }} · provider <code>{{ metrics.meta.provider }}</code> ·
+  {{ metrics.meta.needs_evaluated }} NEEDs · {{ metrics.meta.qrels_rows }} qrels.csv rows ·
+  {{ metrics.meta.entities_indexed }} entities indexed.
+</p>
+{% endif %}
+{% endblock %}

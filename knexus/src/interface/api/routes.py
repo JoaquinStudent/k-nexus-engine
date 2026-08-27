@@ -7,7 +7,7 @@ arma el pipeline). Mismos DTO de presentación que las plantillas Jinja
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from src.application.auditar_resultado import comparar
-from src.interface import presenters
+from src.interface import metrics_report, presenters
 from src.interface.composition import QueryService
 
 router = APIRouter(prefix="/api")
@@ -60,6 +60,14 @@ def opportunity(q: str, service: QueryService = Depends(get_query_service)) -> d
         "query": q,
         "opportunities": [presenters.serialize_opportunity(o, repo=service.repo, explainer=service.explainer) for o in opportunities],
     }
+
+
+@router.get("/metrics")
+def metrics() -> dict:
+    """Sprint-07 (M8): lee `evaluation/results.json`, no lo calcula en vivo
+    (20 NEEDs con el modelo real toma minutos, incompatible con un request).
+    Sin archivo -> 200 con `available: false` (estado válido, no un error)."""
+    return presenters.serialize_metrics(metrics_report.load_report())
 
 
 @router.get("/audit")

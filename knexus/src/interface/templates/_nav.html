@@ -5,6 +5,6 @@
     <a href="/results?q={{ query|default('')|urlencode }}" class="{{ 'active' if active == 'results' }}">Resultados</a>
     <a href="/opportunity?q={{ query|default('')|urlencode }}" class="{{ 'active' if active == 'opportunity' }}">Oportunidad</a>
     <a href="/audit?q={{ query|default('')|urlencode }}" class="{{ 'active' if active == 'audit' }}">Auditoría</a>
-    <a class="disabled">Métricas <span class="disabled-tag">Sprint-07</span></a>
+    <a href="/metrics" class="{{ 'active' if active == 'metrics' }}">Métricas</a>
   </nav>
 </aside>

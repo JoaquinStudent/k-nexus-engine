@@ -1,0 +1,281 @@
+{
+  "needs_evaluated": 20,
+  "avg_latency_ms": 350.825410001562,
+  "avg_dense_latency_ms": 34.53580500208773,
+  "evidence_coverage": 1.0,
+  "precision_recall": {
+    "cluster": {
+      "full": {
+        "p5": 0.48,
+        "p10": 0.505,
+        "r10": 0.18216310514104633,
+        "r30": 0.4897433720963133,
+        "mrr": 0.6214880952380952
+      },
+      "cosine": {
+        "p5": 0.54,
+        "p10": 0.5700000000000001,
+        "r10": 0.21027170337832102,
+        "r30": 0.49801445830857594,
+        "mrr": 0.6113888888888889
+      },
+      "dense": {
+        "p5": 0.54,
+        "p10": 0.5700000000000001,
+        "r10": 0.21027170337832102,
+        "r30": 0.5022560160427807,
+        "mrr": 0.6113888888888889
+      }
+    },
+    "strict": {
+      "full": {
+        "p5": 0.12000000000000002,
+        "p10": 0.16,
+        "r10": 0.31833333333333336,
+        "r30": 0.7266666666666667,
+        "mrr": 0.3479419191919192
+      },
+      "cosine": {
+        "p5": 0.13,
+        "p10": 0.155,
+        "r10": 0.31,
+        "r30": 0.7266666666666667,
+        "mrr": 0.29648293029871975
+      },
+      "dense": {
+        "p5": 0.13,
+        "p10": 0.15,
+        "r10": 0.3,
+        "r30": 0.6266666666666667,
+        "mrr": 0.2955698906356801
+      }
+    }
+  },
+  "recall_ceilings": {
+    "cluster": {
+      "r10_ceiling": 0.36619256288373936,
+      "r30_ceiling": 0.9761029411764707
+    },
+    "strict": {
+      "r10_ceiling": 1.0,
+      "r30_ceiling": 1.0
+    }
+  },
+  "construct_validity": {
+    "full": {
+      "trap_rate": 0.28,
+      "capability_rate": 0.36,
+      "method_rate": 0.43,
+      "actionable_rate": 0.55,
+      "unscored_rate": 0.0
+    },
+    "cosine": {
+      "trap_rate": 0.65,
+      "capability_rate": 0.07,
+      "method_rate": 0.24,
+      "actionable_rate": 0.27,
+      "unscored_rate": 0.0
+    },
+    "dense": {
+      "trap_rate": 0.65,
+      "capability_rate": 0.07,
+      "method_rate": 0.24,
+      "actionable_rate": 0.27,
+      "unscored_rate": 0.0
+    }
+  },
+  "per_need": [
+    {
+      "need_id": "NEED-001",
+      "relevant_cluster": 34,
+      "relevant_strict": 5,
+      "p5_full": 1.0,
+      "p5_cosine": 0.8,
+      "p5_dense": 0.8,
+      "latency_ms": 452.7362000080757
+    },
+    {
+      "need_id": "NEED-002",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 1.0,
+      "p5_cosine": 0.8,
+      "p5_dense": 0.8,
+      "latency_ms": 421.9967999961227
+    },
+    {
+      "need_id": "NEED-003",
+      "relevant_cluster": 28,
+      "relevant_strict": 6,
+      "p5_full": 0.4,
+      "p5_cosine": 0.0,
+      "p5_dense": 0.0,
+      "latency_ms": 440.7777000160422
+    },
+    {
+      "need_id": "NEED-004",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 0.0,
+      "p5_cosine": 0.2,
+      "p5_dense": 0.2,
+      "latency_ms": 478.77709998283535
+    },
+    {
+      "need_id": "NEED-005",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 0.6,
+      "p5_cosine": 0.8,
+      "p5_dense": 0.8,
+      "latency_ms": 428.01329999929294
+    },
+    {
+      "need_id": "NEED-006",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 1.0,
+      "p5_cosine": 1.0,
+      "p5_dense": 1.0,
+      "latency_ms": 401.9759999937378
+    },
+    {
+      "need_id": "NEED-007",
+      "relevant_cluster": 21,
+      "relevant_strict": 5,
+      "p5_full": 0.0,
+      "p5_cosine": 0.6,
+      "p5_dense": 0.6,
+      "latency_ms": 429.048000019975
+    },
+    {
+      "need_id": "NEED-008",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 0.2,
+      "p5_cosine": 0.2,
+      "p5_dense": 0.2,
+      "latency_ms": 426.0968999878969
+    },
+    {
+      "need_id": "NEED-009",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 0.8,
+      "p5_cosine": 0.2,
+      "p5_dense": 0.2,
+      "latency_ms": 436.87669999781065
+    },
+    {
+      "need_id": "NEED-010",
+      "relevant_cluster": 27,
+      "relevant_strict": 5,
+      "p5_full": 0.4,
+      "p5_cosine": 0.2,
+      "p5_dense": 0.2,
+      "latency_ms": 425.97579999710433
+    },
+    {
+      "need_id": "NEED-011",
+      "relevant_cluster": 34,
+      "relevant_strict": 5,
+      "p5_full": 0.6,
+      "p5_cosine": 0.4,
+      "p5_dense": 0.4,
+      "latency_ms": 267.23779999883845
+    },
+    {
+      "need_id": "NEED-012",
+      "relevant_cluster": 32,
+      "relevant_strict": 5,
+      "p5_full": 0.2,
+      "p5_cosine": 0.8,
+      "p5_dense": 0.8,
+      "latency_ms": 252.29709999985062
+    },
+    {
+      "need_id": "NEED-013",
+      "relevant_cluster": 22,
+      "relevant_strict": 5,
+      "p5_full": 0.4,
+      "p5_cosine": 0.8,
+      "p5_dense": 0.8,
+      "latency_ms": 264.85460001276806
+    },
+    {
+      "need_id": "NEED-014",
+      "relevant_cluster": 27,
+      "relevant_strict": 5,
+      "p5_full": 0.4,
+      "p5_cosine": 0.6,
+      "p5_dense": 0.6,
+      "latency_ms": 266.53759999317117
+    },
+    {
+      "need_id": "NEED-015",
+      "relevant_cluster": 32,
+      "relevant_strict": 5,
+      "p5_full": 0.4,
+      "p5_cosine": 1.0,
+      "p5_dense": 1.0,
+      "latency_ms": 273.76909999293275
+    },
+    {
+      "need_id": "NEED-016",
+      "relevant_cluster": 34,
+      "relevant_strict": 5,
+      "p5_full": 1.0,
+      "p5_cosine": 0.0,
+      "p5_dense": 0.0,
+      "latency_ms": 245.71689998265356
+    },
+    {
+      "need_id": "NEED-017",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 0.2,
+      "p5_cosine": 1.0,
+      "p5_dense": 1.0,
+      "latency_ms": 276.1830000090413
+    },
+    {
+      "need_id": "NEED-018",
+      "relevant_cluster": 22,
+      "relevant_strict": 5,
+      "p5_full": 0.2,
+      "p5_cosine": 0.4,
+      "p5_dense": 0.4,
+      "latency_ms": 275.1511000096798
+    },
+    {
+      "need_id": "NEED-019",
+      "relevant_cluster": 28,
+      "relevant_strict": 5,
+      "p5_full": 0.2,
+      "p5_cosine": 0.0,
+      "p5_dense": 0.0,
+      "latency_ms": 270.79830001457594
+    },
+    {
+      "need_id": "NEED-020",
+      "relevant_cluster": 21,
+      "relevant_strict": 5,
+      "p5_full": 0.6,
+      "p5_cosine": 1.0,
+      "p5_dense": 1.0,
+      "latency_ms": 281.6882000188343
+    }
+  ],
+  "meta": {
+    "generated_at": "2026-08-27T19:22:46.291558+00:00",
+    "provider": "paraphrase-multilingual-MiniLM-L12-v2",
+    "fast": false,
+    "entities_indexed": 2512,
+    "qrels_rows": 97,
+    "needs_evaluated": 20,
+    "top_k_primary": 5,
+    "top_k_secondary": 10,
+    "top_k_recall_wide": 30,
+    "elapsed_s": 7.768855094909668
+  }
+}

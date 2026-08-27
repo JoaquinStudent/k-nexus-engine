@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from src.application.auditar_resultado import comparar
-from src.interface import presenters
+from src.interface import metrics_report, presenters
 from src.interface.api.routes import get_query_service
 from src.interface.composition import QueryService
 from src.ports.entity_repository import StoredEntity
@@ -114,6 +114,13 @@ def opportunity_page(request: Request, q: str = "", service: QueryService = Depe
         ],
     })
     return templates.TemplateResponse(request, "opportunity.html", context)
+
+
+@router.get("/metrics", response_class=HTMLResponse)
+def metrics_page(request: Request, service: QueryService = Depends(get_query_service)):
+    context = _base_context(request, service, active="metrics")
+    context.update({"metrics": presenters.serialize_metrics(metrics_report.load_report())})
+    return templates.TemplateResponse(request, "metrics.html", context)
 
 
 @router.get("/audit", response_class=HTMLResponse)

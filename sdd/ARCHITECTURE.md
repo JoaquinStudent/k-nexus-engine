@@ -97,15 +97,24 @@ knexus/
 │   │   └── repository/       # loaders CSV/MD + provenance
 │   └── interface/          # Sprint-06 (ADR-013): FastAPI + Jinja2, un proceso
 │       ├── composition.py     # composition root: arma el pipeline UNA vez + caché de consulta
-│       ├── presenters.py      # DTO -> dict de presentación (PURO); mini-grafo SVG
+│       ├── presenters.py      # DTO -> dict de presentación (PURO); mini-grafo SVG; serialize_metrics (Sprint-07)
+│       ├── metrics_report.py  # Sprint-07: LEE evaluation/results.json (no lo importa como paquete)
 │       ├── app.py             # monta static/templates, ambos routers, lifespan
-│       ├── api/                # rutas JSON: /api/discover, /api/connection, /api/opportunity, /api/audit
-│       ├── ui/                  # rutas HTML: /, /results, /connection/{id}, /opportunity, /audit
-│       ├── templates/          # Jinja — base + 5 pantallas + 3 parciales
+│       ├── api/                # rutas JSON: /api/discover, /api/connection, /api/opportunity, /api/audit, /api/metrics
+│       ├── ui/                  # rutas HTML: /, /results, /connection/{id}, /opportunity, /audit, /metrics
+│       ├── templates/          # Jinja — base + 6 pantallas + 3 parciales
 │       └── static/               # knexus.css (tokens de DESIGN.md) + fonts/ vendorizadas
+├── evaluation/             # Sprint-07: evidencia de desempeño (FUERA del hexágono de src/)
+│   ├── metrics.py             # P@K, R@K, MRR — funciones puras
+│   ├── qrels.py                # carga/valida el set etiquetado contra el repositorio real
+│   ├── qrels.csv                # set etiquetado: cluster de application_context por NEED
+│   └── harness.py                # orquesta los 3 brazos del ablation (full/cosine/dense) -> dict
+├── scripts/
+│   ├── query_cli.py         # CLI manual de consulta (reusa interface/composition.build_pipeline)
+│   └── evaluate.py           # Sprint-07: corre harness.run_all -> evaluation/results.json
 ├── database/
 │   └── schema.sql
-├── tests/                # espejo de domain/, application/ e interface/
+├── tests/                # espejo de domain/, application/, interface/ y evaluation/
 └── .sprints/
 ```
 
@@ -127,6 +136,8 @@ knexus/
 | A2 | Los use-cases dependen de puertos, no de adapters concretos. | Inyección de dependencias en el arranque. Desde Sprint-06, `interface/composition.py` es el ÚNICO módulo autorizado a instanciar adapters concretos (`DatasetEntityRepository`, `DenseIndex`, `BM25Index`, `NetworkXGraphStore`); las rutas los reciben ya construidos vía `Depends(get_query_service)`. |
 | A3 | Todo resultado conserva su provenance hasta la UI. | Test de trazabilidad end-to-end. Desde Sprint-06 esto se verifica también a nivel HTML renderizado (`tests/interface/test_trazabilidad_ui.py`), no sólo a nivel de datos. |
 | A4 | Existe al menos un adapter de degradación por cada dependencia externa. | `TemplateExplainer` presente y probado. |
+
+**Nota (Sprint-07):** `evaluation/` no pertenece al hexágono de `src/` — es un paquete de medición dev-only con su propio arranque (`scripts/evaluate.py`, que reusa `interface/composition.build_pipeline`, Regla A2) que tarda varios minutos con el modelo real, incompatible con un request HTTP. `interface/metrics_report.py` NO importa `evaluation/`: sólo LEE el archivo de datos (`evaluation/results.json`) que ese paquete produce. Así el runtime de la app queda desacoplado del paquete de medición — `evaluation/` puede evolucionar (o faltar) sin afectar los imports de `interface/`.
 
 ## 7. Flujo de una consulta (secuencia)
 

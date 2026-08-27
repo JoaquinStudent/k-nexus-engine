@@ -296,6 +296,59 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
     )
 
 
+# --- Métricas (M8, Sprint-07): dict de `evaluation/results.json` -> presentación ---
+
+ARMS_ORDER = ("full", "cosine", "dense")
+ARM_LABELS = {"full": "Full pipeline", "cosine": "Cosine reorder", "dense": "Dense only"}
+
+
+def serialize_metrics(report: dict | None) -> dict:
+    """`report`: dict ya cargado de `evaluation/results.json`
+    (`interface/metrics_report.load_report()`), o `None` si el archivo no
+    existe todavía. PURA: no importa `evaluation/`, sólo transforma un dict.
+
+    Sin medición registrada, `available=False` es un estado válido (M9),
+    nunca un error — mismo criterio que una query vacía en `/api/discover`.
+
+    Todas las barras (`pct`) son directamente `valor * 100`: precision/recall/
+    MRR/tasas de `harness.py` ya viven en [0, 1] por construcción, así que no
+    hace falta normalizar contra un máximo — el ancho queda acotado a [0, 100]
+    sin casos borde de división por cero."""
+    if report is None:
+        return {"available": False}
+
+    meta = report["meta"]
+    pr_cluster = report["precision_recall"]["cluster"]
+    construct = report["construct_validity"]
+
+    return {
+        "available": True,
+        "meta": meta,
+        "stat_tiles": (
+            {"label": "Entities indexed", "value": str(meta.get("entities_indexed", "-"))},
+            {"label": "Avg latency", "value": f"{report['avg_latency_ms']:.0f} ms"},
+            {"label": "Evidence coverage", "value": f"{report['evidence_coverage'] * 100:.0f}%"},
+        ),
+        "precision_at_k": (
+            {"label": "P@5", "value": pr_cluster["full"]["p5"], "pct": pr_cluster["full"]["p5"] * 100},
+            {"label": "P@10", "value": pr_cluster["full"]["p10"], "pct": pr_cluster["full"]["p10"] * 100},
+        ),
+        "ablation": tuple(
+            {"arm": arm, "label": ARM_LABELS[arm],
+             "p5": pr_cluster[arm]["p5"], "pct": pr_cluster[arm]["p5"] * 100}
+            for arm in ARMS_ORDER
+        ),
+        "ablation_delta_cosine": pr_cluster["full"]["p5"] - pr_cluster["cosine"]["p5"],
+        "ablation_delta_dense": pr_cluster["full"]["p5"] - pr_cluster["dense"]["p5"],
+        "recall_ceilings": report["recall_ceilings"]["cluster"],
+        "construct_validity": tuple(
+            {"arm": arm, "label": ARM_LABELS[arm], **construct[arm]}
+            for arm in ARMS_ORDER
+        ),
+        "per_need": report["per_need"],
+    }
+
+
 def serialize_comparison(comparison) -> dict:
     """`comparison`: ComparisonResult (application/auditar_resultado.py)."""
     return {

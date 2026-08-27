@@ -328,8 +328,30 @@ a:hover { text-decoration: underline; }
 .state-empty { text-align: center; padding: calc(var(--unit) * 6) 0; color: var(--text-muted); }
 .state-empty h2 { color: var(--text-strong); }
 
+/* --- Métricas (M8, Sprint-07) --- */
+.stat-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--unit); margin-bottom: calc(var(--unit) * 2); }
+.stat-tile { display: flex; flex-direction: column; gap: 4px; }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--brand-900); }
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--unit); align-items: start; }
+.chart-row { display: flex; align-items: center; gap: var(--unit); margin: 10px 0; }
+.chart-label { width: 130px; font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+.chart-bar-track { flex: 1; height: 14px; background: var(--bg); border-radius: 999px; overflow: hidden; }
+.chart-bar { height: 100%; background: var(--brand-500); border-radius: 999px; }
+.chart-bar.arm-full { background: var(--brand-900); }
+.chart-bar.arm-cosine { background: var(--accent-lavender); }
+.chart-bar.arm-dense { background: var(--accent-orchid); }
+.chart-value { width: 44px; text-align: right; font-size: 12px; font-weight: 600; color: var(--text-strong); }
+.delta-line { margin-top: var(--unit); font-size: 13px; color: var(--text-muted); }
+.delta-positive { color: var(--rel-high); font-weight: 700; }
+.delta-negative { color: var(--rel-low); font-weight: 700; }
+.metrics-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.metrics-table th, .metrics-table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); }
+.metrics-table th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.03em; }
+.provenance-trail-block { font-size: 12px; color: var(--text-muted); }
+
 @media (max-width: 860px) {
   .app { flex-direction: column; }
   .sidebar { width: 100%; flex-direction: row; overflow-x: auto; }
   .audit-grid { grid-template-columns: 1fr; }
+  .stat-tiles, .metrics-grid { grid-template-columns: 1fr; }
 }

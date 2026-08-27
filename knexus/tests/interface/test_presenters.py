@@ -101,3 +101,84 @@ def test_subgraph_svg_escapa_entity_id_de_texto_libre():
     svg = presenters.subgraph_svg(malicious, malicious, (), graph=_NoGraph())
     assert "<script>" not in svg
     assert "&lt;script&gt;" in svg
+
+
+# --- serialize_metrics (M8, Sprint-07) ---
+
+def _sample_report(**overrides):
+    report = {
+        "needs_evaluated": 2,
+        "avg_latency_ms": 210.5,
+        "avg_dense_latency_ms": 1.8,
+        "evidence_coverage": 0.91,
+        "precision_recall": {
+            "cluster": {
+                "full": {"p5": 0.6, "p10": 0.5, "r10": 0.2, "r30": 0.4, "mrr": 0.7},
+                "cosine": {"p5": 0.3, "p10": 0.25, "r10": 0.1, "r30": 0.2, "mrr": 0.4},
+                "dense": {"p5": 0.2, "p10": 0.15, "r10": 0.05, "r30": 0.15, "mrr": 0.3},
+            },
+            "strict": {
+                "full": {"p5": 0.5, "p10": 0.4, "r10": 0.15, "r30": 0.3, "mrr": 0.6},
+                "cosine": {"p5": 0.2, "p10": 0.2, "r10": 0.08, "r30": 0.18, "mrr": 0.3},
+                "dense": {"p5": 0.1, "p10": 0.1, "r10": 0.04, "r30": 0.1, "mrr": 0.2},
+            },
+        },
+        "recall_ceilings": {
+            "cluster": {"r10_ceiling": 0.36, "r30_ceiling": 0.97},
+            "strict": {"r10_ceiling": 0.30, "r30_ceiling": 0.90},
+        },
+        "construct_validity": {
+            "full": {"trap_rate": 0.18, "capability_rate": 0.43, "method_rate": 0.44, "actionable_rate": 0.63, "unscored_rate": 0.0},
+            "cosine": {"trap_rate": 0.5, "capability_rate": 0.1, "method_rate": 0.1, "actionable_rate": 0.2, "unscored_rate": 0.0},
+            "dense": {"trap_rate": 0.6, "capability_rate": 0.05, "method_rate": 0.05, "actionable_rate": 0.1, "unscored_rate": 0.3},
+        },
+        "per_need": [
+            {"need_id": "NEED-001", "relevant_cluster": 6, "relevant_strict": 1,
+             "p5_full": 0.6, "p5_cosine": 0.3, "p5_dense": 0.2, "latency_ms": 200.0},
+            {"need_id": "NEED-005", "relevant_cluster": 4, "relevant_strict": 1,
+             "p5_full": 0.6, "p5_cosine": 0.3, "p5_dense": 0.2, "latency_ms": 221.0},
+        ],
+        "meta": {
+            "generated_at": "2026-08-27T00:00:00+00:00",
+            "provider": "paraphrase-multilingual-MiniLM-L12-v2",
+            "fast": False,
+            "entities_indexed": 2512,
+            "qrels_rows": 97,
+            "needs_evaluated": 2,
+            "top_k_primary": 5,
+            "top_k_secondary": 10,
+            "top_k_recall_wide": 30,
+            "elapsed_s": 120.0,
+        },
+    }
+    report.update(overrides)
+    return report
+
+
+def test_serialize_metrics_sin_reporte_es_estado_valido_no_error():
+    result = presenters.serialize_metrics(None)
+    assert result == {"available": False}
+
+
+def test_serialize_metrics_shape_completo():
+    result = presenters.serialize_metrics(_sample_report())
+    assert result["available"] is True
+    assert len(result["stat_tiles"]) == 3
+    assert len(result["precision_at_k"]) == 2
+    assert [row["arm"] for row in result["ablation"]] == ["full", "cosine", "dense"]
+    assert len(result["construct_validity"]) == 3
+    assert result["per_need"][0]["need_id"] == "NEED-001"
+
+
+def test_serialize_metrics_deltas_son_exactos():
+    result = presenters.serialize_metrics(_sample_report())
+    assert result["ablation_delta_cosine"] == pytest.approx(0.6 - 0.3)
+    assert result["ablation_delta_dense"] == pytest.approx(0.6 - 0.2)
+
+
+def test_serialize_metrics_barras_acotadas_0_100():
+    result = presenters.serialize_metrics(_sample_report())
+    for row in result["ablation"]:
+        assert 0.0 <= row["pct"] <= 100.0
+    for row in result["precision_at_k"]:
+        assert 0.0 <= row["pct"] <= 100.0

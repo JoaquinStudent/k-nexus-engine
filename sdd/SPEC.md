@@ -240,3 +240,42 @@ Cero CDN: `static/knexus.css` define los tokens de `DESIGN.md §2` como custom p
 ### 12.5 Nota de infraestructura (macOS)
 
 `faiss` y `torch` (vía `sentence-transformers`) empaquetan cada uno su propio runtime OpenMP; cargar ambos en el mismo proceso en macOS aborta con `SIGABRT` ("OMP: Error #15") al registrar el segundo — no depende de esta app, es un conflicto conocido entre esas dos librerías nativas. Fix aplicado en `adapters/retrieval/dense_index.py` y `adapters/embeddings/sentence_transformer_provider.py`: `os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")` antes de sus respectivos imports pesados — inocuo porque ninguna de las dos librerías usa paralelismo OpenMP dentro de la otra en este pipeline. Mismo patrón que la nota de infra de Sprint-03 (venv en ruta corta para Windows).
+
+## 13. Contrato de evidencia de desempeño (Sprint-07)
+
+> **Estado:** ✅ Implementado. **Capa:** `evaluation/` (fuera del hexágono de `src/`, Regla A2 extendida) + `interface/metrics_report.py` (lectura) + pantalla `/metrics` (M8).
+
+### 13.1 Metodología del set etiquetado
+
+No existe una tabla `need -> project/thesis` en el dataset (L4/R7: nada se fabrica). La relevancia de un NEED se aproxima por el **cluster de `application_context`** de sus proyectos/tesis: `evaluation/qrels.csv` (97 filas, 20 NEEDs — NEED-001..020; NEED-021..042 son meta/institucionales sin candidato temático real y quedan deliberadamente fuera, `test_meta_needs_fuera_de_alcance_no_estan_en_qrels`) lista, por NEED, las variantes ES/EN y sinónimos directos de su contexto de aplicación. `evaluation/qrels.py:build_relevant_sets` resuelve cada término contra `PROJECT`/`THESIS` reales y arma la unión — el "cluster" (variante por defecto, `strict=False`) — o sólo la primera fila (más literal) por NEED — la variante **estricta**, un análisis de sensibilidad, nunca el número principal.
+
+`evaluation/qrels.py:validation_errors` se corre ANTES de cualquier medición (`harness.run_all` revienta con `ValueError` si no pasa): todo `need_id` debe existir en el repositorio, todo `application_context` debe matchear al menos una entidad real (caza typos — "label rot"), y ningún cluster de relevancia puede quedar vacío.
+
+### 13.2 Los tres brazos del ablation
+
+| Brazo | Qué hace | Qué aísla |
+|---|---|---|
+| `full` | Pipeline real completo: RRF (denso+léxico) + expansión por grafo + reranking de 7 features (`descubrir_conexiones`). | El sistema tal como lo usa el usuario. |
+| `cosine` | LOS MISMOS candidatos de `full`, re-ordenados por `feature_vector.sim_semantica`. | La DECISIÓN DE ORDEN — comparten pool, así que los sesgos del pool se cancelan en el delta. |
+| `dense` | Top-K directo del índice denso (`DenseIndex.search`), agregado campo→entidad (`aggregate_by_entity`), SIN RRF/grafo/reranking. | El SISTEMA completo de "similarity" puro — el examen literal de R6. Sus candidatos pueden no haber sido puntuados nunca por `full` (nunca entraron al pool fusionado de 50); esa fracción se reporta como `unscored_rate`, nunca como un 0 falso (mismo principio que N/A + re-normalización de ADR-007). |
+
+Métricas por brazo (`evaluation/metrics.py`, puras): `precision_at_k` (P@5, P@10 — `k` siempre en el denominador, un ranking corto no infla el score), `recall_at_k` (R@10, R@30), `mrr`. **El techo teórico de recall se reporta siempre junto al número** (`_recall_ceiling`): con clusters de 21-34 entidades relevantes sobre un top-30, R@30 no puede exceder ~0.97-1.0 — un R@30 alto es parcialmente estructural, no sólo mérito del sistema.
+
+`construct_validity` (top-5, sobre candidatos que `full` sí puntuó): `trap_rate` (fracción tipada `coincidencia_superficial`), `capability_rate` (`soporte_capacidad>=1.0`), `method_rate` (`compat_metodo>=0.6`), `actionable_rate` (tipo ∈ `{antecedente_metodologico, activacion_capacidad}`) — mide lo que P@K, construido sobre una etiqueta temática, no puede ver.
+
+### 13.3 Sesgos declarados (nunca escondidos, R7)
+
+- **La etiqueta de relevancia es temática** (`application_context`), no "conexión de valor decisorio". Esto favorece estructuralmente a los brazos de similitud pura: un candidato puede compartir vocabulario con el NEED (alto `sim_semantica`) sin tener método transferible ni capacidad institucional real. `construct_validity` existe precisamente para medir lo que P@K, sobre esta etiqueta, no puede ver.
+- **Candidatos que entran por arista (ADR-011)** tienen `sim_semantica=0.0` por diseño (un investigador no comparte vocabulario textual con la necesidad) — esto penaliza a `full` frente a `cosine`/`dense` en P@K de forma estructural: un investigador correctamente enlazado por grafo puntúa 0 de similitud textual y cae fuera del top-5 de los brazos de similitud pura.
+- **Hallazgo real medido (2026-08-27, modelo `paraphrase-multilingual-MiniLM-L12-v2`, 20 NEEDs, `evaluation/results.json`):** P@5 cluster = `full` 0.480 vs `cosine` 0.540 vs `dense` 0.540 — el pipeline real puntúa MÁS BAJO que los dos brazos de similitud pura en esta métrica. No se ocultó ni se ajustó nada para revertirlo (compromiso de honestidad de este sprint). La lectura correcta no es "el reranker es peor": es que P@K sobre una etiqueta temática mide relevancia temática, y el reranker deliberadamente pondera método/capacidad/evidencia por encima de la similitud textual (R6: "similarity ≠ relevance" es una elección de diseño, no un accidente). La evidencia de que esa elección vale la pena está en `construct_validity` del mismo run: `actionable_rate` del top-5 es 0.55 (`full`) vs 0.27 (`cosine`/`dense`) — el doble de conexiones con valor de decisión directo — y `trap_rate` es 0.28 (`full`) vs 0.65 (`cosine`/`dense`) — menos de la mitad de coincidencias superficiales. `cosine` y `dense` coinciden casi exactamente en este dataset (ambos brazos convergen al mismo orden dominado por `sim_semantica`, aunque parten de pools distintos: top-50 fusionado vs top-200 denso puro) — evidencia adicional de que P@K por sí solo no distingue "más similar" de "más accionable".
+
+### 13.4 `results.json` y las rutas
+
+`scripts/evaluate.py` (reusa `interface/composition.build_pipeline`, Regla A2) corre `harness.run_all` sobre el pipeline real y serializa `evaluation/results.json`: los bloques de `run_all()` (`precision_recall`, `recall_ceilings`, `construct_validity`, `per_need`, `avg_latency_ms`, `avg_dense_latency_ms`, `evidence_coverage`) más un bloque `meta` — `generated_at`, `provider`, `fast`, `entities_indexed`, `qrels_rows`, `needs_evaluated`, los `top_k_*` usados, `elapsed_s`. **El número siempre se muestra con su procedencia** (`meta`) — un P@5 sin fecha/modelo/tamaño de set no es auditable.
+
+La medición NO corre en vivo por request (20 NEEDs con el modelo real toma varios segundos a minutos, incompatible con un request HTTP) — `interface/metrics_report.py` sólo LEE el JSON ya generado; sin archivo, degrada a `{"available": false}` (200, estado válido — M9 — nunca un 500). `interface/` no importa `evaluation/` (ver ARCHITECTURE.md §4).
+
+| Ruta | Método | Devuelve | Estado M9 si falla |
+|---|---|---|---|
+| `GET /metrics` | HTML | M8 — stat tiles + Precision@K + ablation de 3 brazos + construct validity + tabla por NEED + procedencia | sin `results.json`: "No measurement recorded yet — run `scripts/evaluate.py`" |
+| `GET /api/metrics` | JSON | `presenters.serialize_metrics(...)` — mismo DTO que consume la plantilla | `{"available": false}` (200) |
