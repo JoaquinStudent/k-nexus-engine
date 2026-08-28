@@ -19,3 +19,8 @@ class Explainer(ABC):
     def explain_opportunity(self, opportunity) -> str:
         """`opportunity`: Opportunity (domain/opportunity.py)."""
         ...
+
+    @abstractmethod
+    def explain_comparison(self, comparison) -> str:
+        """`comparison`: ComparisonResult (application/auditar_resultado.py)."""
+        ...

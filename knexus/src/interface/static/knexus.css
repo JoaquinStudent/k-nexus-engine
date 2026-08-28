@@ -42,6 +42,8 @@
   --node-researcher: #CADFFD;
   --node-capability: #2FADB0;
   --node-curricular: #CCA9E8;
+  --node-research-group: #3A2E6E;
+  --node-publication: #9C7A3C;
   --edge-explicit: #3D3A57;
   --edge-inferred: #C3BEEF;
 
@@ -250,26 +252,58 @@ a:hover { text-decoration: underline; }
   cursor: pointer;
 }
 
+/* --- Landing de Descubrir (M1): hero propio, no el genérico .state-empty
+   (ese sigue usándose tal cual en audit.html/opportunity.html) --- */
+.discover-hero {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: calc(var(--unit) * 5) 0 calc(var(--unit) * 3);
+}
+.discover-hero .eyebrow {
+  margin: 0 0 calc(var(--unit) * 1.25);
+  color: var(--brand-500);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.discover-hero h1 { margin: 0 0 calc(var(--unit) * 2); }
+.discover-lead {
+  max-width: 620px;
+  margin: 0 0 calc(var(--unit) * 4);
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.discover-hero .search-form { margin: 0 0 calc(var(--unit) * 2); }
+.quick-picks-block { margin: 0 0 calc(var(--unit) * 6); }
+.quick-picks-block .caption { margin-bottom: var(--unit); }
+.discover-footer { margin-top: calc(var(--unit) * 5); }
+
 .how-it-works {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: calc(var(--unit) * 2);
-  flex-wrap: wrap;
-  margin: calc(var(--unit) * 3) 0;
+  margin: 0 0 calc(var(--unit) * 2);
 }
 .how-step {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  max-width: 220px;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: calc(var(--unit) * 2);
 }
 .how-num {
   width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
   background: var(--brand-900); color: #FFFFFF;
   border-radius: 999px; font-size: 12px; font-weight: 700;
+  margin-bottom: 2px;
 }
 .how-label { font-weight: 600; color: var(--text-strong); font-size: 14px; }
-.how-desc { font-size: 12px; color: var(--text-muted); }
+.how-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
 .quick-picks { display: flex; gap: var(--unit); flex-wrap: wrap; }
 .chip {
@@ -440,7 +474,10 @@ a:hover { text-decoration: underline; }
   gap: calc(var(--unit) * 2);
   align-items: center;
 }
-.audit-feature-row { display: contents; }
+/* Nunca `display: contents` aquí: no hay grid ancestro que herede sus 3
+   columnas, así que "desaparecer" la fila desparrama sus 3 celdas como
+   bloques apilados en vez de una fila alineada (bug real, ver comentario
+   idéntico en el media query de abajo, que sí lo evita). */
 .audit-feature-label { text-align: center; font-size: 12px; color: var(--text-muted); }
 .audit-tick { color: var(--rel-high); font-weight: 700; }
 .audit-verdict {
@@ -494,7 +531,12 @@ a:hover { text-decoration: underline; }
 }
 
 /* --- Mini-grafo (M6) --- */
-.graph-panel svg { width: 100%; height: auto; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+.graph-panel svg { width: 100%; height: auto; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); touch-action: none; cursor: grab; }
+.graph-panel svg:active { cursor: grabbing; }
+.graph-node-link { cursor: pointer; }
+.graph-node { transition: r 0.12s ease; }
+.graph-node-link:hover .graph-node, .graph-node-link:focus .graph-node { r: 9; stroke: var(--edge-explicit); }
+.graph-node-group { touch-action: none; }
 .graph-legend { display: flex; gap: calc(var(--unit) * 2); font-size: 11px; color: var(--text-muted); margin-top: var(--unit); flex-wrap: wrap; }
 .graph-legend .item { display: flex; align-items: center; gap: 6px; }
 .graph-legend .line { width: 18px; height: 0; border-top: 2px solid var(--edge-explicit); }
@@ -561,4 +603,5 @@ a:hover { text-decoration: underline; }
     border-bottom: 1px solid var(--border);
   }
   .stat-tiles, .metrics-grid { grid-template-columns: 1fr; }
+  .how-it-works { grid-template-columns: 1fr; }
 }

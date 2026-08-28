@@ -98,7 +98,7 @@ def connection_page(entity_id: str, request: Request, q: str, service: QueryServ
     context.update({
         "connection": presenters.serialize_connection(connection, explainer=service.explainer),
         "graph_svg": presenters.subgraph_svg(
-            connection.entity, query_entity, results, graph=service.graph, repo=service.repo,
+            connection.entity, query_entity, results, graph=service.graph, repo=service.repo, query=q,
         ),
         "feature_glossary": presenters.feature_glossary(),
     })
@@ -156,6 +156,6 @@ def audit_page(
         context.update({
             "connection_a": presenters.serialize_connection(connection_a),
             "connection_b": presenters.serialize_connection(connection_b),
-            "comparison": presenters.serialize_comparison(comparison),
+            "comparison": presenters.serialize_comparison(comparison, explainer=service.explainer),
         })
     return templates.TemplateResponse(request, "audit.html", context)

@@ -70,5 +70,11 @@
       (diferencia de {{ '%.2f'|format(comparison.score_delta|abs) }} puntos de relevancia).
     </p>
   </div>
+  {% if comparison.explanation %}
+  <div class="card" style="margin-top:16px;">
+    <span class="tag-generated">Generado por IA</span>
+    <p style="margin-top:12px; margin-bottom:0;">{{ comparison.explanation }}</p>
+  </div>
+  {% endif %}
 {% endif %}
 {% endblock %}

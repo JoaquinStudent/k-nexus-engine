@@ -80,6 +80,8 @@ El producto conecta conocimiento fragmentado y **demuestra por qué** una conexi
 | `--node-researcher`| `#CADFFD` | Nodo Investigador. |
 | `--node-capability`| `#2FADB0` | Nodo Capacidad *(teal añadido para diferenciar del resto)*. |
 | `--node-curricular`| `#CCA9E8` | Nodo Asignatura/Competencia. |
+| `--node-research-group`| `#3A2E6E` | Nodo Grupo de investigación (vecino real vía `project_group`/`researcher_group`). |
+| `--node-publication`| `#9C7A3C` | Nodo Publicación (vecino real vía `publication_researcher`/`publication_project`; tono cálido a propósito — todo lo demás es frío). |
 | `--edge-explicit` | `#3D3A57` | Arista explícita (viene de tabla de relación) — sólida. |
 | `--edge-inferred` | `#C3BEEF` | Arista inferida (descubierta) — punteada. |
 

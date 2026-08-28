@@ -101,3 +101,17 @@ class TemplateExplainer(Explainer):
             f"(prioridad {opportunity.priority}, score del antecedente {opportunity.score:.2f}): "
             f"{chain}."
         )
+
+    def explain_comparison(self, comparison) -> str:
+        a_id = comparison.connection_a.entity.entity_id
+        b_id = comparison.connection_b.entity.entity_id
+        winner_id, loser_id = (a_id, b_id) if comparison.score_delta >= 0 else (b_id, a_id)
+        dominant_label = FEATURE_LABELS.get(comparison.dominant_feature, comparison.dominant_feature)
+        meaning = FEATURE_HELP.get(comparison.dominant_feature, "")
+        base = (
+            f"{winner_id} rankea más alto que {loser_id} — la diferencia decisiva es "
+            f"{dominant_label} (diferencia de {abs(comparison.score_delta):.2f} puntos de relevancia)"
+        )
+        if meaning:
+            return f"{base}: {meaning}"
+        return f"{base}."

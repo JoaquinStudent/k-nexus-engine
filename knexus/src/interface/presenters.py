@@ -8,7 +8,9 @@ Explainer), los umbrales de relevancia son los de `domain/opportunity.py`
 sale de `application/descubrir_conexiones.feature_contributions` — no se
 reimplementa la re-normalización de ADR-007/ADR-009 aquí.
 """
+import textwrap
 from html import escape as _xml_escape
+from urllib.parse import quote as _urlquote
 
 import networkx as nx
 
@@ -210,12 +212,35 @@ NODE_COLORS = {
     "NEED": "#251D4B", "PROJECT": "#5B4F9E", "THESIS": "#C3BEEF",
     "RESEARCHER": "#CADFFD", "CAPABILITY": "#2FADB0",
     "SUBJECT": "#CCA9E8", "COMPETENCY": "#CCA9E8",
+    # Añadidos: `researcher_group`/`publication_*` (networkx_store.py) SÍ
+    # aparecen como vecinos reales en el grafo — antes cara sin color propio
+    # caían en DEFAULT_NODE_COLOR, indistinguibles entre sí y sin leyenda.
+    "RESEARCH_GROUP": "#3A2E6E", "PUBLICATION": "#9C7A3C",
 }
 DEFAULT_NODE_COLOR = "#8A86A6"
 EDGE_EXPLICIT = "#3D3A57"
 EDGE_INFERRED = "#C3BEEF"
 SUBGRAPH_MAX_NODES = 15  # tope de DESIGN.md M6: "no un hairball"
-NODE_LABEL_MAX_CHARS = 22  # etiqueta corta bajo cada nodo (UX): título, no solo ID
+NODE_LABEL_MAX_CHARS = 18  # ancho de línea de la etiqueta bajo cada nodo
+NODE_LABEL_LINE_HEIGHT = 11
+
+
+def _resolves_to_entity(entity_id: str, connections, repo=None) -> bool:
+    """Algunas aristas del grafo (`researcher_expertise`, networkx_store.py)
+    apuntan a un id (`EXP-...`) que nunca se cargó como entidad — no hay
+    `ENTITY_TABLES` para eso. Ese vecino no tiene tipo, ni color, ni nombre
+    legible, y su link de `/connection/{id}` siempre da 404: se filtra antes
+    de entrar al grafo en vez de dibujarse como un gris sin explicación."""
+    for connection in connections:
+        if connection.entity.entity_id == entity_id:
+            return True
+    if repo is not None:
+        try:
+            repo.get(entity_id)
+            return True
+        except KeyError:
+            return False
+    return False
 
 
 def _entity_type_of(entity_id: str, connections, repo=None) -> str:
@@ -230,27 +255,52 @@ def _entity_type_of(entity_id: str, connections, repo=None) -> str:
     return ""
 
 
-def _short_label(text: str, max_chars: int = NODE_LABEL_MAX_CHARS) -> str:
-    if len(text) <= max_chars:
-        return text
-    return text[: max_chars - 1] + "…"
-
-
 def _node_label(entity_id: str, connections, repo=None) -> str:
-    """Título corto legible para un nodo del mini-grafo (UX) — antes sólo se
-    mostraba el `entity_id` crudo, ilegible para quien no conoce el dataset."""
+    """Título completo legible para un nodo del mini-grafo (UX) — antes sólo se
+    mostraba el `entity_id` crudo, ilegible para quien no conoce el dataset.
+    Sin truncar: el grafo es arrastrable/con zoom (JS embebido en el SVG), así
+    que un nombre largo se resuelve separando nodos, no cortando texto."""
     for connection in connections:
         if connection.entity.entity_id == entity_id:
-            return _short_label(title_of(connection.entity))
+            return title_of(connection.entity)
     if repo is not None:
         try:
-            return _short_label(title_of(repo.get(entity_id)))
+            return title_of(repo.get(entity_id))
         except KeyError:
             return entity_id
     return entity_id
 
 
-def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, width: int = 640, height: int = 420) -> str:
+def _wrap_label(text: str) -> list:
+    """Nombre completo, siempre — nunca truncado con `…`. Se parte en tantas
+    líneas cortas como haga falta para que quepa bajo el nodo (el grafo es
+    arrastrable/con zoom, así que más líneas sólo significa separar nodos)."""
+    return textwrap.wrap(text, width=NODE_LABEL_MAX_CHARS) or [text]
+
+
+def _label_markup(x: float, y: float, text: str) -> str:
+    lines = _wrap_label(text)
+    tspans = "".join(
+        f'<tspan x="{x:.1f}" dy="{0 if i == 0 else NODE_LABEL_LINE_HEIGHT}">{_xml_escape(line)}</tspan>'
+        for i, line in enumerate(lines)
+    )
+    return (
+        f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="middle" font-size="10" '
+        f'font-family="Montserrat, sans-serif" fill="#3D3A57" paint-order="stroke" '
+        f'stroke="#FFFFFF" stroke-width="3">{tspans}</text>'
+    )
+
+
+def _svg_dom_id(entity_id: str) -> str:
+    """id de DOM válido para el <svg> (usado por el script embebido para
+    encontrarse a sí mismo sin depender de `document.currentScript`, que en
+    algunos navegadores no resuelve un <script> dentro de un elemento SVG)."""
+    safe = "".join(c if c.isalnum() else "-" for c in entity_id)
+    return f"graph-{safe}"
+
+
+def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, query: str = "",
+                  width: int = 640, height: int = 420) -> str:
     """`viewed_entity`: StoredEntity de la conexión EN VISTA (M3) — el centro
     del grafo. `query_entity`: StoredEntity/placeholder de la consulta (puede
     coincidir con `viewed_entity` si se está viendo la propia query). `graph`:
@@ -270,7 +320,7 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
     for neighbor_id in graph.neighbors(viewed_entity.entity_id):
         if len(node_ids) >= SUBGRAPH_MAX_NODES:
             break
-        if neighbor_id not in node_ids:
+        if neighbor_id not in node_ids and _resolves_to_entity(neighbor_id, connections, repo):
             node_ids.append(neighbor_id)
     node_set = set(node_ids)
 
@@ -292,20 +342,24 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
                     explicit_edges.add(edge)
                     g.add_edge(entity_id, neighbor)
 
+    svg_id = _svg_dom_id(viewed_entity.entity_id)
+
     if len(node_ids) == 1:
         x, y = width / 2, height / 2
         color = NODE_COLORS.get(viewed_entity.entity_type, DEFAULT_NODE_COLOR)
-        label = _short_label(title_of(viewed_entity))
+        label = title_of(viewed_entity)
         return (
-            f'<svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" '
+            f'<svg id="{svg_id}" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" '
             f'role="img" aria-label="Mini-grafo de conexiones">'
             f'<title>Grafo con 1 entidad, sin vecinos registrados en los datos.</title>'
             f'<circle cx="{x:.1f}" cy="{y:.1f}" r="10" fill="{color}" stroke="#FFFFFF" stroke-width="1.5"/>'
-            f'<text x="{x:.1f}" y="{y + 24:.1f}" text-anchor="middle" font-size="10" '
-            f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(label)}</text></svg>'
+            + _label_markup(x, y + 24, label) + "</svg>"
         )
 
-    pos = nx.spring_layout(g, seed=42, k=0.9)
+    # k crece con la cantidad de nodos (hasta 15, DESIGN.md M6) para que un
+    # grafo lleno no amontone las etiquetas unas sobre otras.
+    k = 0.9 + 0.06 * len(node_ids)
+    pos = nx.spring_layout(g, seed=42, k=k)
     xs = [p[0] for p in pos.values()]
     ys = [p[1] for p in pos.values()]
     min_x, max_x = min(xs), max(xs)
@@ -320,47 +374,163 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
 
     coords = {node: scale(point) for node, point in pos.items()}
 
-    parts = []
+    edge_parts = []
     for edge in explicit_edges:
         a, b = tuple(edge)
         (x1, y1), (x2, y2) = coords[a], coords[b]
-        parts.append(f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
-                      f'stroke="{EDGE_EXPLICIT}" stroke-width="1.5"/>')
+        edge_parts.append(
+            f'<line data-a="{_xml_escape(a)}" data-b="{_xml_escape(b)}" '
+            f'x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
+            f'stroke="{EDGE_EXPLICIT}" stroke-width="1.5"/>'
+        )
     for edge in discovered_edges:
         a, b = tuple(edge)
         (x1, y1), (x2, y2) = coords[a], coords[b]
-        parts.append(f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
-                      f'stroke="{EDGE_INFERRED}" stroke-width="1.5" stroke-dasharray="4,3"/>')
+        edge_parts.append(
+            f'<line data-a="{_xml_escape(a)}" data-b="{_xml_escape(b)}" '
+            f'x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
+            f'stroke="{EDGE_INFERRED}" stroke-width="1.5" stroke-dasharray="4,3"/>'
+        )
 
+    node_parts = []
     for entity_id in node_ids:
         x, y = coords[entity_id]
         is_center = entity_id == viewed_entity.entity_id
         is_query = has_distinct_query_node and entity_id == query_entity.entity_id
         if is_center:
             entity_type = viewed_entity.entity_type
-            label = _short_label(title_of(viewed_entity))
+            label = title_of(viewed_entity)
         elif is_query:
             entity_type = query_entity.entity_type
-            label = _short_label(title_of(query_entity))
+            label = title_of(query_entity)
         else:
             entity_type = _entity_type_of(entity_id, connections, repo)
             label = _node_label(entity_id, connections, repo)
         color = NODE_COLORS.get(entity_type, DEFAULT_NODE_COLOR)
         r = 10 if is_center else 7
-        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" stroke="#FFFFFF" stroke-width="1.5">'
-                      f'<title>{_xml_escape(entity_id)}</title></circle>')
-        parts.append(f'<text x="{x:.1f}" y="{y + r + 12:.1f}" text-anchor="middle" font-size="10" '
-                      f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(label)}</text>')
+        # data-id/-x/-y/-r: el script de abajo los lee para poder arrastrar
+        # el nodo y recalcular las líneas conectadas sin recalcular el layout.
+        node_group = (
+            f'<g class="graph-node-group" data-id="{_xml_escape(entity_id)}" '
+            f'data-x="{x:.1f}" data-y="{y:.1f}" data-r="{r}">'
+            f'<circle class="graph-node" cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" '
+            f'stroke="#FFFFFF" stroke-width="1.5"><title>{_xml_escape(entity_id)}</title></circle>'
+            + _label_markup(x, y + r + 12, label) + "</g>"
+        )
+        # sólo se enlazan entidades reales del dataset (no el nodo-consulta de
+        # texto libre, que no tiene una página /connection propia) y no el
+        # centro, que ya es la página en la que estás.
+        is_linkable = not is_center and entity_type != "QUERY"
+        if is_linkable:
+            href = f"/connection/{_urlquote(entity_id, safe='')}?q={_urlquote(query, safe='')}"
+            node_parts.append(f'<a href="{_xml_escape(href)}" class="graph-node-link">{node_group}</a>')
+        else:
+            node_parts.append(node_group)
 
     summary = (
         f"Grafo con {len(node_ids)} entidades y {len(explicit_edges) + len(discovered_edges)} vínculos: "
-        f"{len(explicit_edges)} explícitos (línea sólida), {len(discovered_edges)} por ranking (línea punteada)."
+        f"{len(explicit_edges)} explícitos (línea sólida), {len(discovered_edges)} por ranking (línea punteada). "
+        f"Arrastrable, con zoom (rueda) y paneo (arrastrar el fondo)."
     )
     return (
-        f'<svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" '
-        f'role="img" aria-label="Mini-grafo de conexiones">'
-        f'<title>{_xml_escape(summary)}</title>' + "".join(parts) + "</svg>"
+        f'<svg id="{svg_id}" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" '
+        f'role="img" aria-label="Mini-grafo de conexiones interactivo">'
+        f'<title>{_xml_escape(summary)}</title>'
+        f'<g class="knexus-graph-viewport">' + "".join(edge_parts) + "".join(node_parts) + "</g>"
+        + _graph_interaction_script(svg_id) + "</svg>"
     )
+
+
+def _graph_interaction_script(svg_id: str) -> str:
+    """Zoom (rueda), paneo (arrastrar el fondo) y arrastre de nodos individuales
+    — sin dependencias nuevas (rung 4 de la escalera): vanilla JS embebido en el
+    propio SVG, se ejecuta solo al insertarse la página (progressive
+    enhancement: sin JS, el grafo sigue siendo una imagen SVG válida y legible,
+    sólo pierde la interacción). Usa un id de DOM en vez de
+    `document.currentScript` porque ese accessor es poco fiable para un
+    <script> dentro de contenido SVG en algunos navegadores."""
+    return f"""<script>(function(){{
+  var svg = document.getElementById("{svg_id}");
+  if (!svg) return;
+  var vp = svg.querySelector('.knexus-graph-viewport');
+  var scale = 1, tx = 0, ty = 0;
+  function applyTransform() {{ vp.setAttribute('transform', 'translate(' + tx + ',' + ty + ') scale(' + scale + ')'); }}
+  function toLocalPoint(evt) {{
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }}
+  var nodes = {{}};
+  svg.querySelectorAll('.graph-node-group').forEach(function(g) {{
+    var id = g.getAttribute('data-id');
+    nodes[id] = {{
+      circle: g.querySelector('circle'), text: g.querySelector('text'),
+      tspans: g.querySelectorAll('tspan'),
+      x: parseFloat(g.getAttribute('data-x')), y: parseFloat(g.getAttribute('data-y')),
+      r: parseFloat(g.getAttribute('data-r')), dragDist: 0, wasDragged: false
+    }};
+    var anchor = g.closest('a');
+    if (anchor) {{
+      anchor.addEventListener('click', function(e) {{
+        if (nodes[id].wasDragged) {{ e.preventDefault(); nodes[id].wasDragged = false; }}
+      }});
+    }}
+    g.addEventListener('pointerdown', function(e) {{
+      // Capturado en el propio <g>, no en <svg>: si se capturara en <svg> el
+      // click resultante se retargetea a <svg> y el navegador nunca navega
+      // el <a>. Capturado aquí, el click retargeteado sigue burbujeando por
+      // <a> (su ancestro) — y el arrastre no se corta si el puntero se
+      // escapa del círculo (chico) al moverse rápido.
+      dragId = id; dragStart = toLocalPoint(e); nodes[id].dragDist = 0;
+      e.stopPropagation();
+      g.setPointerCapture(e.pointerId);
+    }});
+  }});
+  var lines = svg.querySelectorAll('line[data-a]');
+  function moveNode(id) {{
+    var n = nodes[id];
+    n.circle.setAttribute('cx', n.x); n.circle.setAttribute('cy', n.y);
+    n.text.setAttribute('x', n.x); n.text.setAttribute('y', n.y + n.r + 12);
+    n.tspans.forEach(function(t) {{ t.setAttribute('x', n.x); }});
+    lines.forEach(function(line) {{
+      if (line.getAttribute('data-a') === id) {{ line.setAttribute('x1', n.x); line.setAttribute('y1', n.y); }}
+      if (line.getAttribute('data-b') === id) {{ line.setAttribute('x2', n.x); line.setAttribute('y2', n.y); }}
+    }});
+  }}
+  var dragId = null, dragStart = null, panning = false, panStart = null;
+  svg.addEventListener('pointerdown', function(e) {{
+    panning = true; panStart = toLocalPoint(e);
+    svg.setPointerCapture(e.pointerId);
+  }});
+  svg.addEventListener('pointermove', function(e) {{
+    var p = toLocalPoint(e);
+    if (dragId) {{
+      var n = nodes[dragId];
+      var ddx = (p.x - dragStart.x) / scale, ddy = (p.y - dragStart.y) / scale;
+      n.x += ddx; n.y += ddy;
+      n.dragDist += Math.abs(ddx) + Math.abs(ddy);
+      if (n.dragDist > 3) nodes[dragId].wasDragged = true;
+      dragStart = p;
+      moveNode(dragId);
+    }} else if (panning) {{
+      tx += (p.x - panStart.x); ty += (p.y - panStart.y);
+      panStart = p;
+      applyTransform();
+    }}
+  }});
+  function endDrag() {{ dragId = null; panning = false; }}
+  svg.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointerleave', endDrag);
+  svg.addEventListener('wheel', function(e) {{
+    e.preventDefault();
+    var p = toLocalPoint(e);
+    var localX = (p.x - tx) / scale, localY = (p.y - ty) / scale;
+    var factor = e.deltaY < 0 ? 1.15 : (1 / 1.15);
+    scale = Math.min(4, Math.max(0.4, scale * factor));
+    tx = p.x - localX * scale; ty = p.y - localY * scale;
+    applyTransform();
+  }}, {{passive: false}});
+}})();</script>"""
 
 
 # --- Métricas (M8, Sprint-07): dict de `evaluation/results.json` -> presentación ---
@@ -433,8 +603,25 @@ def serialize_metrics(report: dict | None) -> dict:
     }
 
 
-def serialize_comparison(comparison) -> dict:
-    """`comparison`: ComparisonResult (application/auditar_resultado.py)."""
+def _display_favors(f) -> str:
+    """`f.favors` (auditar_resultado.py) compara la CONTRIBUCIÓN exacta — hasta
+    la última cifra de punto flotante — para que la suma de deltas cuadre con
+    el delta de score. Pero la UI redondea `value_a`/`value_b` a 2 decimales,
+    así que un delta minúsculo (ruido del modelo de embeddings) puede mostrar
+    el mismo número en ambos lados con el ✓ en uno solo — parece arbitrario.
+    Si lo que se VE es igual, se muestra como empate aunque por debajo haya
+    ganado alguien por 0.0003."""
+    if f.value_a is None or f.value_b is None:
+        return f.favors
+    if round(f.value_a, 2) == round(f.value_b, 2):
+        return "empate"
+    return f.favors
+
+
+def serialize_comparison(comparison, *, explainer=None) -> dict:
+    """`comparison`: ComparisonResult (application/auditar_resultado.py).
+    `explainer` es opcional (puerto Explainer) — sin él, `explanation` queda
+    vacío en vez de fallar, mismo patrón que `serialize_connection`."""
     return {
         "score_delta": comparison.score_delta,
         "dominant_feature": comparison.dominant_feature,
@@ -443,8 +630,9 @@ def serialize_comparison(comparison) -> dict:
             {
                 "name": f.name, "label": FEATURE_LABELS.get(f.name, f.name),
                 "value_a": f.value_a, "value_b": f.value_b,
-                "weight": f.weight, "delta": f.delta, "favors": f.favors,
+                "weight": f.weight, "delta": f.delta, "favors": _display_favors(f),
             }
             for f in comparison.features
         ),
+        "explanation": explainer.explain_comparison(comparison) if explainer is not None else "",
     }
