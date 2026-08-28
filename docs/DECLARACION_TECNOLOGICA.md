@@ -39,7 +39,7 @@ interfaz corre sin red incluso para su estilo visual (Regla R5).
 
 | Componente | Detalle |
 |---|---|
-| **API de OpenRouter** (`anthropic/claude-3.5-haiku` por defecto) | Redacción en lenguaje natural de la explicación de una conexión/oportunidad (`src/adapters/explain/llm_explainer.py`). Vía el endpoint REST de OpenRouter (compatible con OpenAI chat completions), llamado con `httpx` — sin SDK adicional. |
+| **API de OpenRouter** (`anthropic/claude-3.5-haiku` por defecto) | Redacción en lenguaje natural de la explicación de una conexión, una oportunidad, o el comparador A-vs-B de `/audit` (`src/adapters/explain/llm_explainer.py`, método `explain_comparison`). Vía el endpoint REST de OpenRouter (compatible con OpenAI chat completions), llamado con `httpx` — sin SDK adicional. |
 | Cómo se activa | Sólo si la variable de entorno `OPENROUTER_API_KEY` está presente (`src/adapters/explain/factory.py:build_explainer()`). Nunca hardcodeada. |
 | Degradación | Si falta la key, o si la llamada falla por cualquier motivo (red, rate limit, error del proveedor), el sistema cae automáticamente a `TemplateExplainer` — determinista, sin red, con el mismo grounding estricto. **El sistema completo, incluida la generación de oportunidades, funciona sin esta API.** |
 | Estado de verificación | **No probado contra la API real en este entorno** (sin key disponible durante el desarrollo) — se declara explícitamente como limitación conocida (ver `README.md`). El adapter tiene tests unitarios con un cliente falso; lo no verificado es la llamada de red real. |
@@ -60,7 +60,8 @@ con estos datos ni se usa para inventar hechos sobre entidades del reto.
   `{retrieved, edge, inferred}` (ADR-012) — nunca se presentan un dato recuperado, una arista real de
   una tabla de relación y una inferencia como si fueran la misma clase de evidencia.
 - La interfaz marca explícitamente el texto con procedencia institucional (`tag-evidence`, lavanda) vs.
-  el texto redactado por el `Explainer` (`tag-generated`, gris — `src/interface/static/knexus.css`).
+  el texto redactado por el `Explainer` (`tag-generated`, gris — `src/interface/static/knexus.css`),
+  incluida la explicación del comparador en `/audit`.
 - Cuando el sistema corre sin LLM (por defecto, o por degradación de Regla A4), un banner ámbar visible
   en toda la interfaz lo declara: *"AI explainer is offline — showing template explanations instead"*
   (`_banner.html`, `service.explainer_degraded`).

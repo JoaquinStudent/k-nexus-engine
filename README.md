@@ -62,6 +62,16 @@ flowchart TD
 `F8` corre offline (`scripts/evaluate.py`) y precomputa `evaluation/results.json`; la interfaz sólo lo
 lee (`/metrics`) — 20 NEEDs con el modelo real no caben en el tiempo de un request HTTP.
 
+**Flujo de uso (interfaz web):** todas las páginas salvo `/` (Descubrir) mantienen una barra de
+búsqueda persistente en el header — se puede lanzar una consulta nueva desde resultados, conexión,
+oportunidad o auditoría sin volver al inicio. El mini-grafo de `/connection/{id}` es interactivo:
+arrastrable nodo por nodo, zoom con la rueda, paneo del fondo, y cada nodo enlaza a su propia página
+de conexión (las etiquetas ya no se truncan, se envuelven en varias líneas). Un glosario desplegable
+("Cómo leer esto") explica los 7 factores del score sin jerga técnica, y cada tarjeta de resultado
+muestra siempre en texto los 3 factores dominantes (no depende de hover, por accesibilidad). Las
+páginas de oportunidad y auditoría sin consulta ofrecen ejemplos (`quick picks`) en vez de un
+callejón sin salida.
+
 ## 3. Tecnologías
 
 | Capa | Tecnología |
@@ -159,8 +169,9 @@ Cada uno es navegable también en la interfaz: `/results?q=NEED-001`, `/opportun
    `link_type` (`retrieved`/`edge`/`inferred`) — un dato recuperado, una arista real de una tabla de
    relación y una inferencia por regla nunca se presentan como si fueran la misma clase de evidencia. Un
    eslabón sin evidencia real simplemente no aparece; nunca se fabrica.
-5. **Explicación** (`Explainer`, puerto): redacción en lenguaje natural con grounding estricto —
-   verificado por test que ningún ID/cifra en la salida puede faltar en el input.
+5. **Explicación** (`Explainer`, puerto): redacción en lenguaje natural con grounding estricto para
+   conexión, oportunidad y el comparador A-vs-B de `/audit` (`explain_comparison`) — verificado por
+   test que ningún ID/cifra en la salida puede faltar en el input.
 
 ## 7. Evidencia de desempeño
 
