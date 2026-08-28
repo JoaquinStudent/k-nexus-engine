@@ -1,13 +1,13 @@
 {% macro breakdown_bar(segments, mini=False) %}
 <div class="breakdown-bar{{ ' mini' if mini else '' }}" role="img"
-     aria-label="Desglose de relevancia en 7 factores: {% for s in segments %}{{ s.label }} {{ '%.2f'|format(s.value) if not s.na else 'no medible' }}{% if not loop.last %}, {% endif %}{% endfor %}.">
+     aria-label="Desglose de relevancia en 7 factores: {% for s in segments %}{{ s.label }} {{ '%.0f'|format(s.value * 100) + '%' if not s.na else 'no medible' }}{% if not loop.last %}, {% endif %}{% endfor %}.">
   {% for s in segments %}
     {# N/A (ADR-007/ADR-009) recibe un ancho fijo pequeño SOLO para visibilidad —
        nunca se muestra como 0 falso; el ancho real (pct) que suma el score
        exacto sigue siendo la fuente de verdad en interface/presenters.py. #}
     <div class="segment {{ 'na' if s.na else 'feat-' + s.name }}"
          style="width: {{ s.pct if not s.na else 4 }}%"
-         title="{{ s.label }}: {{ '%.2f'|format(s.value) if not s.na else 'no medible — peso redistribuido' }}"></div>
+         title="{{ s.label }}: {{ '%.0f'|format(s.value * 100) + '%' if not s.na else 'no medible — peso redistribuido' }}"></div>
   {% endfor %}
 </div>
 {% endmacro %}
@@ -17,7 +17,7 @@
   {% for s in segments %}
     <div class="item {{ 'na' if s.na else '' }}">
       <span class="swatch {{ '' if s.na else 'feat-' + s.name }}"></span>
-      {{ s.label }}{% if not s.na %} ({{ '%.2f'|format(s.value) }}){% else %} — no medible para este par (peso redistribuido entre los demás factores){% endif %}
+      {{ s.label }}{% if not s.na %} ({{ '%.0f'|format(s.value * 100) }}%){% else %} — no medible para este par (peso redistribuido entre los demás factores){% endif %}
     </div>
   {% endfor %}
 </div>
@@ -30,7 +30,7 @@
 {% set measurable = segments|rejectattr('na')|sort(attribute='pct', reverse=True)|list %}
 <div class="result-mini-legend">
   {% for s in measurable[:top_n] %}
-    <span><span class="swatch feat-{{ s.name }}"></span>{{ s.label }} {{ '%.2f'|format(s.value) }}</span>
+    <span><span class="swatch feat-{{ s.name }}"></span>{{ s.label }} {{ '%.0f'|format(s.value * 100) }}%</span>
   {% endfor %}
 </div>
 {% endmacro %}

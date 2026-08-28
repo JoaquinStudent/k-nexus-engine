@@ -58,7 +58,7 @@ def test_metrics_page_con_datos_renderiza_numeros_y_procedencia(client, tmp_path
     assert resp.status_code == 200
     body = resp.text
     # Los números medidos (no sólo el shape JSON) deben llegar al HTML.
-    assert "0.60" in body  # P@5 del brazo full
+    assert "60%" in body  # P@5 del brazo full, ahora en escala 0-100%
     assert "Similitud no es lo mismo que relevancia" in body  # UX: traducido, mismo hallazgo (SPEC.md §13.3)
     # La línea de procedencia -- sin ella el número no es auditable (MEMORY.md).
     assert "paraphrase-multilingual-MiniLM-L12-v2" in body

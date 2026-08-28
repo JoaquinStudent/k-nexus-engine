@@ -39,8 +39,8 @@
       </tr>
       <tr>
         <td>...coinciden con el tema esperado (P@5)</td>
-        <td>{{ '%.2f'|format(full_ab.p5) }}</td>
-        <td>{{ '%.2f'|format(cosine_ab.p5) }}</td>
+        <td>{{ '%.0f'|format(full_ab.p5 * 100) }}%</td>
+        <td>{{ '%.0f'|format(cosine_ab.p5 * 100) }}%</td>
       </tr>
     </tbody>
   </table>
@@ -66,15 +66,15 @@
     <div class="chart-row">
       <span class="chart-label">{{ row.label }}</span>
       <div class="chart-bar-track"><div class="chart-bar arm-full" style="width: {{ row.pct }}%"></div></div>
-      <span class="chart-value">{{ '%.2f'|format(row.value) }}</span>
+      <span class="chart-value">{{ '%.0f'|format(row.pct) }}%</span>
     </div>
     {% endfor %}
     <p class="muted" style="margin-top:12px;">
       Ningún sistema puede llegar a 100% aquí: cuando hay 20-30 candidatos relevantes reales para una
       sola necesidad, mostrar sólo los primeros 10 o 30 ya deja afuera a varios — es un límite del tamaño
       de la lista etiquetada, no un fallo del sistema (nunca lo escondemos):
-      con los primeros 10 el máximo posible es {{ '%.2f'|format(metrics.recall_ceilings.r10_ceiling) }} ·
-      con los primeros 30, {{ '%.2f'|format(metrics.recall_ceilings.r30_ceiling) }}.
+      con los primeros 10 el máximo posible es {{ '%.0f'|format(metrics.recall_ceilings.r10_ceiling * 100) }}% ·
+      con los primeros 30, {{ '%.0f'|format(metrics.recall_ceilings.r30_ceiling * 100) }}%.
     </p>
   </div>
 
@@ -86,7 +86,7 @@
     <div class="chart-row">
       <span class="chart-label">{{ row.label }}</span>
       <div class="chart-bar-track"><div class="chart-bar arm-{{ row.arm }}" style="width: {{ row.pct }}%"></div></div>
-      <span class="chart-value">{{ '%.2f'|format(row.p5) }}</span>
+      <span class="chart-value">{{ '%.0f'|format(row.pct) }}%</span>
     </div>
     {% endfor %}
     <table class="metrics-table compact-table" style="margin-top:8px;">
@@ -98,9 +98,9 @@
       </tbody>
     </table>
     <p class="delta-line">
-      <span class="{{ 'delta-positive' if metrics.ablation_delta_cosine >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_cosine) }}</span>
+      <span class="{{ 'delta-positive' if metrics.ablation_delta_cosine >= 0 else 'delta-negative' }}">{{ '%+.0f'|format(metrics.ablation_delta_cosine * 100) }}%</span>
       frente a ordenar solo por parecido ·
-      <span class="{{ 'delta-positive' if metrics.ablation_delta_dense >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_dense) }}</span>
+      <span class="{{ 'delta-positive' if metrics.ablation_delta_dense >= 0 else 'delta-negative' }}">{{ '%+.0f'|format(metrics.ablation_delta_dense * 100) }}%</span>
       frente a buscar solo por significado
     </p>
   </div>
@@ -142,9 +142,9 @@
       <tr>
         <td>{{ row.need_id }}</td>
         <td>{{ row.relevant_cluster }}</td>
-        <td>{{ '%.2f'|format(row.p5_full) }}</td>
-        <td>{{ '%.2f'|format(row.p5_cosine) }}</td>
-        <td>{{ '%.2f'|format(row.p5_dense) }}</td>
+        <td>{{ '%.0f'|format(row.p5_full * 100) }}%</td>
+        <td>{{ '%.0f'|format(row.p5_cosine * 100) }}%</td>
+        <td>{{ '%.0f'|format(row.p5_dense * 100) }}%</td>
         <td>{{ '%.0f'|format(row.latency_ms) }}</td>
       </tr>
     {% endfor %}

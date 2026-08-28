@@ -51,13 +51,13 @@
   {% for f in comparison.features %}
   <div class="audit-grid audit-feature-row" style="margin-top:10px;">
     <div style="text-align:right;">
-      {{ '%.2f'|format(f.value_a) if f.value_a is not none else 'N/A' }}
+      {{ '%.0f'|format(f.value_a * 100) + '%' if f.value_a is not none else 'N/A' }}
       {% if f.favors == 'A' %}<span class="audit-tick">&#10003;</span>{% endif %}
     </div>
     <div class="audit-feature-label">{{ f.label }}</div>
     <div>
       {% if f.favors == 'B' %}<span class="audit-tick">&#10003;</span>{% endif %}
-      {{ '%.2f'|format(f.value_b) if f.value_b is not none else 'N/A' }}
+      {{ '%.0f'|format(f.value_b * 100) + '%' if f.value_b is not none else 'N/A' }}
     </div>
   </div>
   {% endfor %}
@@ -67,7 +67,7 @@
     <p class="audit-verdict" style="margin:0;">
       <strong>{{ winner.title }}</strong> ({{ winner.entity_id }}) rankea más alto que <strong>{{ loser.title }}</strong>
       ({{ loser.entity_id }}) — la diferencia decisiva es <strong>{{ comparison.dominant_feature_label }}</strong>
-      (diferencia de {{ '%.2f'|format(comparison.score_delta|abs) }} puntos de relevancia).
+      (diferencia de {{ '%.0f'|format((comparison.score_delta|abs) * 100) }} puntos porcentuales de relevancia).
     </p>
   </div>
   {% if comparison.explanation %}

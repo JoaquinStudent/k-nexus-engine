@@ -36,8 +36,8 @@
       </div>
     </a>
     <div class="result-footer">
-      <span class="pill {{ c.relevance_band }}">{{ c.relevance_band|capitalize }} · {{ '%.2f'|format(c.score) }}</span>
-      <span class="result-scale">de 1 · alta ≥0.60 · media ≥0.40</span>
+      <span class="pill {{ c.relevance_band }}">{{ c.relevance_band|capitalize }} · {{ '%.0f'|format(c.score * 100) }}%</span>
+      <span class="result-scale">alta ≥60% · media ≥40%</span>
       <a class="btn-compare" href="/audit?q={{ query|urlencode }}&amp;a={{ c.entity_id }}">Comparar con otro resultado</a>
     </div>
   </div>

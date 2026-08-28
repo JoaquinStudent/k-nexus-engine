@@ -15,9 +15,9 @@
 </div>
 
 <div class="card" style="margin-top:24px;">
-  <h2 style="margin-bottom:4px;">Relevancia {{ '%.2f'|format(connection.score) }} <span class="result-scale">de 1</span></h2>
+  <h2 style="margin-bottom:4px;">Relevancia {{ '%.0f'|format(connection.score * 100) }}%</h2>
   <span class="pill {{ connection.relevance_band }}">{{ connection.relevance_band|capitalize }}</span>
-  <span class="result-scale">· alta ≥0.60 · media ≥0.40 · baja &lt;0.40</span>
+  <span class="result-scale">· alta ≥60% · media ≥40% · baja &lt;40%</span>
   {% if connection.relation_help %}<p class="muted" style="margin-top:8px;">{{ connection.relation_label|capitalize }}: {{ connection.relation_help }}</p>{% endif %}
   <div style="margin-top:20px;">{{ m.breakdown_bar(connection.breakdown) }}</div>
   {{ m.breakdown_legend(connection.breakdown) }}
