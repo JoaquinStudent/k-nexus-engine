@@ -453,6 +453,18 @@ a:hover { text-decoration: underline; }
 .tag-generated { background: rgba(138,134,166,0.15); color: var(--generated); }
 .tag-evidence::before, .tag-generated::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
 
+/* Mismo tratamiento visual que .evidence-item (borde + fondo tintado), pero
+   con el color --generated: distingue de un vistazo "esto lo redactó el LLM"
+   de "esto es evidencia institucional", sin depender solo del tag de texto. */
+.explanation-generated {
+  border-left: 3px solid var(--generated);
+  padding: var(--unit) calc(var(--unit) * 1.5);
+  background: rgba(138,134,166,0.06);
+  border-radius: 0 8px 8px 0;
+  margin-top: 12px;
+}
+.explanation-generated p { margin: 0; font-style: italic; color: var(--text-body); line-height: 1.6; }
+
 /* --- Cadena de oportunidad (M5) --- */
 .chain { display: flex; align-items: center; gap: var(--unit); flex-wrap: wrap; margin: calc(var(--unit) * 2) 0; }
 .chain-node {

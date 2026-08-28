@@ -45,7 +45,7 @@
   </div>
   {% if o.explanation %}
     <span class="tag-generated">Generado por IA</span>
-    <p style="margin-top:8px; margin-bottom:0;">{{ o.explanation }}</p>
+    <div class="explanation-generated"><p>{{ o.explanation }}</p></div>
   {% endif %}
 </div>
 {% endfor %}
