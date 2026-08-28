@@ -21,8 +21,9 @@
 <div class="findings-banner">
   <h2>Similitud no es lo mismo que relevancia — medido, no ilustrado</h2>
   <p class="chart-help">"Accionable" = una conexión que de verdad sirve para tomar una decisión (hay método
-     transferible o una capacidad institucional real detrás). "Trampa" = una conexión que solo comparte
-     palabras, sin servir para nada.</p>
+     transferible o una capacidad institucional real detrás). "Coincidencia superficial" = una conexión
+     que solo comparte palabras o tema, sin servir para nada — el mismo tipo que ves etiquetado en las
+     tarjetas de resultados.</p>
   <table class="metrics-table compact-table">
     <thead><tr><th scope="col">De cada 5 resultados que mostramos...</th><th scope="col">Nuestro sistema</th><th scope="col">Ordenado solo por parecido</th></tr></thead>
     <tbody>
@@ -112,7 +113,7 @@
   <table class="metrics-table">
     <caption>"Sin puntuar" ≠ 0 — es lo que ese método ni siquiera llegó a evaluar.</caption>
     <thead>
-      <tr><th scope="col">Método</th><th scope="col">Trampa</th><th scope="col">Capacidad</th><th scope="col">Método transferible</th><th scope="col">Accionable</th><th scope="col">Sin puntuar</th></tr>
+      <tr><th scope="col">Método</th><th scope="col">Coincidencia superficial</th><th scope="col">Capacidad</th><th scope="col">Método transferible</th><th scope="col">Accionable</th><th scope="col">Sin puntuar</th></tr>
     </thead>
     <tbody>
     {% for row in metrics.construct_validity %}

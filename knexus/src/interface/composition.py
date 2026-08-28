@@ -18,6 +18,37 @@ from src.adapters.retrieval.corpus import build_corpus
 from src.adapters.retrieval.dense_index import DenseIndex
 from src.application.descubrir_conexiones import descubrir_conexiones
 from src.application.generar_oportunidad import generar_oportunidad
+from src.ports.explainer import Explainer
+
+
+class _CachingExplainer(Explainer):
+    """Envuelve un `Explainer` real (LLM) para no pagar una llamada de red
+    nueva cada vez que se recarga la MISMA página. Clave = id() del DTO, no
+    su contenido: `discover`/`opportunities` ya están cacheados por query
+    (arriba), así que la misma query+entidad siempre entrega el MISMO objeto
+    Python -- id() alcanza sin tener que volver hasheables los DTOs (algunos,
+    como RankedConnection, no lo son por StoredEntity).
+    ponytail: dict sin límite de tamaño -- vive lo que dura el proceso; subir
+    a un LRU si una sesión tan larga como para que la memoria importe."""
+
+    def __init__(self, inner: Explainer):
+        self._inner = inner
+        self._cache: dict = {}
+
+    def _cached(self, method_name: str, dto) -> str:
+        key = (method_name, id(dto))
+        if key not in self._cache:
+            self._cache[key] = getattr(self._inner, method_name)(dto)
+        return self._cache[key]
+
+    def explain_connection(self, connection) -> str:
+        return self._cached("explain_connection", connection)
+
+    def explain_opportunity(self, opportunity) -> str:
+        return self._cached("explain_opportunity", opportunity)
+
+    def explain_comparison(self, comparison) -> str:
+        return self._cached("explain_comparison", comparison)
 
 
 def build_pipeline(fast: bool = False, *, log=lambda msg: None):
@@ -64,7 +95,13 @@ class QueryService:
         self.graph = graph
         # build_explainer() ya implementa la degradación de Regla A4 (sin
         # OPENROUTER_API_KEY -> TemplateExplainer); no se reimplementa aquí.
-        self.explainer = explainer if explainer is not None else build_explainer()
+        base_explainer = explainer if explainer is not None else build_explainer()
+        self._explainer_is_template = isinstance(base_explainer, TemplateExplainer)
+        # Cachea la redacción del LLM -- sin esto, recargar la misma página
+        # de conexión/oportunidad/auditoría vuelve a llamar a OpenRouter cada
+        # vez, aunque el resultado (rankeo, score) sea idéntico por venir de
+        # discover()/opportunities(), que sí están cacheados.
+        self.explainer = _CachingExplainer(base_explainer)
         # ponytail: la query es un string — lru_cache es toda la caché que hace falta.
         self.discover = lru_cache(maxsize=64)(self._discover)
         self.opportunities = lru_cache(maxsize=64)(self._opportunities)
@@ -73,7 +110,7 @@ class QueryService:
     def explainer_degraded(self) -> bool:
         """True si el sistema corre sin LLM — TemplateExplainer por defecto o
         por degradación (Regla A4). Alimenta el banner ámbar de M9."""
-        return isinstance(self.explainer, TemplateExplainer)
+        return self._explainer_is_template
 
     def _discover(self, query: str) -> tuple:
         return descubrir_conexiones(
