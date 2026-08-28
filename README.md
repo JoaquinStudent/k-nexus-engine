@@ -21,8 +21,7 @@ en español o inglés — sin resultados precargados.
 ## 2. Diagrama de arquitectura
 
 Pipeline (Pipes & Filters) gobernado por Arquitectura Hexagonal (dominio puro, dependencias siempre
-hacia adentro). Corresponde exactamente a lo implementado — ver `sdd/ARCHITECTURE.md` para el detalle
-por capa y las reglas verificables (A1-A4).
+hacia adentro). Corresponde exactamente a lo implementado.
 
 ```mermaid
 flowchart TD
@@ -115,7 +114,7 @@ uvicorn src.interface.app:app --reload
   arranques siguientes son offline.
 - macOS: si `faiss` + `torch` abortan con `SIGABRT`/"OMP: Error #15" al cargar juntos, es un conflicto
   conocido de runtimes OpenMP entre ambas librerías nativas — ya mitigado en el código
-  (`KMP_DUPLICATE_LIB_OK=TRUE`, ver `sdd/SPEC.md §12.5`); no requiere acción manual.
+  (`KMP_DUPLICATE_LIB_OK=TRUE`); no requiere acción manual.
 - LLM opcional: `export OPENROUTER_API_KEY=...` para redacción vía API real (OpenRouter, sin SDK
   adicional — usa `httpx`); sin esto, el sistema funciona completo con `TemplateExplainer` (Regla A4).
 
@@ -176,9 +175,9 @@ Cada uno es navegable también en la interfaz: `/results?q=NEED-001`, `/opportun
 ## 7. Evidencia de desempeño
 
 Medición real (2026-08-27, `paraphrase-multilingual-MiniLM-L12-v2`, 2.512 entidades, 20 NEEDs
-etiquetados por cluster de `application_context`, `evaluation/results.json`). Metodología completa,
-sesgos declarados y las 3 métricas de construct-validity: **[`sdd/SPEC.md §13`](sdd/SPEC.md)**.
-Pantalla interactiva: `/metrics`.
+etiquetados por cluster de `application_context`, `evaluation/results.json`). Metodología completa y
+sesgos declarados: código fuente de la medición en `knexus/evaluation/harness.py` y
+`knexus/evaluation/qrels.py`. Pantalla interactiva: `/metrics`.
 
 | Brazo | P@5 | P@10 | R@30 | MRR |
 |---|---|---|---|---|
@@ -198,7 +197,7 @@ muestra el valor del reranking es *construct validity* sobre el top-5:
 
 El pipeline real duplica la tasa de conexiones con valor de decisión directo y reduce a menos de la
 mitad las coincidencias superficiales — el argumento *"similarity ≠ relevance"* queda demostrado con
-datos, no ilustrado con un ejemplo elegido a mano. Detalle completo del porqué en `sdd/SPEC.md §13.3`.
+datos, no ilustrado con un ejemplo elegido a mano.
 
 ## 8. Limitaciones conocidas
 
@@ -211,8 +210,7 @@ datos, no ilustrado con un ejemplo elegido a mano. Detalle completo del porqué 
   — no había key disponible durante el desarrollo. Está cubierto por tests unitarios con cliente falso;
   la llamada de red real queda sin verificar. El sistema funciona completo sin él.
 - Los techos de recall son estructurales, no un límite del sistema: con clusters de 21-34 entidades
-  relevantes sobre un top-30, R@30 no puede superar ~0.97-1.0 — se reporta siempre junto al número
-  (`sdd/SPEC.md §13.2`).
+  relevantes sobre un top-30, R@30 no puede superar ~0.97-1.0 — se reporta siempre junto al número.
 - Dataset sintético (`dataset/README.md`): las entidades y relaciones son ficticias, generadas para el
   reto — ninguna conclusión aquí generaliza a una universidad real sin re-validación.
 - `faiss-cpu` usa búsqueda exacta (`IndexFlatIP`), no aproximada — válido a esta escala (~2.500
@@ -239,11 +237,6 @@ datos, no ilustrado con un ejemplo elegido a mano. Detalle completo del porqué 
 
 ```
 dataset/          Data V1.0 (fuente de verdad, sin sobrescribir)
-files/             Documentos oficiales del reto
-mocks-stitch/       Mocks de diseño (Google Stitch, HTML)
-sdd/                 Especificación viva: SPEC · ARCHITECTURE · BACKLOG · MEMORY · TECH_STACK · DESIGN
-docs/                 Entregables de empaque: declaración tecnológica, casos demostrables
-knexus/                Código fuente ejecutable — ver src/, tests/, evaluation/, scripts/
+docs/               Entregables de empaque: declaración tecnológica, casos demostrables, guion de pitch
+knexus/               Código fuente ejecutable — ver src/, tests/, evaluation/, scripts/
 ```
-
-Historial de decisiones y retro por sprint: `sdd/MEMORY.md` (incluye ADR-001 a ADR-014).
