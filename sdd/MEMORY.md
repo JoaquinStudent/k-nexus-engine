@@ -166,6 +166,18 @@
 | **❌ Errores a evitar** | Al escribir la explicación del mecanismo de scoring de memoria, los pesos citados inicialmente (`sim_semantica=0.20`, `densidad_evidencia=0.15`, `enlace_estructural=0.05`) no coincidían con `scoring.py:WEIGHTS` (`0.18`/`0.12`/`0.10` reales) — y una banda de relevancia citada en un caso demostrable (`0.657` descrita como "media") contradecía el propio umbral `ALTO=0.6` documentado dos líneas antes. Ambos se detectaron grepeando el código fuente contra lo escrito, no confiando en la memoria de sprints anteriores. Lección: todo número citado en documentación de empaque debe verificarse contra el código en el momento de escribirlo, aunque ya se haya documentado antes en otro archivo — la documentación vieja puede llevar el mismo error arrastrado. |
 | **🔁 Acción para el próximo Sprint** | Ninguno pendiente — Sprint-08 cierra el backlog planeado (`BACKLOG.md`). Si se retoma el proyecto, validar `LlmExplainer` contra la API real (única pieza declarada pero nunca ejercitada, ver limitaciones del README) sería el primer punto natural. |
 
+---
+
+### Sprint-09 — Pulido UI/UX y Limpieza del Repositorio
+
+| Dimensión | Detalle |
+|---|---|
+| **Objetivo** | Refinar la interfaz (grafo interactivo, explicaciones) y preparar el repositorio para la entrega final eliminando artefactos de diseño preliminar. |
+| **✅ Qué funcionó** | Se ajustó el minigrafo interactivo (`presenters.py`): nodos secundarios reales como `RESEARCH_GROUP` y `PUBLICATION` ahora tienen colores semánticos en lugar de gris genérico, y se implementó `textwrap` en las etiquetas (`NODE_LABEL_MAX_CHARS=18`) para que los nombres largos no saturen el visualizador. Documentos clave como `README.md`, `DECLARACION_TECNOLOGICA.md` y `GUION_PITCH.md` fueron actualizados para la presentación final. |
+| **⚠️ Qué vigilar** | El grafo ahora descarta proactivamente (`_resolves_to_entity`) nodos inyectados por aristas (ej. `researcher_expertise`) que apuntan a IDs (`EXP-...`) no existentes en el dataset, evitando enlaces rotos 404 en el SVG renderizado. |
+| **❌ Errores a evitar** | Eliminaciones masivas precipitadas: en un commit de limpieza se eliminó accidentalmente toda la carpeta `sdd/` (donde residen este `MEMORY.md`, `ARCHITECTURE.md`, etc.). Aunque se re-añadieron minutos después, el control estricto de qué carpetas se eliminan (`mocks-stitch/`, `files/`) es crucial antes de presentar un producto. |
+| **🔁 Acción para el próximo Sprint** | El proyecto queda consolidado para evaluación. Futuras versiones deberán evaluar la persistencia real y manejo de usuarios que requiera infraestructura nube. |
+
 ## 3. Antipatrones detectados (lista negra)
 
 | Antipatrón | Por qué es peligroso |
