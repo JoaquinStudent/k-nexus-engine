@@ -39,7 +39,7 @@ interfaz corre sin red incluso para su estilo visual (Regla R5).
 
 | Componente | Detalle |
 |---|---|
-| **API de OpenRouter** (`anthropic/claude-3.5-haiku` por defecto) | Redacción en lenguaje natural de la explicación de una conexión, una oportunidad, o el comparador A-vs-B de `/audit` (`src/adapters/explain/llm_explainer.py`, método `explain_comparison`). Vía el endpoint REST de OpenRouter (compatible con OpenAI chat completions), llamado con `httpx` — sin SDK adicional. |
+| **API de OpenRouter** (`anthropic/claude-haiku-4.5` por defecto) | Redacción en lenguaje natural de la explicación de una conexión, una oportunidad, o el comparador A-vs-B de `/audit` (`src/adapters/explain/llm_explainer.py`, método `explain_comparison`). Vía el endpoint REST de OpenRouter (compatible con OpenAI chat completions), llamado con `httpx` — sin SDK adicional. |
 | Cómo se activa | Sólo si la variable de entorno `OPENROUTER_API_KEY` está presente (`src/adapters/explain/factory.py:build_explainer()`). Nunca hardcodeada. |
 | Degradación | Si falta la key, o si la llamada falla por cualquier motivo (red, rate limit, error del proveedor), el sistema cae automáticamente a `TemplateExplainer` — determinista, sin red, con el mismo grounding estricto. **El sistema completo, incluida la generación de oportunidades, funciona sin esta API.** |
 | Estado de verificación | **No probado contra la API real en este entorno** (sin key disponible durante el desarrollo) — se declara explícitamente como limitación conocida (ver `README.md`). El adapter tiene tests unitarios con un cliente falso; lo no verificado es la llamada de red real. |

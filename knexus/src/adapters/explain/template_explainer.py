@@ -46,6 +46,14 @@ OPPORTUNITY_TYPE_LABELS = {
     "exploratoria": "exploratoria",
 }
 
+OPPORTUNITY_TYPE_HELP = {
+    "continuidad_investigativa": "hay un antecedente metodológico fuerte y un investigador conectado — conviene seguir esa línea con esa persona.",
+    "activacion_capacidad": "hay una capacidad institucional instalada que coincide, aunque el método del antecedente no sea el mismo.",
+    "integracion_curricular": "la conexión llega hasta un componente curricular — puede alimentar formación, no sólo investigación.",
+    "colaboracion_interdisciplinaria": "el investigador conectado es de otra facultad — el valor está en el cruce entre áreas.",
+    "exploratoria": "la conexión existe pero aún no tiene un eslabón fuerte (capacidad, currículo o investigador) que la respalde.",
+}
+
 # Glosario para el usuario nuevo (M9/UX): una línea por concepto, sin jerga de
 # implementación. Fuente única — la UI (`presenters.py`) lo reusa en vez de
 # duplicar texto en las plantillas Jinja.
@@ -69,9 +77,9 @@ RELATION_HELP = {
 }
 
 ARM_HELP = {
-    "full": "el orden final: recuperación + las 7 features + reglas de negocio.",
-    "cosine": "el mismo conjunto de candidatos, pero ordenado únicamente por similitud semántica.",
-    "dense": "resultados directos del índice denso, sin fusión ni reordenamiento.",
+    "full": "busca de varias formas a la vez y decide el orden con 7 criterios explicables (método, capacidad institucional, evidencia...), no solo por parecido de texto.",
+    "cosine": "los mismos resultados encontrados, pero ordenados solo por qué tan parecido es el significado del texto — sin mirar método, capacidad ni evidencia.",
+    "dense": "resultados directos de buscar por significado, sin ninguna regla encima — la forma más simple y común de buscar con IA.",
 }
 
 

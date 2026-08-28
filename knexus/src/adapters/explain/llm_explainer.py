@@ -12,22 +12,16 @@ demo, se cae el sistema" es justo lo que esto evita).
 import httpx
 
 from src.adapters.explain.template_explainer import (
-    FEATURE_HELP, FEATURE_LABELS, OPPORTUNITY_TYPE_LABELS, RELATION_LABELS, TemplateExplainer,
+    FEATURE_HELP, FEATURE_LABELS, LINK_TYPE_LABELS, OPPORTUNITY_TYPE_HELP, OPPORTUNITY_TYPE_LABELS,
+    RELATION_HELP, RELATION_LABELS, ROLE_LABELS, TemplateExplainer,
 )
 from src.ports.explainer import Explainer
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
-GROUNDING_INSTRUCTION = (
-    "Redacta en español, en una o dos frases, SOLO a partir de los datos "
-    "provistos abajo. No inventes entidades, cifras ni afirmaciones que no "
-    "estén explícitas en los datos. Marca tu respuesta como una explicación "
-    "generada, no como un hecho institucional adicional."
-)
-
 
 class LlmExplainer(Explainer):
-    def __init__(self, api_key: str, model: str = "anthropic/claude-3.5-haiku", fallback: Explainer = None):
+    def __init__(self, api_key: str, model: str = "anthropic/claude-haiku-4.5", fallback: Explainer = None):
         self._api_key = api_key
         self._model = model
         self._fallback = fallback or TemplateExplainer()
@@ -52,27 +46,46 @@ class LlmExplainer(Explainer):
 
     def _connection_prompt(self, connection) -> str:
         scored = connection.scored
-        features = ", ".join(
-            f"{FEATURE_LABELS.get(name, name)}={value:.2f}"
+        relation_label = RELATION_LABELS.get(scored.relation_type, scored.relation_type)
+        relation_meaning = RELATION_HELP.get(scored.relation_type, "")
+        features = "\n".join(
+            f"- {FEATURE_LABELS.get(name, name)} = {value:.2f} ({FEATURE_HELP.get(name, '')})"
             for name, value, _ in connection.top_features
         )
         return (
-            f"{GROUNDING_INSTRUCTION}\n\n"
+            "El score y el tipo de relación de esta conexión YA se muestran en pantalla — "
+            "no los repitas ni los reformules. Tu tarea es otra: en español, 2 o 3 frases, "
+            "lenguaje cotidiano pero analítico (nada de jerga de sistema de puntuación), dale "
+            "a alguien de la universidad una RECOMENDACIÓN práctica sobre qué hacer con esta "
+            "conexión y por qué — apóyate en el significado de las features dominantes de "
+            "abajo, no en repetir sus números. No inventes entidades, cifras ni datos fuera de "
+            "los provistos. Marca tu respuesta como una explicación generada, no como un hecho "
+            "institucional adicional.\n\n"
             f"Entidad: {connection.entity.entity_id}\n"
-            f"Tipo de relación: {RELATION_LABELS.get(scored.relation_type, scored.relation_type)}\n"
-            f"Score: {scored.score:.2f}\n"
-            f"Features que más pesaron: {features}"
+            f"Tipo de relación: {relation_label} ({relation_meaning})\n"
+            f"Features dominantes:\n{features}"
         )
 
     def _opportunity_prompt(self, opportunity) -> str:
-        chain = " -> ".join(f"{link.role}:{link.entity_id}({link.link_type})" for link in opportunity.links)
+        type_label = OPPORTUNITY_TYPE_LABELS.get(opportunity.opportunity_type, opportunity.opportunity_type)
+        type_meaning = OPPORTUNITY_TYPE_HELP.get(opportunity.opportunity_type, "")
+        chain = "\n".join(
+            f"- {ROLE_LABELS.get(link.role, link.role)} {link.entity_id} "
+            f"({LINK_TYPE_LABELS.get(link.link_type, link.link_type)})"
+            for link in opportunity.links
+        )
         return (
-            f"{GROUNDING_INSTRUCTION}\n\n"
+            "El tipo de oportunidad, la prioridad y la cadena de eslabones YA se muestran en "
+            "pantalla — no los repitas ni los reformules. Tu tarea es otra: en español, 2 o 3 "
+            "frases, lenguaje cotidiano pero analítico, dale una RECOMENDACIÓN práctica sobre "
+            "el siguiente paso concreto con esta oportunidad — apóyate en qué tan firme es cada "
+            "eslabón (su tipo de vínculo, abajo) y en el significado del tipo de oportunidad, no "
+            "en repetir los datos. No inventes entidades, personas ni datos fuera de los "
+            "provistos. Marca tu respuesta como una explicación generada, no como un hecho "
+            "institucional adicional.\n\n"
             f"Necesidad: {opportunity.need_id}\n"
-            f"Tipo de oportunidad: {OPPORTUNITY_TYPE_LABELS.get(opportunity.opportunity_type, opportunity.opportunity_type)}\n"
-            f"Prioridad: {opportunity.priority}\n"
-            f"Cadena: {chain}\n"
-            f"Score del antecedente: {opportunity.score:.2f}"
+            f"Tipo de oportunidad: {type_label} ({type_meaning})\n"
+            f"Cadena:\n{chain}"
         )
 
     def _comparison_prompt(self, comparison) -> str:

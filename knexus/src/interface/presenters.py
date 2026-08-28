@@ -536,7 +536,7 @@ def _graph_interaction_script(svg_id: str) -> str:
 # --- Métricas (M8, Sprint-07): dict de `evaluation/results.json` -> presentación ---
 
 ARMS_ORDER = ("full", "cosine", "dense")
-ARM_LABELS = {"full": "Pipeline completo", "cosine": "Reorden por coseno", "dense": "Sólo denso"}
+ARM_LABELS = {"full": "Nuestro sistema", "cosine": "Reordenado solo por parecido", "dense": "Solo búsqueda por significado"}
 
 # Umbral único para pintar accionable_rate/trap_rate en la tabla de validez de
 # constructo (verde/rojo) — mismo criterio simple en toda la fila, nunca un

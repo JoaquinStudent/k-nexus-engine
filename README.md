@@ -82,7 +82,7 @@ callejón sin salida.
 | Grafo | `networkx` |
 | Fusión / reranking | código propio (RRF + 7 features ponderadas, `src/domain/`) |
 | Backend + UI | FastAPI + Jinja2, un solo proceso |
-| LLM opcional | OpenRouter (`anthropic/claude-3.5-haiku` por defecto), degrada sin key |
+| LLM opcional | OpenRouter (`anthropic/claude-haiku-4.5` por defecto), degrada sin key |
 
 Declaración completa de componentes externos, versiones y cómo se distingue evidencia institucional de
 contenido generado: **[`docs/DECLARACION_TECNOLOGICA.md`](docs/DECLARACION_TECNOLOGICA.md)**.

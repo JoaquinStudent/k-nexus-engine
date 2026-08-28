@@ -2,7 +2,10 @@
 {% block title %}Desempeño — KNexus Engine{% endblock %}
 {% block content %}
 <h1>Desempeño</h1>
-<p class="page-intro">Foto de una evaluación ya hecha (no en vivo) — compara 3 formas de ordenar los mismos resultados.</p>
+<p class="page-intro">Esta pantalla responde una pregunta simple con números: ¿el sistema realmente encuentra
+   conexiones útiles, o solo cosas parecidas? Es una foto de una evaluación ya hecha (no se recalcula en
+   cada visita): probamos el mismo caso con nuestro método y con dos formas más simples de ordenar los
+   resultados, para ver cuánto aporta de verdad.</p>
 
 {% if not metrics.available %}
   <div class="card state-empty">
@@ -17,28 +20,31 @@
 {% set cosine_ab = metrics.ablation[1] %}
 <div class="findings-banner">
   <h2>Similitud no es lo mismo que relevancia — medido, no ilustrado</h2>
+  <p class="chart-help">"Accionable" = una conexión que de verdad sirve para tomar una decisión (hay método
+     transferible o una capacidad institucional real detrás). "Trampa" = una conexión que solo comparte
+     palabras, sin servir para nada.</p>
   <table class="metrics-table compact-table">
-    <thead><tr><th scope="col">Métrica (top-5)</th><th scope="col">Pipeline completo</th><th scope="col">Reorden coseno</th></tr></thead>
+    <thead><tr><th scope="col">De cada 5 resultados que mostramos...</th><th scope="col">Nuestro sistema</th><th scope="col">Ordenado solo por parecido</th></tr></thead>
     <tbody>
       <tr>
-        <td>Accionable</td>
+        <td>...son realmente útiles</td>
         <td class="stat-positive">{{ '%.0f'|format(full_cv.actionable_rate * 100) }}%</td>
         <td class="stat-negative">{{ '%.0f'|format(cosine_cv.actionable_rate * 100) }}%</td>
       </tr>
       <tr>
-        <td>Trampa</td>
+        <td>...solo parecen relacionados, pero no sirven</td>
         <td class="stat-positive">{{ '%.0f'|format(full_cv.trap_rate * 100) }}%</td>
         <td class="stat-negative">{{ '%.0f'|format(cosine_cv.trap_rate * 100) }}%</td>
       </tr>
       <tr>
-        <td>P@5</td>
+        <td>...coinciden con el tema esperado (P@5)</td>
         <td>{{ '%.2f'|format(full_ab.p5) }}</td>
         <td>{{ '%.2f'|format(cosine_ab.p5) }}</td>
       </tr>
     </tbody>
   </table>
-  <p class="chart-help">P@5 sale más bajo en el pipeline completo porque la etiqueta mide parecido temático, no
-     utilidad real — por eso importan más las dos filas de arriba.</p>
+  <p class="chart-help">La última fila (P@5) sale más baja en nuestro sistema porque esa etiqueta mide
+     solo parecido de tema, no utilidad real — por eso las dos filas de arriba son las que más importan.</p>
 </div>
 
 <div class="stat-tiles">
@@ -52,8 +58,9 @@
 
 <div class="metrics-grid">
   <div class="card">
-    <h3>Precision@K</h3>
-    <p class="chart-help">% de resultados relevantes en el top-K.</p>
+    <h3>Precisión (Precision@K)</h3>
+    <p class="chart-help">De los primeros K resultados que mostramos, cuántos coinciden con el tema que
+       se esperaba encontrar.</p>
     {% for row in metrics.precision_at_k %}
     <div class="chart-row">
       <span class="chart-label">{{ row.label }}</span>
@@ -62,15 +69,18 @@
     </div>
     {% endfor %}
     <p class="muted" style="margin-top:12px;">
-      Techos de recall (límite del tamaño del set etiquetado, nunca ocultos):
-      R@10 &le; {{ '%.2f'|format(metrics.recall_ceilings.r10_ceiling) }} ·
-      R@30 &le; {{ '%.2f'|format(metrics.recall_ceilings.r30_ceiling) }}
+      Ningún sistema puede llegar a 100% aquí: cuando hay 20-30 candidatos relevantes reales para una
+      sola necesidad, mostrar sólo los primeros 10 o 30 ya deja afuera a varios — es un límite del tamaño
+      de la lista etiquetada, no un fallo del sistema (nunca lo escondemos):
+      con los primeros 10 el máximo posible es {{ '%.2f'|format(metrics.recall_ceilings.r10_ceiling) }} ·
+      con los primeros 30, {{ '%.2f'|format(metrics.recall_ceilings.r30_ceiling) }}.
     </p>
   </div>
 
   <div class="card">
-    <h3>Ablation</h3>
-    <p class="chart-help">Mismos resultados, 3 formas de ordenarlos.</p>
+    <h3>Comparación de método (Ablation)</h3>
+    <p class="chart-help">Mismos resultados de partida, 3 formas distintas de ordenarlos — para ver
+       cuánto aporta de verdad nuestro método frente a las formas más simples.</p>
     {% for row in metrics.ablation %}
     <div class="chart-row">
       <span class="chart-label">{{ row.label }}</span>
@@ -79,7 +89,7 @@
     </div>
     {% endfor %}
     <table class="metrics-table compact-table" style="margin-top:8px;">
-      <thead><tr><th scope="col">Brazo</th><th scope="col">Qué hace</th></tr></thead>
+      <thead><tr><th scope="col">Método</th><th scope="col">Qué hace</th></tr></thead>
       <tbody>
       {% for row in metrics.ablation %}
         <tr><td><span class="swatch arm-{{ row.arm }}"></span> {{ row.label }}</td><td class="muted">{{ row.help }}</td></tr>
@@ -88,20 +98,21 @@
     </table>
     <p class="delta-line">
       <span class="{{ 'delta-positive' if metrics.ablation_delta_cosine >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_cosine) }}</span>
-      vs. coseno ·
+      frente a ordenar solo por parecido ·
       <span class="{{ 'delta-positive' if metrics.ablation_delta_dense >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_dense) }}</span>
-      vs. denso
+      frente a buscar solo por significado
     </p>
   </div>
 </div>
 
 <div class="card" style="margin-top:16px;">
-  <h3>Validez de constructo (top-5)</h3>
-  <p class="chart-help">Qué tan útil es el top-5 real, más allá del score.</p>
+  <h3>¿El top-5 realmente sirve? (validez de constructo)</h3>
+  <p class="chart-help">Va más allá del score: mide si lo que aparece primero de verdad tiene con qué
+     actuar (capacidad institucional, método transferible), no solo si "suena" relevante.</p>
   <table class="metrics-table">
-    <caption>"Sin puntuar" ≠ 0 — es lo que ese brazo nunca llegó a evaluar.</caption>
+    <caption>"Sin puntuar" ≠ 0 — es lo que ese método ni siquiera llegó a evaluar.</caption>
     <thead>
-      <tr><th scope="col">Brazo</th><th scope="col">Trampa</th><th scope="col">Capacidad</th><th scope="col">Método</th><th scope="col">Accionable</th><th scope="col">Sin puntuar</th></tr>
+      <tr><th scope="col">Método</th><th scope="col">Trampa</th><th scope="col">Capacidad</th><th scope="col">Método transferible</th><th scope="col">Accionable</th><th scope="col">Sin puntuar</th></tr>
     </thead>
     <tbody>
     {% for row in metrics.construct_validity %}

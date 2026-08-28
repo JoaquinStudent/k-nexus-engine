@@ -80,12 +80,14 @@ jurado si no entran en el minuto.
 
 ## 4 — Resultados y métricas (2:30 – 3:00)
 
-> Medimos con un ablation de 3 brazos sobre 20 necesidades etiquetadas: el pipeline real sube la tasa
-> de conexiones accionables del top-5 a **0.55** contra **0.27** del coseno puro, y baja las
-> coincidencias superficiales de **0.65** a **0.28** — así controlamos que una conexión de solo
-> vocabulario compartido no gane. Limitación honesta: en precisión temática pura el coseno gana, porque
-> mide parecido de tema, no valor de decisión — por eso medimos también accionabilidad, no solo
-> precisión.
+> Comparamos nuestro sistema contra la forma más simple de ordenar resultados — solo por parecido de
+> texto — sobre 20 necesidades reales de la universidad, revisadas a mano. Resultado: más del doble de
+> las conexiones que mostramos arriba terminan siendo realmente útiles para tomar una decisión
+> (**0.55** contra **0.27**), y bajamos a menos de la mitad los casos que solo comparten palabras pero
+> no sirven de nada (de **0.65** a **0.28**). Ahí está la pertinencia y el control: no confundimos "se
+> parece" con "es relevante". Limitación honesta: si solo importara el tema, ordenar por parecido de
+> texto gana más fácil — por eso medimos también si la conexión sirve de verdad, no solo si suena
+> parecida.
 
 **Imagen:** barras `actionable_rate` (0.55 vs 0.27) y `trap_rate` (0.28 vs 0.65), `full` vs `cosine`,
 colores semánticos (verde=bueno, rojo=trampa). Es el dato más fuerte del proyecto.
@@ -97,9 +99,9 @@ colores semánticos (verde=bueno, rojo=trampa). Es el dato más fuerte del proye
 > Llevado a un ecosistema real, esto se conecta directo con procesos que ya existen: antecedentes
 > metodológicos para nuevas líneas de investigación, comparadores para elegir asesor y enfoque de
 > tesis, cadenas de oportunidad que activan colaboración interdisciplinaria entre grupos que hoy no se
-> conocen, y activación de capacidades instaladas que hoy nadie encuentra. Y como cada componente vive
-> detrás de un puerto, pasar del dataset sintético a datos institucionales reales — o de una
-> universidad a un consorcio — es cuestión de un adapter nuevo, no de una reescritura.
+> conocen, y activación de capacidades instaladas que hoy nadie encuentra. Y el eslabón curricular ya
+> cierra el círculo: conecta esa evidencia con el proceso académico formal, para que lo que se
+> investiga alimente lo que se enseña, no quede aislado en un reporte.
 
 ---
 
