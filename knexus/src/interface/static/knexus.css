@@ -126,9 +126,15 @@ a:hover { text-decoration: underline; }
 .sidebar .brand {
   color: #FFFFFF;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 22px;
+  line-height: 1.1;
   margin-bottom: calc(var(--unit) * 3);
+  padding-left: var(--unit);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--unit) * 2);
 }
+.sidebar .brand img { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; }
 .sidebar nav a {
   display: block;
   padding: calc(var(--unit) * 1.25) var(--unit);
