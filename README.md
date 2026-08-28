@@ -21,7 +21,8 @@ en español o inglés — sin resultados precargados.
 ## 2. Diagrama de arquitectura
 
 Pipeline (Pipes & Filters) gobernado por Arquitectura Hexagonal (dominio puro, dependencias siempre
-hacia adentro). Corresponde exactamente a lo implementado.
+hacia adentro). Corresponde exactamente a lo implementado — ver `sdd/ARCHITECTURE.md` para el detalle
+por capa y las reglas verificables (A1-A4).
 
 ```mermaid
 flowchart TD
@@ -94,7 +95,7 @@ Requiere Python 3.11+ (probado con 3.12).
 cd knexus
 python -m venv .venv
 # Windows: si sentence-transformers/torch falla por MAX_PATH, usar una ruta
-# corta para el venv, p.ej. `python -m venv C:\kvenv` (ver §9, Limitaciones).
+# corta para el venv, p.ej. `python -m venv C:\kvenv` (ver sección 8, Limitaciones).
 .venv\Scripts\activate        # Windows
 # source .venv/bin/activate   # macOS/Linux
 
@@ -114,7 +115,7 @@ uvicorn src.interface.app:app --reload
   arranques siguientes son offline.
 - macOS: si `faiss` + `torch` abortan con `SIGABRT`/"OMP: Error #15" al cargar juntos, es un conflicto
   conocido de runtimes OpenMP entre ambas librerías nativas — ya mitigado en el código
-  (`KMP_DUPLICATE_LIB_OK=TRUE`); no requiere acción manual.
+  (`KMP_DUPLICATE_LIB_OK=TRUE`, ver `sdd/SPEC.md`, sección 12.5); no requiere acción manual.
 - LLM opcional: `export OPENROUTER_API_KEY=...` para redacción vía API real (OpenRouter, sin SDK
   adicional — usa `httpx`); sin esto, el sistema funciona completo con `TemplateExplainer` (Regla A4).
 
@@ -175,9 +176,9 @@ Cada uno es navegable también en la interfaz: `/results?q=NEED-001`, `/opportun
 ## 7. Evidencia de desempeño
 
 Medición real (2026-08-27, `paraphrase-multilingual-MiniLM-L12-v2`, 2.512 entidades, 20 NEEDs
-etiquetados por cluster de `application_context`, `evaluation/results.json`). Metodología completa y
-sesgos declarados: código fuente de la medición en `knexus/evaluation/harness.py` y
-`knexus/evaluation/qrels.py`. Pantalla interactiva: `/metrics`.
+etiquetados por cluster de `application_context`, `evaluation/results.json`). Metodología completa,
+sesgos declarados y las 3 métricas de construct-validity: **[`sdd/SPEC.md`, sección 13](sdd/SPEC.md)**.
+Pantalla interactiva: `/metrics`.
 
 | Brazo | P@5 | P@10 | R@30 | MRR |
 |---|---|---|---|---|
@@ -197,7 +198,7 @@ muestra el valor del reranking es *construct validity* sobre el top-5:
 
 El pipeline real duplica la tasa de conexiones con valor de decisión directo y reduce a menos de la
 mitad las coincidencias superficiales — el argumento *"similarity ≠ relevance"* queda demostrado con
-datos, no ilustrado con un ejemplo elegido a mano.
+datos, no ilustrado con un ejemplo elegido a mano. Detalle completo del porqué en `sdd/SPEC.md`, sección 13.3.
 
 ## 8. Limitaciones conocidas
 
@@ -210,33 +211,37 @@ datos, no ilustrado con un ejemplo elegido a mano.
   — no había key disponible durante el desarrollo. Está cubierto por tests unitarios con cliente falso;
   la llamada de red real queda sin verificar. El sistema funciona completo sin él.
 - Los techos de recall son estructurales, no un límite del sistema: con clusters de 21-34 entidades
-  relevantes sobre un top-30, R@30 no puede superar ~0.97-1.0 — se reporta siempre junto al número.
+  relevantes sobre un top-30, R@30 no puede superar ~0.97-1.0 — se reporta siempre junto al número
+  (`sdd/SPEC.md`, sección 13.2).
 - Dataset sintético (`dataset/README.md`): las entidades y relaciones son ficticias, generadas para el
   reto — ninguna conclusión aquí generaliza a una universidad real sin re-validación.
 - `faiss-cpu` usa búsqueda exacta (`IndexFlatIP`), no aproximada — válido a esta escala (~2.500
   entidades); no se probó el comportamiento a escalas mayores.
 
-## 9. Checklist de la guía oficial (§11)
+## 9. Checklist de la guía oficial (sección 11)
 
 | Pregunta | Respuesta |
 |---|---|
 | ¿Procesa realmente Data V1.0? | Sí — `src/adapters/repository/`, 2.512 entidades + 3.536 aristas cargadas con provenance. |
 | ¿Conexión no trivial entre fuentes distintas? | Sí — Caso A (`docs/CASOS_DEMOSTRABLES.md`), necesidad↔proyecto. |
 | ¿Explica por qué una conexión es relevante y otra no? | Sí — `/audit`, comparador con delta exacto por feature (Caso A). |
-| ¿Mecanismo de priorización? | Sí — §6 de este README, `src/domain/scoring.py`. |
+| ¿Mecanismo de priorización? | Sí — sección 6 de este README, `src/domain/scoring.py`. |
 | ¿Llega desde la recomendación hasta el archivo/registro/campo? | Sí — Regla A3, `tests/interface/test_trazabilidad_ui.py`. |
 | ¿Las oportunidades se derivan de evidencia institucional? | Sí — cada `ChainLink` con `link_type`, ADR-012; nada se fabrica. |
 | ¿Conexiones con investigación, capacidades y/o currículo? | Sí — Caso B, cadena completa. |
 | ¿Funciona end-to-end con consulta nueva? | Sí — Caso C, texto libre nunca visto. |
-| ¿La arquitectura corresponde a lo implementado? | Sí — diagrama §2 verificado contra el código en Sprint-08 (antes decía `bge-m3`; corregido). |
-| ¿El README permite ejecutar la solución? | Este documento, §4. |
+| ¿La arquitectura corresponde a lo implementado? | Sí — diagrama de la sección 2 verificado contra el código en Sprint-08 (antes decía `bge-m3`; corregido). |
+| ¿El README permite ejecutar la solución? | Este documento, sección 4. |
 | ¿Se declaran modelos, APIs y componentes externos? | `docs/DECLARACION_TECNOLOGICA.md`. |
-| ¿Se explican limitaciones sin afirmar de más? | §8 de este README. |
+| ¿Se explican limitaciones sin afirmar de más? | Sección 8 de este README. |
 
 ## 10. Estructura del repositorio
 
 ```
 dataset/          Data V1.0 (fuente de verdad, sin sobrescribir)
-docs/               Entregables de empaque: declaración tecnológica, casos demostrables, guion de pitch
-knexus/               Código fuente ejecutable — ver src/, tests/, evaluation/, scripts/
+sdd/                 Especificación viva: SPEC · ARCHITECTURE · BACKLOG · MEMORY · TECH_STACK · DESIGN
+docs/                 Entregables de empaque: declaración tecnológica, casos demostrables, guion de pitch
+knexus/                Código fuente ejecutable — ver src/, tests/, evaluation/, scripts/
 ```
+
+Historial de decisiones y retro por sprint: `sdd/MEMORY.md` (incluye ADR-001 a ADR-014).
