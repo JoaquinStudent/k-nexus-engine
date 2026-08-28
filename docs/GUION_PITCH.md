@@ -1,117 +1,129 @@
 # Guion de pitch — KNexus Engine
 
-> Cronometrado a **3:00 min exactos**. Texto para decir en voz alta, no para leer — memorizar la idea de cada
-> slide, no la frase literal. 5 slides: los primeros 30s son el problema, los siguientes 30s la solución en
-> frases cortas, dos slides de sustento (arquitectura y resultados/evolución), y el quinto slide es la demo en
-> vivo. El paso a paso de clics de la demo está al final.
+> Sigue **exactamente** la estructura oficial del reto (5 secciones + preguntas del jurado). Texto para
+> decir en voz alta, no para leer — memorizar la idea de cada bloque, no la frase literal.
+> **Total: 3:30 min** + hasta 3 min de preguntas del jurado.
 
-| Slide | Contenido | Tiempo | Duración |
+| # | Sección (oficial) | Tiempo | Duración |
 |---|---|---|---|
-| 1 | Problema | 0:00 – 0:30 | 30s |
-| 2 | Solución | 0:30 – 1:00 | 30s |
-| 3 | Arquitectura y enfoque técnico | 1:00 – 1:35 | 35s |
-| 4 | Resultados, métricas e impacto | 1:35 – 2:05 | 30s |
-| 5 | Demo funcional (en vivo) | 2:05 – 3:00 | 55s |
+| 1 | Problema y propuesta de solución | 0:00 – 0:30 | 30s |
+| 2 | Arquitectura y enfoque técnico | 0:30 – 1:30 | 60s |
+| 3 | Demostración funcional (en vivo) | 1:30 – 2:30 | 60s |
+| 4 | Resultados y métricas | 2:30 – 3:00 | 30s |
+| 5 | Impacto y evolución | 3:00 – 3:30 | 30s |
 
 ---
 
-## Slide 1 — Problema (0:00 – 0:30)
+## 1 — Problema y propuesta de solución (0:00 – 0:30)
 
-> Las universidades producen conocimiento sin parar: proyectos, tesis, investigadores, capacidades. Pero vive
-> repartido entre facultades y sistemas que no se hablan entre sí. Buscar por palabra clave no basta — devuelve
-> parecido, no relevancia. Y sin evidencia verificable detrás, no se puede confiar en la conexión.
+> Las universidades producen conocimiento sin parar — proyectos, tesis, investigadores, capacidades —
+> pero vive repartido entre sistemas que no se hablan. Buscar por palabra clave devuelve parecido, no
+> relevancia; y sin evidencia verificable detrás, la conexión no se puede confiar. KNexus Engine
+> descubre esas conexiones, las prioriza por pertinencia real — nunca por coseno puro — y las explica
+> con la evidencia literal que las sustenta. Ese es el diferenciador: relevancia auditable, no
+> similitud disfrazada de recomendación.
 
-**Recomendación de imagen:** algo que muestre fragmentación, no una foto genérica de estudiantes. Por ejemplo:
-un diagrama simple de "islas" — facultades/sistemas representados como nodos aislados, con líneas punteadas o
-cortadas entre ellos (contraste directo con el grafo conectado que aparece en el Slide 3). También funciona un
-mosaico de capturas de hojas de cálculo/PDFs sueltos con una "X" o candado entre ellos, comunicando "esto no se
-habla entre sí".
-
----
-
-## Slide 2 — Solución (0:30 – 1:00)
-
-> KNexus Engine descubre, prioriza y explica esas conexiones. Recuperación híbrida — semántica, léxica y de
-> grafo — más un reranking de 7 features auditables, nunca coseno puro. Cada conexión trae su evidencia
-> literal, con archivo y campo de origen. Nunca la inventa.
-
-**Recomendación de imagen:** el mismo diagrama de "islas" del Slide 1 pero ahora CONECTADO — nodos unidos por
-líneas sólidas con una etiqueta de score o un ícono de "evidencia verificada" (check + documento) sobre una de
-las aristas. Es el antes/después visual más directo del pitch. Si hay tiempo de diseño, usar el logo/nombre
-"KNexus Engine" como ancla del slide.
+**Imagen:** diagrama de "islas" (facultades/sistemas aislados, líneas cortadas) transformándose en un
+grafo conectado con un ícono de evidencia (check + documento) sobre una arista. Antes/después en un
+solo golpe visual.
 
 ---
 
-## Slide 3 — Arquitectura y enfoque técnico (1:00 – 1:35)
+## 2 — Arquitectura y enfoque técnico (0:30 – 1:30)
 
-> Pipeline de 8 filtros sobre arquitectura hexagonal: dominio puro en el centro, todo depende hacia adentro.
-> Cargamos 22 tablas y 60 documentos sin perder procedencia. La recuperación combina denso, léxico y grafo —
-> porque un investigador rara vez comparte vocabulario con una necesidad, lo trae la arista, no el texto. El
-> corazón es el reranking: 7 features ponderadas, nunca coseno puro. Y la explicación por IA es opcional: sin
-> red, degrada sola a plantillas.
+> La arquitectura es un pipeline de 8 filtros sobre un núcleo hexagonal: el dominio no importa nada
+> hacia afuera, así el scoring queda auditable y testeable sin red — decisión clave para poder explicar
+> cada score en vivo. F1 ingiere 22 tablas y 60 documentos sin perder procedencia. F2 representa el
+> conocimiento en tres capas — denso con sentence-transformers y FAISS, léxico con BM25, y grafo con
+> NetworkX sobre las tablas de relación — porque un investigador casi nunca comparte vocabulario con
+> una necesidad; esa conexión la trae la arista, no el texto. F3 fusiona esas tres señales por RRF,
+> pero solo para generar candidatos: nunca decide el orden final. Esa decisión es del dominio puro en
+> F4 — 7 features ponderadas, donde método y capacidad pesan tanto como la similitud semántica, y el
+> léxico pesa lo mínimo a propósito para no premiar la trampa léxica. Y el LLM en F6 es un puerto: sin
+> conexión, degrada solo a plantillas — nada se cae.
 
-**Recomendación de imagen:** el diagrama de arquitectura/pipeline de `sdd/ARCHITECTURE.md` simplificado a un
-esquema de cajas y flechas (8 filtros en fila, dominio hexagonal al centro) — evitar meter el diagrama completo
-y denso del documento técnico, usar una versión limpia con 5-6 cajas máximo. Si no hay tiempo de rediseñarlo,
-la captura `mocks-stitch/knowledge_graph_knexus_engine/screen.png` sirve como apoyo visual del grafo real.
+**Imagen:** el diagrama de `sdd/ARCHITECTURE.md` simplificado a 5-6 cajas máximo (8 filtros en fila,
+dominio hexagonal al centro) — no meter el diagrama denso completo del documento técnico.
 
----
-
-## Slide 4 — Resultados, métricas e impacto (1:35 – 2:05)
-
-> Medido, no sólo mostrado. Sobre 2.512 entidades y 20 necesidades etiquetadas, el pipeline real sube la tasa
-> de conexiones accionables del top-5 a **0.55** contra **0.27** del coseno puro, y baja las coincidencias
-> superficiales de 0.65 a 0.28. Y cada pieza vive detrás de un puerto: cambiar el embedding o el repositorio de
-> datos es una línea de código, no una reescritura — listo para pasar de un dataset sintético a un ecosistema
-> universitario real.
-
-**Recomendación de imagen:** un gráfico de barras simple comparando dos métricas por brazo (`full` vs
-`cosine`): `actionable_rate` (0.55 vs 0.27) y `trap_rate` (0.28 vs 0.65) — dos pares de barras, colores
-semánticos (verde=bueno, rojo=trampa). Es el dato más fuerte del proyecto, merece su propio gráfico y no un
-texto suelto. La captura `mocks-stitch/performance_knexus_engine/screen.png` puede usarse como referencia de
-estilo o directamente como imagen de apoyo.
+**Si preguntan por qué esta decisión y no otra**, el porqué de cada una está en `sdd/MEMORY.md`
+(ADR-001 a ADR-014) — no memorizar detalle, saber que existe y dónde está.
 
 ---
 
-## Slide 5 — Demo funcional en vivo (2:05 – 3:00)
+## 3 — Demostración funcional en vivo (1:30 – 2:30)
 
-> Consulta en vivo, un ID real del dataset, nada precargado.
+> Consulta en vivo, un ID real del dataset, nada precargado — así se ve el flujo completo que pide el
+> reto: información institucional → identificación y representación → conexión descubierta →
+> valoración de pertinencia → evidencia → oportunidad generada.
 
-Recorrido de 4 pantallas (detalle de clics en la sección **Paso a paso** más abajo):
+| # | Pantalla | Ruta | Etapa del flujo oficial | Qué decir | Qué señalar |
+|---|---|---|---|---|---|
+| 1 | Descubrir | `/` → escribir `NEED-001` | Información institucional → identificación y representación | "Necesidad real del dataset: predicción y prevención de deserción estudiantil. 2.512 entidades ya indexadas con procedencia." | Contador "2.512 entidades indexadas" |
+| 2 | Resultados | `/results?q=NEED-001` | Conexión descubierta | "62 resultados en menos de medio segundo — cada tarjeta ya trae su barra de 7 features, no es una lista por parecido de texto. PRJ-007 arriba, score 0.657." | Mini-barra + pill "Alta" en la tarjeta #1 |
+| 3 | Conexión | `/connection/PRJ-007?q=NEED-001` (clic en la tarjeta) | Valoración de pertinencia + Evidencia | "Método transferible 0.90, capacidad institucional 1.00 dominan el score. Y la evidencia es la cita literal, con archivo, campo y registro — nada se fabrica." | Barra desglosada + leyenda, bloque de evidencia con procedencia |
+| 4 | Oportunidad | `/opportunity?q=NEED-001` | Oportunidad generada | "De esa conexión sale la cadena completa: necesidad, antecedente, investigador, capacidad, currículo — cada eslabón etiquetado como recuperado, arista real o inferido, nunca mezclados como si fueran la misma clase de evidencia." | Etiquetas `[retrieved]` / `[edge]` / `[inferred]` bajo cada nodo |
 
-1. **Descubrir** (`/`) → escribo `NEED-001`.
-2. **Resultados** (`/results?q=NEED-001`) → PRJ-007 arriba, score 0.657, barra de 7 features.
-3. **Conexión** (`/connection/PRJ-007?q=NEED-001`) → evidencia literal + procedencia exacta.
-4. **Auditoría** (`/audit?q=NEED-001&a=PRJ-007&b=PRJ-002`) → por qué PRJ-007 gana, delta por feature.
+> Cierre de la demo: "Esto no es una búsqueda por palabras clave ni una generación de texto sin
+> respaldo — cada paso queda trazado hasta el dato institucional que lo sustenta."
 
-> Y esto no es un truco para "deserción estudiantil": *(flash rápido)* `NEED-009` es calidad del agua, dominio
-> totalmente distinto, con la cadena completa necesidad→antecedente→investigador→capacidad→currículo.
+**Si sobra tiempo (bonus, no obligatorio):** flash de `/audit?q=NEED-001&a=PRJ-007&b=PRJ-002` (por qué
+A gana a B, delta por feature) o de `/opportunity?q=NEED-009` (dominio distinto, calidad del agua, para
+mostrar que no es un caso elegido a mano). Ambos quedan como respaldo listo para las preguntas del
+jurado si no entran en el minuto.
 
-**Recomendación de imagen:** este slide no necesita imagen propia si la demo es en vivo (navegador compartido).
-Como respaldo por si falla la red/proyección, dejar como slide oculto (o como imagen de transición) las
-capturas reales ya generadas en `mocks-stitch/`, en este orden:
-- `query_discover_knexus_engine/screen.png` (pantalla 1)
-- `results_ranked_connections_knexus_engine/screen.png` (pantalla 2)
-- `connection_detail_knexus_engine/screen.png` + `evidence_provenance_knexus_engine/screen.png` (pantalla 3)
-- `why_a_over_b_audit_knexus_engine/screen.png` (pantalla 4)
-- `opportunity_knexus_engine/screen.png` (paso 5 opcional, NEED-009)
-
-Son capturas reales de la interfaz (no mockups genéricos), así que sirven tanto de respaldo como de imagen de
-apoyo si se decide no compartir pantalla en vivo.
+**Imagen de respaldo** (si falla red/proyección): capturas reales en `mocks-stitch/`, en orden
+`query_discover_knexus_engine` → `results_ranked_connections_knexus_engine` →
+`connection_detail_knexus_engine` + `evidence_provenance_knexus_engine` →
+`opportunity_knexus_engine`.
 
 ---
 
-## Paso a paso por pantalla (para el Slide 5)
+## 4 — Resultados y métricas (2:30 – 3:00)
 
-| # | Pantalla | Acción | Qué decir | Qué señalar |
-|---|---|---|---|---|
-| 1 | `/` Descubrir | Escribir `NEED-001`, clic en Descubrir | "Necesidad institucional real del dataset — predicción y prevención de deserción estudiantil." | Contador "2.512 entidades indexadas" |
-| 2 | `/results?q=NEED-001` | — | "62 resultados en menos de medio segundo. Cada tarjeta ya trae su barra de 7 features — no es una lista por parecido de texto. PRJ-007 arriba, score 0.657, banda alta." | Mini-barra de la tarjeta #1, pill "Alta" |
-| 3 | `/connection/PRJ-007?q=NEED-001` | Clic en la tarjeta #1 | "Método transferible 0.90, capacidad institucional 1.00 dominan. Y la evidencia es la cita literal, con archivo, campo y registro — nada se fabrica." | Barra desglosada + leyenda, bloque de evidencia, mini-grafo |
-| 4 | `/audit?q=NEED-001&a=PRJ-007&b=PRJ-002` | Clic en "Comparar con…" | "PRJ-007 gana por soporte de capacidad, +0.15, aun con similitud semántica levemente menor. El sistema no cae en la trampa léxica." | Fila `soporte_capacidad` con check a favor de A, delta al pie |
-| 5 | `/opportunity?q=NEED-009` | — | "Dominio distinto — calidad del agua. Cadena completa: necesidad, antecedente, investigador, capacidad, currículo. Cada eslabón etiquetado como recuperado, arista real o inferido." | Etiquetas `[retrieved]/[edge]/[inferred]` bajo cada nodo |
+> Medimos con un ablation de 3 brazos sobre 20 necesidades etiquetadas: el pipeline real sube la tasa
+> de conexiones accionables del top-5 a **0.55** contra **0.27** del coseno puro, y baja las
+> coincidencias superficiales de **0.65** a **0.28** — así controlamos que una conexión de solo
+> vocabulario compartido no gane. Limitación honesta: en precisión temática pura el coseno gana, porque
+> mide parecido de tema, no valor de decisión — por eso medimos también accionabilidad, no solo
+> precisión.
 
-*(Paso 5 es opcional si el tiempo del Slide 5 se ajustó bien — úsalo solo si van sobrados de segundos.)*
+**Imagen:** barras `actionable_rate` (0.55 vs 0.27) y `trap_rate` (0.28 vs 0.65), `full` vs `cosine`,
+colores semánticos (verde=bueno, rojo=trampa). Es el dato más fuerte del proyecto.
+
+---
+
+## 5 — Impacto y evolución (3:00 – 3:30)
+
+> Llevado a un ecosistema real, esto se conecta directo con procesos que ya existen: antecedentes
+> metodológicos para nuevas líneas de investigación, comparadores para elegir asesor y enfoque de
+> tesis, cadenas de oportunidad que activan colaboración interdisciplinaria entre grupos que hoy no se
+> conocen, y activación de capacidades instaladas que hoy nadie encuentra. Y como cada componente vive
+> detrás de un puerto, pasar del dataset sintético a datos institucionales reales — o de una
+> universidad a un consorcio — es cuestión de un adapter nuevo, no de una reescritura.
+
+---
+
+## Preguntas del jurado (hasta 3 min adicionales)
+
+| Tema que pueden preguntar | Dónde está la respuesta lista |
+|---|---|
+| Arquitectura / código | `sdd/ARCHITECTURE.md` (reglas verificables A1-A4) |
+| Representación del conocimiento | `sdd/SPEC.md` §4 (7 features) + `ARCHITECTURE.md` §3 (F2) |
+| Algoritmos / modelos / APIs externas | `docs/DECLARACION_TECNOLOGICA.md` |
+| Calidad de conexiones / priorización | `sdd/SPEC.md` §5-6 (pesos y tipado) |
+| Métricas | `sdd/SPEC.md` §13, pantalla `/metrics` en vivo |
+| Explicabilidad / trazabilidad | Regla A3, `tests/interface/test_trazabilidad_ui.py` |
+| Escalabilidad | README §8 (FAISS exacto, no probado a mayor escala) |
+| Limitaciones | README §8 |
+
+## Condiciones de la demostración — autocheck
+
+- Todo lo mostrado corre en el prototipo real (servidor en vivo o CLI) — nada mockeado.
+- Las slides son apoyo, no sustituto: la demo se hace en el navegador/CLI real.
+- Sólo se afirma como implementado lo que se puede clicar o ejecutar en vivo.
+- Cada conexión/oportunidad mostrada trae su evidencia (archivo/campo/registro) visible en pantalla.
+- El origen del LLM (OpenRouter, opcional) y su degradación a plantillas quedan explícitos si
+  preguntan — la redacción del LLM nunca se presenta como dato institucional.
 
 ---
 
@@ -121,6 +133,6 @@ apoyo si se decide no compartir pantalla en vivo.
 python scripts/query_cli.py "NEED-001" --compare PRJ-002 --top 3
 ```
 
-Mismo dato, sin depender de la demo web. Si el modelo real no llegó a descargarse, `--fast` da resultados
-instantáneos (aclarándolo en voz alta si se usa). La salida literal de los tres casos, capturada de una
-corrida real, está en [`docs/CASOS_DEMOSTRABLES.md`](CASOS_DEMOSTRABLES.md).
+Mismo dato, sin depender de la demo web. Si el modelo real no llegó a descargarse, `--fast` da
+resultados instantáneos (aclarándolo en voz alta si se usa). La salida literal de los tres casos,
+capturada de una corrida real, está en [`docs/CASOS_DEMOSTRABLES.md`](CASOS_DEMOSTRABLES.md).
