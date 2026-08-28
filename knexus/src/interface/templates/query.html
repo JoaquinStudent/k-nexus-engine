@@ -3,18 +3,32 @@
 {% block content %}
 <div class="state-empty" style="text-align:left; padding-top:0;">
   <h1>Descubrir conexiones</h1>
-  <p class="muted">Ingresa una necesidad institucional, un ID de entidad o texto libre.</p>
+  <p class="muted" style="max-width:560px;">
+    KNexus busca en toda la universidad — necesidades institucionales, proyectos, tesis, investigadores
+    y capacidades — y explica <strong>por qué</strong> cada conexión es relevante, con evidencia trazable
+    a su fuente original. No es un buscador por palabras clave: prioriza método, dominio y capacidad real
+    por encima de la simple similitud de texto.
+  </p>
+
+  <div class="how-it-works">
+    <div class="how-step"><span class="how-num">1</span><span class="how-label">Recuperar</span><span class="how-desc">candidatos por significado y por palabra, en español e inglés.</span></div>
+    <div class="how-step"><span class="how-num">2</span><span class="how-label">Puntuar</span><span class="how-desc">cada candidato con 7 factores auditables, no solo similitud.</span></div>
+    <div class="how-step"><span class="how-num">3</span><span class="how-label">Explicar</span><span class="how-desc">el resultado con evidencia citada de su fuente original.</span></div>
+  </div>
+
   <form class="search-form" action="/results" method="get">
-    <input class="search-input" type="text" name="q" placeholder="NEED-001, PRJ-004, o una necesidad en texto libre..." autofocus>
+    <input class="search-input" type="text" name="q" placeholder="NEED-001, PRJ-004, o una necesidad en texto libre..." autofocus
+           aria-label="Buscar una necesidad, ID de entidad o texto libre">
     <button class="btn-primary" type="submit">Descubrir</button>
   </form>
   {% if quick_picks %}
+  <p class="caption" style="margin-bottom:8px;">O prueba con un ejemplo real del dataset</p>
   <div class="quick-picks">
     {% for pick in quick_picks %}
       <a class="chip" href="/results?q={{ pick.id }}">{{ pick.id }} · {{ pick.title }}</a>
     {% endfor %}
   </div>
   {% endif %}
-  <p class="caption" style="margin-top:32px;">{{ entity_count }} entidades indexadas</p>
+  <p class="caption" style="margin-top:32px;">{{ entity_count }} entidades indexadas · Data V1.0 (22 CSV + 60 documentos)</p>
 </div>
 {% endblock %}

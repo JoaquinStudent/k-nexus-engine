@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% import "_macros.html" as m %}
-{% block title %}Resultados — KNexus Engine{% endblock %}
+{% block title %}{{ query }} — Resultados — KNexus Engine{% endblock %}
 {% block content %}
 <div class="muted" style="margin-bottom:16px;">Resultados para: <strong>{{ query }}</strong></div>
 
@@ -17,10 +17,11 @@
     <a class="btn-primary" href="/">Probar otra consulta</a>
   </div>
 {% else %}
+{% if feature_glossary %}{{ m.glossary(feature_glossary, id="glossary-results") }}{% endif %}
 <div class="result-list">
   {% for c in connections %}
-  <a href="/connection/{{ c.entity_id }}?q={{ query|urlencode }}" style="text-decoration:none; color:inherit;">
-    <div class="card result-card {{ c.relevance_band }}">
+  <div class="card result-card {{ c.relevance_band }}">
+    <a class="result-card-link" href="/connection/{{ c.entity_id }}?q={{ query|urlencode }}">
       <div style="display:flex; gap:24px; align-items:flex-start;">
         <div class="result-rank">{{ '%02d'|format(c.rank) }}</div>
         <div class="result-body">
@@ -28,13 +29,18 @@
             <h3 style="margin:0;">{{ c.title }}</h3>
             <span class="badge">{{ c.entity_type }} {{ c.entity_id }}</span>
           </div>
-          <div style="margin-top:8px; width:260px;">{{ m.breakdown_bar(c.breakdown, mini=True) }}</div>
-          <p class="result-reason">{{ c.relation_label }}</p>
+          <div style="margin-top:8px; width:260px; max-width:100%;">{{ m.breakdown_bar(c.breakdown, mini=True) }}</div>
+          {{ m.breakdown_mini_legend(c.breakdown) }}
+          <p class="result-reason">{{ c.reason if c.reason else c.relation_label }}</p>
         </div>
       </div>
+    </a>
+    <div class="result-footer">
       <span class="pill {{ c.relevance_band }}">{{ c.relevance_band|capitalize }} · {{ '%.2f'|format(c.score) }}</span>
+      <span class="result-scale">de 1 · alta ≥0.60 · media ≥0.40</span>
+      <a class="btn-compare" href="/audit?q={{ query|urlencode }}&amp;a={{ c.entity_id }}">Comparar con otro resultado</a>
     </div>
-  </a>
+  </div>
   {% endfor %}
 </div>
 {% endif %}

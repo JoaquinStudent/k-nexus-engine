@@ -72,7 +72,7 @@ lee (`/metrics`) — 20 NEEDs con el modelo real no caben en el tiempo de un req
 | Grafo | `networkx` |
 | Fusión / reranking | código propio (RRF + 7 features ponderadas, `src/domain/`) |
 | Backend + UI | FastAPI + Jinja2, un solo proceso |
-| LLM opcional | API de Anthropic (`claude-3-5-haiku`), degrada sin key |
+| LLM opcional | OpenRouter (`anthropic/claude-3.5-haiku` por defecto), degrada sin key |
 
 Declaración completa de componentes externos, versiones y cómo se distingue evidencia institucional de
 contenido generado: **[`docs/DECLARACION_TECNOLOGICA.md`](docs/DECLARACION_TECNOLOGICA.md)**.
@@ -106,8 +106,8 @@ uvicorn src.interface.app:app --reload
 - macOS: si `faiss` + `torch` abortan con `SIGABRT`/"OMP: Error #15" al cargar juntos, es un conflicto
   conocido de runtimes OpenMP entre ambas librerías nativas — ya mitigado en el código
   (`KMP_DUPLICATE_LIB_OK=TRUE`, ver `sdd/SPEC.md §12.5`); no requiere acción manual.
-- LLM opcional: `export ANTHROPIC_API_KEY=...` (y `pip install anthropic`) para redacción vía API real;
-  sin esto, el sistema funciona completo con `TemplateExplainer` (Regla A4).
+- LLM opcional: `export OPENROUTER_API_KEY=...` para redacción vía API real (OpenRouter, sin SDK
+  adicional — usa `httpx`); sin esto, el sistema funciona completo con `TemplateExplainer` (Regla A4).
 
 **CLI de consulta manual** (sin levantar el servidor):
 
@@ -196,7 +196,7 @@ datos, no ilustrado con un ejemplo elegido a mano. Detalle completo del porqué 
   propósito (verificado en la auditoría de Sprint-07, hay un test que impide etiquetarlos).
 - `sim_lexica` es constante 0 para todo NEED — `institutional_needs.csv` no tiene columna `keywords`.
   Es una limitación de diseño declarada (pesa sólo 0.05 a propósito), no un bug oculto.
-- `LlmExplainer` (redacción vía API de Anthropic) **no fue probado contra la API real** en este entorno
+- `LlmExplainer` (redacción vía OpenRouter) **no fue probado contra la API real** en este entorno
   — no había key disponible durante el desarrollo. Está cubierto por tests unitarios con cliente falso;
   la llamada de red real queda sin verificar. El sistema funciona completo sin él.
 - Los techos de recall son estructurales, no un límite del sistema: con clusters de 21-34 entidades

@@ -2,11 +2,24 @@
 {% block title %}Oportunidad — KNexus Engine{% endblock %}
 {% block content %}
 <h1>Oportunidad</h1>
-<p class="muted">Cadenas ensambladas para "{{ query }}"</p>
+{% if query %}<p class="muted">Cadenas ensambladas para "{{ query }}"</p>{% endif %}
 
 {% if not query %}
-  <div class="card state-empty">
-    <h2>Comienza ingresando una necesidad o un ID de entidad.</h2>
+  <div class="card state-empty" style="text-align:left;">
+    <h2 style="text-align:left;">Ensambla una oportunidad: necesidad → antecedente → investigador → capacidad → currículo</h2>
+    <p class="muted" style="text-align:left; max-width:560px;">Ingresa una necesidad institucional o un ID de entidad para ver la cadena de razonamiento completa, con cada eslabón marcado como recuperado, verificado o inferido.</p>
+    <form class="search-form" action="/opportunity" method="get" style="justify-content:flex-start;">
+      <input class="search-input" type="text" name="q" placeholder="NEED-001, PRJ-004, o una necesidad en texto libre..." autofocus
+             aria-label="Buscar una necesidad, ID de entidad o texto libre">
+      <button class="btn-primary" type="submit">Ensamblar</button>
+    </form>
+    {% if quick_picks %}
+    <div class="quick-picks" style="justify-content:flex-start;">
+      {% for pick in quick_picks %}
+        <a class="chip" href="/opportunity?q={{ pick.id }}">{{ pick.id }} · {{ pick.title }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
 {% elif not opportunities %}
   <div class="card state-empty">

@@ -63,7 +63,7 @@ class QueryService:
         self.lexical_index = lexical_index
         self.graph = graph
         # build_explainer() ya implementa la degradación de Regla A4 (sin
-        # ANTHROPIC_API_KEY -> TemplateExplainer); no se reimplementa aquí.
+        # OPENROUTER_API_KEY -> TemplateExplainer); no se reimplementa aquí.
         self.explainer = explainer if explainer is not None else build_explainer()
         # ponytail: la query es un string — lru_cache es toda la caché que hace falta.
         self.discover = lru_cache(maxsize=64)(self._discover)

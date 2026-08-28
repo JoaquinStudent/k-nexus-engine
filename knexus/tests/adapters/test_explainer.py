@@ -105,19 +105,30 @@ def test_grounding_numeros_provienen_del_input():
 
 
 # ---------------------------------------------------------------------------
-# LlmExplainer: degrada sin API key / sin SDK / si falla la llamada
+# LlmExplainer: degrada sin API key válida / sin red / si falla la llamada
 # ---------------------------------------------------------------------------
 
-def test_llm_explainer_sin_api_key_valida_degrada_a_template():
-    # API key claramente inválida -> la llamada real fallará (o el SDK no
-    # estará instalado) -> debe caer a TemplateExplainer sin lanzar excepción.
+def _romper_httpx(monkeypatch):
+    # Simula "sin red" sin depender de una llamada real a OpenRouter — los
+    # tests corren sin red (README §4: "pytest -m 'not slow', sin red").
+    import httpx
+
+    def _raise(*args, **kwargs):
+        raise httpx.ConnectError("sin red (test)")
+
+    monkeypatch.setattr(httpx, "post", _raise)
+
+
+def test_llm_explainer_sin_api_key_valida_degrada_a_template(monkeypatch):
+    _romper_httpx(monkeypatch)
     explainer = LlmExplainer(api_key="sk-invalid-key-para-test")
     connection = _connection()
     text = explainer.explain_connection(connection)
     assert text == TemplateExplainer().explain_connection(connection)
 
 
-def test_llm_explainer_opportunity_tambien_degrada():
+def test_llm_explainer_opportunity_tambien_degrada(monkeypatch):
+    _romper_httpx(monkeypatch)
     explainer = LlmExplainer(api_key="sk-invalid-key-para-test")
     opportunity = _opportunity()
     text = explainer.explain_opportunity(opportunity)
@@ -125,12 +136,12 @@ def test_llm_explainer_opportunity_tambien_degrada():
 
 
 def test_factory_sin_env_var_devuelve_template_explainer(monkeypatch):
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     explainer = build_explainer()
     assert isinstance(explainer, TemplateExplainer)
 
 
 def test_factory_con_env_var_devuelve_llm_explainer(monkeypatch):
-    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-test")
     explainer = build_explainer()
     assert isinstance(explainer, LlmExplainer)

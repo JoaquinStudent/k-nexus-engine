@@ -1,0 +1,9 @@
+<header class="app-header">
+  <form class="header-search" action="/results" method="get" id="header-search-form">
+    <input class="header-search-input" type="search" name="q" value="{{ query|default('') }}"
+           placeholder="NEED-001, PRJ-004, o una necesidad en texto libre..."
+           aria-label="Buscar una necesidad, ID de entidad o texto libre">
+    <button class="btn-primary" type="submit">Descubrir</button>
+  </form>
+  <p class="header-loading muted" id="header-loading" hidden>Conectando fuentes…</p>
+</header>

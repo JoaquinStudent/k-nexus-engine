@@ -1,12 +1,13 @@
 {% macro breakdown_bar(segments, mini=False) %}
-<div class="breakdown-bar{{ ' mini' if mini else '' }}">
+<div class="breakdown-bar{{ ' mini' if mini else '' }}" role="img"
+     aria-label="Desglose de relevancia en 7 factores: {% for s in segments %}{{ s.label }} {{ '%.2f'|format(s.value) if not s.na else 'no medible' }}{% if not loop.last %}, {% endif %}{% endfor %}.">
   {% for s in segments %}
     {# N/A (ADR-007/ADR-009) recibe un ancho fijo pequeño SOLO para visibilidad —
        nunca se muestra como 0 falso; el ancho real (pct) que suma el score
        exacto sigue siendo la fuente de verdad en interface/presenters.py. #}
     <div class="segment {{ 'na' if s.na else 'feat-' + s.name }}"
          style="width: {{ s.pct if not s.na else 4 }}%"
-         title="{{ s.label }}: {{ '%.2f'|format(s.value) if not s.na else 'no medible' }}"></div>
+         title="{{ s.label }}: {{ '%.2f'|format(s.value) if not s.na else 'no medible — peso redistribuido' }}"></div>
   {% endfor %}
 </div>
 {% endmacro %}
@@ -16,8 +17,32 @@
   {% for s in segments %}
     <div class="item {{ 'na' if s.na else '' }}">
       <span class="swatch {{ '' if s.na else 'feat-' + s.name }}"></span>
-      {{ s.label }}{% if not s.na %} ({{ '%.2f'|format(s.value) }}){% else %} — no medible{% endif %}
+      {{ s.label }}{% if not s.na %} ({{ '%.2f'|format(s.value) }}){% else %} — no medible para este par (peso redistribuido entre los demás factores){% endif %}
     </div>
   {% endfor %}
 </div>
+{% endmacro %}
+
+{# Leyenda compacta bajo la mini-barra de una tarjeta de resultados (UX):
+   los 3 factores con mayor contribución, en texto siempre visible — no
+   dependen de hover/tooltip, que es inaccesible por teclado y en táctil. #}
+{% macro breakdown_mini_legend(segments, top_n=3) %}
+{% set measurable = segments|rejectattr('na')|sort(attribute='pct', reverse=True)|list %}
+<div class="result-mini-legend">
+  {% for s in measurable[:top_n] %}
+    <span><span class="swatch feat-{{ s.name }}"></span>{{ s.label }} {{ '%.2f'|format(s.value) }}</span>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro glossary(feature_glossary, id="glossary") %}
+<details class="glossary" id="{{ id }}">
+  <summary>Cómo leer esto</summary>
+  <div class="glossary-body">
+    <p class="glossary-item">La barra descompone el puntaje de relevancia en 7 factores auditables — nunca es solo similitud de texto.</p>
+    {% for f in feature_glossary %}
+    <p class="glossary-item"><span class="term"><span class="swatch feat-{{ f.name }}"></span>{{ f.label }}</span> — <span class="def">{{ f.help }}</span></p>
+    {% endfor %}
+  </div>
+</details>
 {% endmacro %}

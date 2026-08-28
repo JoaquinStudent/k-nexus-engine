@@ -183,7 +183,7 @@ Opportunity:
 
 **Degradación honesta.** Un eslabón sin evidencia real (antecedente sin investigador conectado, ninguna capacidad institucional coincidente, ningún componente curricular sobre el umbral) simplemente **no aparece** en la cadena — nunca se fabrica. `opportunity_priority` penaliza esto de forma natural: menos eslabones "edge" ⇒ prioridad más baja a igual score del antecedente.
 
-**`Explainer` (ADR-002, `ports/explainer.py`):** `explain_connection`/`explain_opportunity` reciben sólo los DTO ya ensamblados (nunca el repositorio) y producen prosa. `TemplateExplainer` es el adapter por defecto (determinista, sin red); `LlmExplainer` es opcional y **degrada automáticamente a `TemplateExplainer`** si no hay `ANTHROPIC_API_KEY` en el entorno, si el SDK no está instalado, o si la llamada falla por cualquier motivo (`adapters/explain/factory.py:build_explainer()`, Regla A4). Grounding verificado por test: ningún identificador ni cifra en la salida del `TemplateExplainer` puede faltar en su input.
+**`Explainer` (ADR-002, `ports/explainer.py`):** `explain_connection`/`explain_opportunity` reciben sólo los DTO ya ensamblados (nunca el repositorio) y producen prosa. `TemplateExplainer` es el adapter por defecto (determinista, sin red); `LlmExplainer` es opcional (vía OpenRouter, API compatible con OpenAI chat completions, llamada con `httpx`) y **degrada automáticamente a `TemplateExplainer`** si no hay `OPENROUTER_API_KEY` en el entorno, o si la llamada falla por cualquier motivo (`adapters/explain/factory.py:build_explainer()`, Regla A4). Grounding verificado por test: ningún identificador ni cifra en la salida del `TemplateExplainer` puede faltar en su input.
 
 ## 12. Contrato de la interfaz (Sprint-06)
 

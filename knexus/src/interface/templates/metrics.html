@@ -2,6 +2,7 @@
 {% block title %}Desempeño — KNexus Engine{% endblock %}
 {% block content %}
 <h1>Desempeño</h1>
+<p class="page-intro">Foto de una evaluación ya hecha (no en vivo) — compara 3 formas de ordenar los mismos resultados.</p>
 
 {% if not metrics.available %}
   <div class="card state-empty">
@@ -10,6 +11,36 @@
        <code>evaluation/results.json</code>.</p>
   </div>
 {% else %}
+{% set full_cv = metrics.construct_validity[0] %}
+{% set cosine_cv = metrics.construct_validity[1] %}
+{% set full_ab = metrics.ablation[0] %}
+{% set cosine_ab = metrics.ablation[1] %}
+<div class="findings-banner">
+  <h2>Similitud no es lo mismo que relevancia — medido, no ilustrado</h2>
+  <table class="metrics-table compact-table">
+    <thead><tr><th scope="col">Métrica (top-5)</th><th scope="col">Pipeline completo</th><th scope="col">Reorden coseno</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Accionable</td>
+        <td class="stat-positive">{{ '%.0f'|format(full_cv.actionable_rate * 100) }}%</td>
+        <td class="stat-negative">{{ '%.0f'|format(cosine_cv.actionable_rate * 100) }}%</td>
+      </tr>
+      <tr>
+        <td>Trampa</td>
+        <td class="stat-positive">{{ '%.0f'|format(full_cv.trap_rate * 100) }}%</td>
+        <td class="stat-negative">{{ '%.0f'|format(cosine_cv.trap_rate * 100) }}%</td>
+      </tr>
+      <tr>
+        <td>P@5</td>
+        <td>{{ '%.2f'|format(full_ab.p5) }}</td>
+        <td>{{ '%.2f'|format(cosine_ab.p5) }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="chart-help">P@5 sale más bajo en el pipeline completo porque la etiqueta mide parecido temático, no
+     utilidad real — por eso importan más las dos filas de arriba.</p>
+</div>
+
 <div class="stat-tiles">
   {% for tile in metrics.stat_tiles %}
   <div class="card stat-tile">
@@ -22,6 +53,7 @@
 <div class="metrics-grid">
   <div class="card">
     <h3>Precision@K</h3>
+    <p class="chart-help">% de resultados relevantes en el top-K.</p>
     {% for row in metrics.precision_at_k %}
     <div class="chart-row">
       <span class="chart-label">{{ row.label }}</span>
@@ -37,7 +69,8 @@
   </div>
 
   <div class="card">
-    <h3>Ablation: pipeline completo vs. reorden por coseno vs. sólo denso</h3>
+    <h3>Ablation</h3>
+    <p class="chart-help">Mismos resultados, 3 formas de ordenarlos.</p>
     {% for row in metrics.ablation %}
     <div class="chart-row">
       <span class="chart-label">{{ row.label }}</span>
@@ -45,34 +78,39 @@
       <span class="chart-value">{{ '%.2f'|format(row.p5) }}</span>
     </div>
     {% endfor %}
+    <table class="metrics-table compact-table" style="margin-top:8px;">
+      <thead><tr><th scope="col">Brazo</th><th scope="col">Qué hace</th></tr></thead>
+      <tbody>
+      {% for row in metrics.ablation %}
+        <tr><td><span class="swatch arm-{{ row.arm }}"></span> {{ row.label }}</td><td class="muted">{{ row.help }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
     <p class="delta-line">
       <span class="{{ 'delta-positive' if metrics.ablation_delta_cosine >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_cosine) }}</span>
-      P@5 vs. reorden por coseno ·
+      vs. coseno ·
       <span class="{{ 'delta-positive' if metrics.ablation_delta_dense >= 0 else 'delta-negative' }}">{{ '%+.3f'|format(metrics.ablation_delta_dense) }}</span>
-      P@5 vs. sólo denso
+      vs. denso
     </p>
-    <p class="caption" style="font-style: italic; margin-top: 8px;">Similarity != relevance, measured.</p>
   </div>
 </div>
 
 <div class="card" style="margin-top:16px;">
   <h3>Validez de constructo (top-5)</h3>
-  <p class="muted" style="margin-top:-8px; margin-bottom:12px;">Lo que P@K no puede ver: ¿el top-5 realmente
-     contiene una trampa, una coincidencia de capacidad real, un método transferible, una relación accionable?
-     Las tasas son sobre los candidatos que el pipeline real puntuó; <code>sin puntuar</code> es el resto —
-     nunca un 0 falso.</p>
+  <p class="chart-help">Qué tan útil es el top-5 real, más allá del score.</p>
   <table class="metrics-table">
+    <caption>"Sin puntuar" ≠ 0 — es lo que ese brazo nunca llegó a evaluar.</caption>
     <thead>
-      <tr><th>Brazo</th><th>Trampa</th><th>Capacidad</th><th>Método</th><th>Accionable</th><th>Sin puntuar</th></tr>
+      <tr><th scope="col">Brazo</th><th scope="col">Trampa</th><th scope="col">Capacidad</th><th scope="col">Método</th><th scope="col">Accionable</th><th scope="col">Sin puntuar</th></tr>
     </thead>
     <tbody>
     {% for row in metrics.construct_validity %}
       <tr>
         <td>{{ row.label }}</td>
-        <td>{{ '%.0f'|format(row.trap_rate * 100) }}%</td>
+        <td class="{{ row.trap_class }}">{{ '%.0f'|format(row.trap_rate * 100) }}%</td>
         <td>{{ '%.0f'|format(row.capability_rate * 100) }}%</td>
         <td>{{ '%.0f'|format(row.method_rate * 100) }}%</td>
-        <td>{{ '%.0f'|format(row.actionable_rate * 100) }}%</td>
+        <td class="{{ row.actionable_class }}">{{ '%.0f'|format(row.actionable_rate * 100) }}%</td>
         <td>{{ '%.0f'|format(row.unscored_rate * 100) }}%</td>
       </tr>
     {% endfor %}
@@ -83,8 +121,9 @@
 <details class="card" style="margin-top:16px;">
   <summary>Desglose por NEED ({{ metrics.per_need|length }} needs)</summary>
   <table class="metrics-table" style="margin-top:12px;">
+    <caption>P@5 por cada NEED individual, comparando los 3 brazos.</caption>
     <thead>
-      <tr><th>NEED</th><th>Relevantes (cluster)</th><th>P@5 completo</th><th>P@5 coseno</th><th>P@5 denso</th><th>Latencia (ms)</th></tr>
+      <tr><th scope="col">NEED</th><th scope="col">Relevantes (cluster)</th><th scope="col">P@5 completo</th><th scope="col">P@5 coseno</th><th scope="col">P@5 denso</th><th scope="col">Latencia (ms)</th></tr>
     </thead>
     <tbody>
     {% for row in metrics.per_need %}

@@ -1,17 +1,22 @@
-"""Adapter opcional: redacción vía LLM externo (TECH_STACK.md: "API Claude /
-GPT", declarado y opcional). Grounding estricto — el prompt incluye SOLO los
+"""Adapter opcional: redacción vía LLM externo, a través de OpenRouter
+(API compatible con OpenAI chat completions, enruta a cualquier modelo —
+Claude, GPT, Llama...). Grounding estricto — el prompt incluye SOLO los
 datos ya verificados del `RankedConnection`/`Opportunity` y pide
 explícitamente no inventar hechos ni cifras.
 
-Si la llamada falla por CUALQUIER motivo (sin API key, sin red, SDK no
-instalado, error del proveedor), degrada a `TemplateExplainer` — la cadena y
-los scores siguen siendo válidos sin el LLM (Regla A4 / R5 de MEMORY.md:
-"si cae la red en la demo, se cae el sistema" es justo lo que esto evita).
+Si la llamada falla por CUALQUIER motivo (sin API key, sin red, error del
+proveedor), degrada a `TemplateExplainer` — la cadena y los scores siguen
+siendo válidos sin el LLM (Regla A4 / R5 de MEMORY.md: "si cae la red en la
+demo, se cae el sistema" es justo lo que esto evita).
 """
+import httpx
+
 from src.adapters.explain.template_explainer import (
     FEATURE_LABELS, OPPORTUNITY_TYPE_LABELS, RELATION_LABELS, TemplateExplainer,
 )
 from src.ports.explainer import Explainer
+
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 GROUNDING_INSTRUCTION = (
     "Redacta en español, en una o dos frases, SOLO a partir de los datos "
@@ -22,7 +27,7 @@ GROUNDING_INSTRUCTION = (
 
 
 class LlmExplainer(Explainer):
-    def __init__(self, api_key: str, model: str = "claude-3-5-haiku-20241022", fallback: Explainer = None):
+    def __init__(self, api_key: str, model: str = "anthropic/claude-3.5-haiku", fallback: Explainer = None):
         self._api_key = api_key
         self._model = model
         self._fallback = fallback or TemplateExplainer()
@@ -65,12 +70,15 @@ class LlmExplainer(Explainer):
         )
 
     def _call_llm(self, prompt: str) -> str:
-        from anthropic import Anthropic  # import perezoso: SDK opcional (Regla A4)
-
-        client = Anthropic(api_key=self._api_key)
-        response = client.messages.create(
-            model=self._model,
-            max_tokens=200,
-            messages=[{"role": "user", "content": prompt}],
+        response = httpx.post(
+            OPENROUTER_URL,
+            headers={"Authorization": f"Bearer {self._api_key}"},
+            json={
+                "model": self._model,
+                "max_tokens": 200,
+                "messages": [{"role": "user", "content": prompt}],
+            },
+            timeout=10.0,
         )
-        return response.content[0].text
+        response.raise_for_status()
+        return response.json()["choices"][0]["message"]["content"]

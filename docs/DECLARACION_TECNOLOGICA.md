@@ -39,9 +39,9 @@ interfaz corre sin red incluso para su estilo visual (Regla R5).
 
 | Componente | Detalle |
 |---|---|
-| **API de Anthropic** (`claude-3-5-haiku-20241022` por defecto) | Redacción en lenguaje natural de la explicación de una conexión/oportunidad (`src/adapters/explain/llm_explainer.py`). |
-| Cómo se activa | Sólo si la variable de entorno `ANTHROPIC_API_KEY` está presente (`src/adapters/explain/factory.py:build_explainer()`). Nunca hardcodeada. |
-| Degradación | Si falta la key, si el paquete `anthropic` no está instalado, o si la llamada falla por cualquier motivo (red, rate limit, error del proveedor), el sistema cae automáticamente a `TemplateExplainer` — determinista, sin red, con el mismo grounding estricto. **El sistema completo, incluida la generación de oportunidades, funciona sin esta API.** |
+| **API de OpenRouter** (`anthropic/claude-3.5-haiku` por defecto) | Redacción en lenguaje natural de la explicación de una conexión/oportunidad (`src/adapters/explain/llm_explainer.py`). Vía el endpoint REST de OpenRouter (compatible con OpenAI chat completions), llamado con `httpx` — sin SDK adicional. |
+| Cómo se activa | Sólo si la variable de entorno `OPENROUTER_API_KEY` está presente (`src/adapters/explain/factory.py:build_explainer()`). Nunca hardcodeada. |
+| Degradación | Si falta la key, o si la llamada falla por cualquier motivo (red, rate limit, error del proveedor), el sistema cae automáticamente a `TemplateExplainer` — determinista, sin red, con el mismo grounding estricto. **El sistema completo, incluida la generación de oportunidades, funciona sin esta API.** |
 | Estado de verificación | **No probado contra la API real en este entorno** (sin key disponible durante el desarrollo) — se declara explícitamente como limitación conocida (ver `README.md`). El adapter tiene tests unitarios con un cliente falso; lo no verificado es la llamada de red real. |
 | Grounding | El prompt enviado al LLM incluye **sólo** los datos ya verificados del `RankedConnection`/`Opportunity` (entity_id, tipo de relación, score, features) y pide explícitamente no inventar hechos ni cifras. Verificado por test que ningún identificador/cifra de la salida de `TemplateExplainer` puede faltar en su input — el mismo contrato de grounding aplica al prompt del LLM. |
 
@@ -67,7 +67,7 @@ con estos datos ni se usa para inventar hechos sobre entidades del reto.
 
 ## 7. Gestión de secretos
 
-Ninguna API key hardcodeada en el repositorio. `ANTHROPIC_API_KEY` se lee exclusivamente de variable de
+Ninguna API key hardcodeada en el repositorio. `OPENROUTER_API_KEY` se lee exclusivamente de variable de
 entorno (`factory.py:14`); su ausencia es el camino feliz por defecto, no un caso de error.
 
 ## 8. Tecnologías explícitamente NO usadas

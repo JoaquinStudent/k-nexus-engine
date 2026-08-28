@@ -13,7 +13,8 @@ from html import escape as _xml_escape
 import networkx as nx
 
 from src.adapters.explain.template_explainer import (
-    FEATURE_LABELS, LINK_TYPE_LABELS, OPPORTUNITY_TYPE_LABELS, RELATION_LABELS, ROLE_LABELS,
+    ARM_HELP, FEATURE_HELP, FEATURE_LABELS, LINK_TYPE_LABELS, OPPORTUNITY_TYPE_LABELS,
+    RELATION_HELP, RELATION_LABELS, ROLE_LABELS,
 )
 from src.adapters.repository.dataset_paths import ENTITY_TABLES
 from src.application.descubrir_conexiones import feature_contributions
@@ -85,6 +86,37 @@ def breakdown_segments(feature_vector) -> tuple:
     return tuple(segments)
 
 
+def reason_text(top_features_tuple) -> str:
+    """Frase en lenguaje natural para la tarjeta de resultado (M2/UX), a partir
+    de `top_features` (ya calculado por `descubrir_conexiones.top_features` —
+    no se reimplementa la selección aquí). Sin top_features, cadena vacía: la
+    plantilla cae al rótulo de tipo de relación como respaldo."""
+    if not top_features_tuple:
+        return ""
+    parts = [
+        f"{FEATURE_LABELS.get(name, name)} ({value:.2f})"
+        for name, value, _pct in top_features_tuple
+    ]
+    return "Destaca por " + ", ".join(parts)
+
+
+def feature_glossary() -> tuple:
+    """Una entrada por feature en el orden de `WEIGHTS`, para el bloque
+    "Cómo leer esto" (M9/UX) — misma fuente que la Relevance Breakdown Bar,
+    nunca un texto duplicado en la plantilla."""
+    return tuple(
+        {"name": name, "label": FEATURE_LABELS.get(name, name), "help": FEATURE_HELP.get(name, "")}
+        for name in WEIGHTS
+    )
+
+
+def relation_glossary() -> tuple:
+    return tuple(
+        {"relation_type": key, "label": RELATION_LABELS[key], "help": RELATION_HELP.get(key, "")}
+        for key in RELATION_LABELS
+    )
+
+
 def relation_label(relation_type: str) -> str:
     return RELATION_LABELS.get(relation_type, relation_type)
 
@@ -116,6 +148,8 @@ def serialize_connection(connection, *, explainer=None) -> dict:
         "relevance_band": relevance_band(scored.score),
         "relation_type": scored.relation_type,
         "relation_label": relation_label(scored.relation_type),
+        "relation_help": RELATION_HELP.get(scored.relation_type, ""),
+        "reason": reason_text(connection.top_features),
         "breakdown": breakdown_segments(scored.feature_vector),
         "evidence": {
             "source_file": connection.evidence.source_file,
@@ -181,6 +215,7 @@ DEFAULT_NODE_COLOR = "#8A86A6"
 EDGE_EXPLICIT = "#3D3A57"
 EDGE_INFERRED = "#C3BEEF"
 SUBGRAPH_MAX_NODES = 15  # tope de DESIGN.md M6: "no un hairball"
+NODE_LABEL_MAX_CHARS = 22  # etiqueta corta bajo cada nodo (UX): título, no solo ID
 
 
 def _entity_type_of(entity_id: str, connections, repo=None) -> str:
@@ -193,6 +228,26 @@ def _entity_type_of(entity_id: str, connections, repo=None) -> str:
         except KeyError:
             return ""
     return ""
+
+
+def _short_label(text: str, max_chars: int = NODE_LABEL_MAX_CHARS) -> str:
+    if len(text) <= max_chars:
+        return text
+    return text[: max_chars - 1] + "…"
+
+
+def _node_label(entity_id: str, connections, repo=None) -> str:
+    """Título corto legible para un nodo del mini-grafo (UX) — antes sólo se
+    mostraba el `entity_id` crudo, ilegible para quien no conoce el dataset."""
+    for connection in connections:
+        if connection.entity.entity_id == entity_id:
+            return _short_label(title_of(connection.entity))
+    if repo is not None:
+        try:
+            return _short_label(title_of(repo.get(entity_id)))
+        except KeyError:
+            return entity_id
+    return entity_id
 
 
 def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, width: int = 640, height: int = 420) -> str:
@@ -240,12 +295,14 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
     if len(node_ids) == 1:
         x, y = width / 2, height / 2
         color = NODE_COLORS.get(viewed_entity.entity_type, DEFAULT_NODE_COLOR)
+        label = _short_label(title_of(viewed_entity))
         return (
             f'<svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" '
             f'role="img" aria-label="Mini-grafo de conexiones">'
+            f'<title>Grafo con 1 entidad, sin vecinos registrados en los datos.</title>'
             f'<circle cx="{x:.1f}" cy="{y:.1f}" r="10" fill="{color}" stroke="#FFFFFF" stroke-width="1.5"/>'
             f'<text x="{x:.1f}" y="{y + 24:.1f}" text-anchor="middle" font-size="10" '
-            f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(viewed_entity.entity_id)}</text></svg>'
+            f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(label)}</text></svg>'
         )
 
     pos = nx.spring_layout(g, seed=42, k=0.9)
@@ -278,21 +335,31 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
     for entity_id in node_ids:
         x, y = coords[entity_id]
         is_center = entity_id == viewed_entity.entity_id
+        is_query = has_distinct_query_node and entity_id == query_entity.entity_id
         if is_center:
             entity_type = viewed_entity.entity_type
-        elif has_distinct_query_node and entity_id == query_entity.entity_id:
+            label = _short_label(title_of(viewed_entity))
+        elif is_query:
             entity_type = query_entity.entity_type
+            label = _short_label(title_of(query_entity))
         else:
             entity_type = _entity_type_of(entity_id, connections, repo)
+            label = _node_label(entity_id, connections, repo)
         color = NODE_COLORS.get(entity_type, DEFAULT_NODE_COLOR)
         r = 10 if is_center else 7
-        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" stroke="#FFFFFF" stroke-width="1.5"/>')
+        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" stroke="#FFFFFF" stroke-width="1.5">'
+                      f'<title>{_xml_escape(entity_id)}</title></circle>')
         parts.append(f'<text x="{x:.1f}" y="{y + r + 12:.1f}" text-anchor="middle" font-size="10" '
-                      f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(entity_id)}</text>')
+                      f'font-family="Montserrat, sans-serif" fill="#3D3A57">{_xml_escape(label)}</text>')
 
+    summary = (
+        f"Grafo con {len(node_ids)} entidades y {len(explicit_edges) + len(discovered_edges)} vínculos: "
+        f"{len(explicit_edges)} explícitos (línea sólida), {len(discovered_edges)} por ranking (línea punteada)."
+    )
     return (
         f'<svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" '
-        f'role="img" aria-label="Mini-grafo de conexiones">' + "".join(parts) + "</svg>"
+        f'role="img" aria-label="Mini-grafo de conexiones">'
+        f'<title>{_xml_escape(summary)}</title>' + "".join(parts) + "</svg>"
     )
 
 
@@ -300,6 +367,19 @@ def subgraph_svg(viewed_entity, query_entity, connections, *, graph, repo=None, 
 
 ARMS_ORDER = ("full", "cosine", "dense")
 ARM_LABELS = {"full": "Pipeline completo", "cosine": "Reorden por coseno", "dense": "Sólo denso"}
+
+# Umbral único para pintar accionable_rate/trap_rate en la tabla de validez de
+# constructo (verde/rojo) — mismo criterio simple en toda la fila, nunca un
+# umbral distinto por brazo. No es un umbral de dominio (no vive en
+# domain/opportunity.py como ALTO/MEDIO): es puramente de presentación, para
+# que la tabla no dependa de leer los números con cuidado para notar cuál
+# brazo va mejor.
+_QUALITY_THRESHOLD = 0.4
+
+
+def _quality_class(value: float, *, good_when_high: bool) -> str:
+    is_good = (value >= _QUALITY_THRESHOLD) if good_when_high else (value < _QUALITY_THRESHOLD)
+    return "stat-positive" if is_good else "stat-negative"
 
 
 def serialize_metrics(report: dict | None) -> dict:
@@ -334,7 +414,7 @@ def serialize_metrics(report: dict | None) -> dict:
             {"label": "P@10", "value": pr_cluster["full"]["p10"], "pct": pr_cluster["full"]["p10"] * 100},
         ),
         "ablation": tuple(
-            {"arm": arm, "label": ARM_LABELS[arm],
+            {"arm": arm, "label": ARM_LABELS[arm], "help": ARM_HELP[arm],
              "p5": pr_cluster[arm]["p5"], "pct": pr_cluster[arm]["p5"] * 100}
             for arm in ARMS_ORDER
         ),
@@ -342,7 +422,11 @@ def serialize_metrics(report: dict | None) -> dict:
         "ablation_delta_dense": pr_cluster["full"]["p5"] - pr_cluster["dense"]["p5"],
         "recall_ceilings": report["recall_ceilings"]["cluster"],
         "construct_validity": tuple(
-            {"arm": arm, "label": ARM_LABELS[arm], **construct[arm]}
+            {
+                "arm": arm, "label": ARM_LABELS[arm], **construct[arm],
+                "trap_class": _quality_class(construct[arm]["trap_rate"], good_when_high=False),
+                "actionable_class": _quality_class(construct[arm]["actionable_rate"], good_when_high=True),
+            }
             for arm in ARMS_ORDER
         ),
         "per_need": report["per_need"],

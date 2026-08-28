@@ -3,6 +3,7 @@
 {% block title %}{{ connection.title }} — KNexus Engine{% endblock %}
 {% block content %}
 <a class="btn-secondary" href="/results?q={{ query|urlencode }}">&larr; Volver a resultados</a>
+{% if feature_glossary %}<div style="margin-top:16px;">{{ m.glossary(feature_glossary, id="glossary-connection") }}</div>{% endif %}
 
 <div style="margin-top:24px; display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap;">
   <div>
@@ -14,8 +15,10 @@
 </div>
 
 <div class="card" style="margin-top:24px;">
-  <h2 style="margin-bottom:4px;">Relevancia {{ '%.2f'|format(connection.score) }}</h2>
+  <h2 style="margin-bottom:4px;">Relevancia {{ '%.2f'|format(connection.score) }} <span class="result-scale">de 1</span></h2>
   <span class="pill {{ connection.relevance_band }}">{{ connection.relevance_band|capitalize }}</span>
+  <span class="result-scale">· alta ≥0.60 · media ≥0.40 · baja &lt;0.40</span>
+  {% if connection.relation_help %}<p class="muted" style="margin-top:8px;">{{ connection.relation_label|capitalize }}: {{ connection.relation_help }}</p>{% endif %}
   <div style="margin-top:20px;">{{ m.breakdown_bar(connection.breakdown) }}</div>
   {{ m.breakdown_legend(connection.breakdown) }}
 </div>
@@ -39,10 +42,19 @@
 
 <div class="card graph-panel" style="margin-top:16px;">
   <h3>Grafo de conocimiento</h3>
+  <p class="muted" style="margin-top:-8px;">Esta entidad y sus vínculos reales en los datos — no un resumen visual, cada línea sólida es una relación verificable.</p>
   {{ graph_svg | safe }}
   <div class="graph-legend">
-    <span class="item"><span class="line"></span> relación explícita</span>
-    <span class="item"><span class="line dashed"></span> descubierta por ranking</span>
+    <span class="item"><span class="line"></span> relación explícita (tabla de datos)</span>
+    <span class="item"><span class="line dashed"></span> cómo se llegó aquí desde la consulta</span>
+  </div>
+  <div class="graph-legend node-type-legend">
+    <span class="item"><span class="node-swatch" style="background:var(--node-need)"></span> Necesidad</span>
+    <span class="item"><span class="node-swatch" style="background:var(--node-project)"></span> Proyecto</span>
+    <span class="item"><span class="node-swatch" style="background:var(--node-thesis)"></span> Tesis</span>
+    <span class="item"><span class="node-swatch" style="background:var(--node-researcher)"></span> Investigador</span>
+    <span class="item"><span class="node-swatch" style="background:var(--node-capability)"></span> Capacidad</span>
+    <span class="item"><span class="node-swatch" style="background:var(--node-curricular)"></span> Curricular</span>
   </div>
 </div>
 {% endblock %}

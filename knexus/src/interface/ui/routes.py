@@ -5,7 +5,7 @@ de salida."""
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from src.application.auditar_resultado import comparar
@@ -34,11 +34,15 @@ def _quick_picks(repo) -> tuple:
     return tuple(picks)
 
 
-def _base_context(request: Request, service: QueryService, *, active: str) -> dict:
+def _base_context(request: Request, service: QueryService, *, active: str, query: str = "") -> dict:
+    """`query` alimenta el buscador persistente del header (UX) — se propaga
+    a TODAS las páginas, no sólo a las que ya traían `q` en su propio
+    contexto, para que el input quede precargado en cualquier ruta."""
     return {
         "request": request,
         "active": active,
         "explainer_degraded": service.explainer_degraded,
+        "query": query,
     }
 
 
@@ -61,16 +65,19 @@ def query_page(request: Request, service: QueryService = Depends(get_query_servi
     return templates.TemplateResponse(request, "query.html", context)
 
 
-@router.get("/results", response_class=HTMLResponse)
+@router.get("/results")
 def results_page(request: Request, q: str = "", service: QueryService = Depends(get_query_service)):
     q = q.strip()
     if not q:
-        return query_page(request, service)
+        # Sin consulta, "/results" no tiene nada que mostrar bajo su propia
+        # URL (UX): antes renderizaba la página de Descubrir aquí mismo, lo
+        # que dejaba la URL/título desalineados con el contenido.
+        return RedirectResponse(url="/", status_code=307)
     results = service.discover(q)
-    context = _base_context(request, service, active="results")
+    context = _base_context(request, service, active="results", query=q)
     context.update({
-        "query": q,
         "connections": [presenters.serialize_connection(c) for c in results],
+        "feature_glossary": presenters.feature_glossary(),
     })
     return templates.TemplateResponse(request, "results.html", context)
 
@@ -79,21 +86,21 @@ def results_page(request: Request, q: str = "", service: QueryService = Depends(
 def connection_page(entity_id: str, request: Request, q: str, service: QueryService = Depends(get_query_service)):
     results = service.discover(q.strip())
     connection = next((c for c in results if c.entity.entity_id == entity_id), None)
-    context = _base_context(request, service, active="results")
+    context = _base_context(request, service, active="results", query=q)
     if connection is None:
         context.update({
-            "query": q, "connections": [presenters.serialize_connection(c) for c in results],
+            "connections": [presenters.serialize_connection(c) for c in results],
             "not_found_id": entity_id,
         })
         return templates.TemplateResponse(request, "results.html", context, status_code=404)
 
     query_entity = _query_entity_or_placeholder(service, q)
     context.update({
-        "query": q,
         "connection": presenters.serialize_connection(connection, explainer=service.explainer),
         "graph_svg": presenters.subgraph_svg(
             connection.entity, query_entity, results, graph=service.graph, repo=service.repo,
         ),
+        "feature_glossary": presenters.feature_glossary(),
     })
     return templates.TemplateResponse(request, "connection.html", context)
 
@@ -101,13 +108,18 @@ def connection_page(entity_id: str, request: Request, q: str, service: QueryServ
 @router.get("/opportunity", response_class=HTMLResponse)
 def opportunity_page(request: Request, q: str = "", service: QueryService = Depends(get_query_service)):
     q = q.strip()
-    context = _base_context(request, service, active="opportunity")
+    context = _base_context(request, service, active="opportunity", query=q)
     if not q:
-        context.update({"query": q, "opportunities": ()})
+        # UX: sin consulta no se deja un callejón sin salida — se ofrece el
+        # mismo punto de entrada (ejemplos) que la landing, en vez de un
+        # mensaje sin ninguna acción disponible.
+        context.update({
+            "opportunities": (),
+            "quick_picks": _quick_picks(service.repo),
+        })
         return templates.TemplateResponse(request, "opportunity.html", context)
     opportunities = service.opportunities(q)
     context.update({
-        "query": q,
         "opportunities": [
             presenters.serialize_opportunity(o, repo=service.repo, explainer=service.explainer)
             for o in opportunities
@@ -129,11 +141,12 @@ def audit_page(
     service: QueryService = Depends(get_query_service),
 ):
     q = q.strip()
-    context = _base_context(request, service, active="audit")
+    context = _base_context(request, service, active="audit", query=q)
     results = service.discover(q) if q else ()
     context.update({
-        "query": q, "a": a, "b": b,
+        "a": a, "b": b,
         "connections": [presenters.serialize_connection(c) for c in results],
+        "quick_picks": () if q else _quick_picks(service.repo),
     })
 
     connection_a = next((c for c in results if c.entity.entity_id == a), None) if a else None

@@ -12,7 +12,7 @@ uvicorn[standard]==0.52.4
 jinja2==3.1.6
 httpx==0.28.1
 
-# Opcional (Regla A4 — el sistema corre completo sin esto, degrada a
-# TemplateExplainer): habilita LlmExplainer si se exporta ANTHROPIC_API_KEY.
-# No verificado en este entorno (sin API key disponible, SPEC.md §11).
-# anthropic>=1.0.0
+# LLM opcional (Regla A4 — el sistema corre completo sin esto, degrada a
+# TemplateExplainer): habilita LlmExplainer si se exporta OPENROUTER_API_KEY.
+# Vía OpenRouter (API compatible con OpenAI chat completions) usando httpx,
+# ya listado arriba — no requiere un SDK adicional.

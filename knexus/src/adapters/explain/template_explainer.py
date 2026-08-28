@@ -46,6 +46,34 @@ OPPORTUNITY_TYPE_LABELS = {
     "exploratoria": "exploratoria",
 }
 
+# Glosario para el usuario nuevo (M9/UX): una línea por concepto, sin jerga de
+# implementación. Fuente única — la UI (`presenters.py`) lo reusa en vez de
+# duplicar texto en las plantillas Jinja.
+FEATURE_HELP = {
+    "sim_semantica": "qué tan parecido es el significado del texto, más allá de las palabras exactas.",
+    "sim_lexica": "coincidencia de palabras literales — la señal más débil, para no premiar la trampa léxica.",
+    "compat_metodo": "si el método de investigación es el mismo o transferible entre ambos.",
+    "compat_dominio": "si pertenecen al mismo sector o dominio institucional.",
+    "densidad_evidencia": "cuánta documentación verificable respalda a este candidato.",
+    "soporte_capacidad": "si existe una capacidad institucional real que activar.",
+    "enlace_estructural": "si hay un vínculo directo con investigadores en los datos.",
+}
+
+RELATION_HELP = {
+    "antecedente_metodologico": "usa un método que se puede transferir directamente a la necesidad.",
+    "antecedente_relevante": "aborda el mismo tema, sin que el método coincida.",
+    "activacion_capacidad": "activa una capacidad institucional ya instalada.",
+    "investigador_complementario": "aporta un investigador con experiencia afín.",
+    "integracion_curricular": "conecta con un componente curricular existente.",
+    "coincidencia_superficial": "comparte vocabulario, pero sin respaldo metodológico o de capacidad — la trampa que este sistema evita premiar.",
+}
+
+ARM_HELP = {
+    "full": "el orden final: recuperación + las 7 features + reglas de negocio.",
+    "cosine": "el mismo conjunto de candidatos, pero ordenado únicamente por similitud semántica.",
+    "dense": "resultados directos del índice denso, sin fusión ni reordenamiento.",
+}
+
 
 class TemplateExplainer(Explainer):
     def explain_connection(self, connection) -> str:
